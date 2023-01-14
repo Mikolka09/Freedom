@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Admin - Users</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/admin/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="/register/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:include="/admin/fragments/sidebar"></th:block>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <th:block th:include="/admin/fragments/topbar"></th:block>
+
+
+            <!-- Begin Page Content -->
+
+            <!-- Sign up form -->
+            <div class="container">
+                <h1 class="text-center">Edit Post</h1>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form th:action="@{|/admin/post/verify-store/${post.getId()}|}" enctype="multipart/form-data"
+                              method="POST">
+                            <input type="hidden" name="user_id" th:value="${user_id}">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="title">Title</label>
+                                            <input type="text" name="title" class="form-control" id="title"
+                                                   placeholder="Title" th:value="${post.getTitle()}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="shortName">Short Name</label>
+                                            <input type="text" name="shortName" class="form-control" id="shortName"
+                                                   placeholder="Short Name" th:value="${post.getShortName()}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category_id">Category</label>
+                                            <select class="form-control" name="category_id" id="category_id">
+                                                <option th:each="category : ${categories}"
+                                                        th:value="${category.id}"
+                                                        th:text="${category.name}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="file">Image</label>
+                                            <img width="100px" th:src="@{|../../../${post.getImgUrl()}|}"
+                                                 alt="Url">
+                                            <input class="form-control" type="file" name="file" id="file"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tag_id">Tag</label>
+                                            <select class="form-control" name="tag_id" id="tag_id" multiple>
+                                                <option th:each="tag : ${tags}"
+                                                        th:value="${tag.id}"
+                                                        th:text="${tag.name}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="checkbox" name="verify" id="verify"
+                                                   class="agree-term"/>
+                                            <label for="verify" class="label-agree-term"><span><span></span>
+                                        </span>Verify</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label for="description">Description</label>
+                                            <textarea class="form-control" name="description" id="description"
+                                                      rows="26"
+                                                      th:text="${post.getBody()}"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="btn btn-success"
+                                       value="Save"/>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <th:block th:include="/admin/fragments/footer"></th:block>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<th:block th:include="/admin/fragments/logout-modal"></th:block>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/admin/vendor/jquery/jquery.min.js"></script>
+<script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/admin/js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>
