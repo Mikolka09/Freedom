@@ -6,7 +6,8 @@
 <body>
 
 <!-- ======= Header ======= -->
-<th:block th:include="/pages/fragments/main/header"></th:block>
+<!--/*@thymesVar id="categories" type=""*/-->
+<th:block th:replace="/pages/fragments/main/header.html::header"></th:block>
 
 <main id="main">
     <th:block th:include="/pages/fragments/about/about-us"></th:block>

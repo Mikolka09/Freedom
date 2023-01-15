@@ -1,6 +1,7 @@
 package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.Category;
+import itstep.social_freedom.entity.Role;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.CategoryService;
@@ -24,7 +25,7 @@ public class PageController {
     private void CreateModel(Model model){
         User user = userService.getCurrentUsername();
         List<Category> categories = categoryService.allCategory();
-        model.addAttribute("User", user);
+        model.addAttribute("user", user);
         model.addAttribute("categories", categories);
         model.addAttribute("status", Status.values());
     }

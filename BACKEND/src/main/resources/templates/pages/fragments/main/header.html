@@ -1,5 +1,7 @@
-<div>
-    <header id="header" class="header d-flex align-items-center fixed-top">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <header id="header" class="header d-flex align-items-center fixed-top" th:fragment="header">
         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
             <a href="/" class="logo d-flex align-items-center">
@@ -25,18 +27,18 @@
             <div class="position-relative">
                 <div class="d-flex justify-content-end">
                     <div>
-                        <nav th:if="${User != null and User.getStatus()==status[0]}" id="navbar1" class="navbar">
+                        <nav th:if="${user != null and user.getStatus()==status[0]}" id="navbar1" class="navbar">
                             <ul>
                                 <li class="dropdown">
                                     <a href="#"><img class="px-1 rounded-circle" width="40px"
-                                                     th:src="${User.getAvatarUrl()}" alt="Url">
-                                        <span th:text="${User.getUsername()}"></span> <i
+                                                     th:src="${user.getAvatarUrl()}" alt="Url">
+                                        <span th:text="${user.getUsername().toUpperCase()}"></span> <i
                                                 class="bi bi-chevron-down dropdown-indicator"></i></a>
                                     <ul>
-                                        <li><a th:href="@{|/registration/edit/${User.getId()}|}">Edit User</a></li>
-                                        <li><a th:href="@{|/registration/delete/${User.getId()}|}">Delete User</a></li>
-                                        <li><a th:href="@{|/post/${User.getId()}|}">My Posts</a></li>
-                                        <li><a th:if="${User.getUsername() =='Admin'}" href="/admin">DashBoard</a></li>
+                                        <li><a th:href="@{|/registration/edit/${user.getId()}|}">Edit User</a></li>
+                                        <li><a href="/user">UserDashBoard</a></li>
+                                        <li><a th:href="@{|/post/${user.getId()}|}">My Posts</a></li>
+                                        <li><a th:if="${user.getUsername().toUpperCase() =='ADMIN'}" href="/admin">AdminDashBoard</a></li>
                                         <li><a href="#">My Comments</a></li>
                                         <li>
                                             <hr style="margin: 0">
@@ -45,7 +47,7 @@
                                 </li>
                             </ul>
                         </nav>
-                        <a th:if="${User == null or User.getStatus()==status[2]}" href="/login" title="LogIn"
+                        <a th:if="${user == null or user.getStatus()==status[2]}" href="/login" title="LogIn"
                            class="mx-2"><span
                                 class="bi-person-circle"></span></a>
                     </div>
@@ -70,4 +72,3 @@
         </div>
 
     </header>
-</div>
