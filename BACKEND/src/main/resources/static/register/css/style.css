@@ -187,18 +187,25 @@ h2 {
 
 .main {
   background: #f8f8f8;
-  padding: 150px 0; }
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+}
 
 .clear {
   clear: both; }
 
 body {
+  position: relative;
   font-size: 13px;
-  line-height: 1.8;
   color: #222;
   background: #f8f8f8;
   font-weight: 400;
-  font-family: Poppins; }
+  font-family: Poppins;
+}
 
 .container {
   width: 900px;
