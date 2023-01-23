@@ -68,13 +68,7 @@ public class PostController {
 
     @GetMapping("/post/edit/{id}")
     public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
-        Post post = postService.findPostById(post_id);
-        List<Category> categories = categoryService.allCategory();
-        List<Tag> tags = tagService.allTag();
-        model.addAttribute("user_id", post.getUser().getId());
-        model.addAttribute("categories", categories);
-        model.addAttribute("tags", tags);
-        model.addAttribute("post", post);
+        AdminController.gettingPost(post_id, model, postService, categoryService, tagService);
         return "/post/edit-post";
     }
 

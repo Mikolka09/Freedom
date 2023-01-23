@@ -40,6 +40,10 @@ public class Post extends BaseEntity {
     private String title;
     private String shortName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+
     @Column(columnDefinition = "TEXT")
     private String body;
     private String imgUrl;

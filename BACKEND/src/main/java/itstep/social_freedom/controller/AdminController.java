@@ -54,8 +54,39 @@ public class AdminController {
         return "admin/posts/posts";
     }
 
+    @GetMapping("/admin/users/create-user")
+    public String createUser(Model model) {
+        model.addAttribute("userForm", new User());
+        return "admin/users/create-user";
+    }
+
+    @PostMapping("/register/new-user")
+    public String addNewUser(@ModelAttribute("userForm") @Valid User userForm,
+                          BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "Not all fields are filled!");
+            return "admin/users/create-user";
+        }
+        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
+            model.addAttribute("error", "Passwords do not match");
+            return "admin/users/create-user";
+        }
+        if (!userService.saveUser(userForm)) {
+            model.addAttribute("error", "A user with the same name already exists");
+            return "admin/users/create-user";
+        }
+
+        return "redirect:/admin/users";
+    }
+
     @GetMapping("/admin/post/edit/{id}")
     public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
+        gettingPost(post_id, model, postService, categoryService, tagService);
+        return "admin/posts/posts-edit";
+    }
+
+    static void gettingPost(@PathVariable(name = "id") Long post_id, Model model, PostService postService, CategoryService categoryService, TagService tagService) {
         Post post = postService.findPostById(post_id);
         List<Category> categories = categoryService.allCategory();
         List<Tag> tags = tagService.allTag();
@@ -63,18 +94,11 @@ public class AdminController {
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
         model.addAttribute("post", post);
-        return "admin/posts/posts-edit";
     }
 
     @GetMapping("/admin/post/verify/{id}")
     public String verifyPost(@PathVariable(name = "id") Long post_id, Model model) {
-        Post post = postService.findPostById(post_id);
-        List<Category> categories = categoryService.allCategory();
-        List<Tag> tags = tagService.allTag();
-        model.addAttribute("user_id", post.getUser().getId());
-        model.addAttribute("categories", categories);
-        model.addAttribute("tags", tags);
-        model.addAttribute("post", post);
+        gettingPost(post_id, model, postService, categoryService, tagService);
         return "admin/posts/post-verify";
     }
 

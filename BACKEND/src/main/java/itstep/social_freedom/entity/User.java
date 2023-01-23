@@ -50,6 +50,10 @@ public class User extends BaseEntity implements UserDetails {
     @ToString.Exclude
     private Set<Post> posts = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+
     private String name;
     private String googleName;
     private String googleUsername;

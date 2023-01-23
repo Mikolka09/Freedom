@@ -45,7 +45,7 @@ public class RegistrationController {
             return "register/register";
         }
 
-        return "redirect:/register/login";
+        return "register/login";
     }
 
     @PostMapping("/register/edit")
