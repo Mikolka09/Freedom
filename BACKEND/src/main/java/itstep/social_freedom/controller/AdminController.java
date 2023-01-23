@@ -131,7 +131,7 @@ public class AdminController {
     @GetMapping("admin/users/edit/{id}")
     public String editUser(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
-        model.addAttribute("User", user);
+        model.addAttribute("user", user);
         return "admin/users/user-edit";
     }
 
@@ -188,6 +188,7 @@ public class AdminController {
                        @RequestParam(value = "user_id") Long user_id,
                        @RequestParam(value = "avatar") MultipartFile file,
                        @RequestParam(value = "username") String username,
+                       @RequestParam(value = "name") String name,
                        @RequestParam(value = "email") String email) {
 
         String path = "../admin/users/edit/" + user_id;
@@ -199,7 +200,11 @@ public class AdminController {
         }
         user.setEmail(email);
         user.setUsername(username);
-
+        if (name == null || name.equals("")) {
+            user.setName(null);
+        } else {
+            user.setName(name);
+        }
         if (addFile(redirectAttributes, file, user, fileService, userService)) return "redirect:" + (path);
 
         return "redirect:/admin/users";
@@ -212,6 +217,7 @@ public class AdminController {
                            @RequestParam(value = "user_id") Long user_id,
                            @RequestParam(value = "avatar") MultipartFile file,
                            @RequestParam(value = "username") String username,
+                           @RequestParam(value = "name") String name,
                            @RequestParam(value = "email") String email,
                            @RequestParam(value = "passwordConfirm") String passwordConfirm,
                            @RequestParam(value = "password") String password,
@@ -226,6 +232,11 @@ public class AdminController {
         }
         user.setEmail(email);
         user.setUsername(username);
+        if (name == null || name.equals("")) {
+            user.setName(null);
+        } else {
+            user.setName(name);
+        }
 
         if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user)) return "redirect:" + (path);
 

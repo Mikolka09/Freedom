@@ -16,11 +16,12 @@
           <form th:action="@{|/admin/categories/create|}" enctype="multipart/form-data"
                 method="POST">
             <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" name="name" id="name"/>
+              <label for="name"></label>
+              <input type="text" class="form-control form-control-user" id="name" name="name"
+                     placeholder="Name Category">
             </div>
             <div class="form-group form-button">
-              <input type="submit" name="signup" id="signup" class="btn btn-success"
+              <input type="submit" name="signup" id="signup" class="btn btn-success btn-user btn-block"
                      value="Create"/>
             </div>
           </form>

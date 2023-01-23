@@ -1,26 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Admin - Users</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="/admin/css/sb-admin-2.min.css" rel="stylesheet">
-
-</head>
+<th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
 <body id="page-top">
 
@@ -28,7 +9,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <th:block th:include="/admin/fragments/sidebar"></th:block>
+    <th:block th:insert="/admin/fragments/sidebar.html::sidebar"></th:block>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -36,14 +17,15 @@
 
         <!-- Main Content -->
         <div id="content">
-            <th:block th:include="/admin/fragments/topbar"></th:block>
+            <th:block th:insert="/admin/fragments/topbar.html::topbar"></th:block>
 
 
             <!-- Begin Page Content -->
             <div class="col-md-10 col-md-offset-2">
                 <h1 class="text-center">List Users</h1>
                 <p>
-                    <a class="btn btn-success btn-sm" href="users/create-user" style="border-radius:6px;">Create new User</a>
+                    <a class="btn btn-success btn-sm" href="users/create-user" style="border-radius:6px;">Create new
+                        User</a>
                 </p>
                 <table class="table table-hover align-self-center">
                     <thead>
@@ -73,8 +55,11 @@
                                th:href="@{|/admin/users/edit/${user.getId()}|}">Edit</a>
                             <a class="btn btn-info btn-sm" style="border-radius:6px;"
                                th:href="@{|/admin/users/newpass/${user.getId()}|}">Edit Pass</a>
-                            <a class="btn btn-danger btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/delete/${user.getId()}|}">Delete</a>
+                            <a class="btn btn-danger btn-sm" style="border-radius:6px;" href="#"
+                               th:data-id="${user.getId()}"
+                               th:data-name="${user.getUsername()}"
+                               data-toggle="modal" data-target="#DeleteModal">Delete</a>
+                            <!--th:href="@{|/admin/users/delete/${user.getId()}|}"-->
                         </td>
                     </tr>
                 </table>
@@ -85,7 +70,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <th:block th:include="/admin/fragments/footer"></th:block>
+        <th:block th:insert="/admin/fragments/footer.html::footer"></th:block>
         <!-- End of Footer -->
 
     </div>
@@ -100,7 +85,8 @@
 </a>
 
 <!-- Logout Modal-->
-<th:block th:include="/admin/fragments/logout-modal"></th:block>
+<th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
+<th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/admin/vendor/jquery/jquery.min.js"></script>
@@ -111,6 +97,21 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/admin/js/sb-admin-2.min.js"></script>
+
+<script>
+    $('#DeleteModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget);
+        let id = button.data('id');
+        let name = button.data('name');
+        let action = "/admin/users/delete/" + id;
+        let label = "Are you sure you're ready to delete User - \"" + name.toUpperCase() + "\"?";
+        let text = "Select \"Delete\" below if you are ready to remove this User."
+        let modal = $(this);
+        modal.find('#deleteModalLabel').text(label);
+        modal.find('#text').text(text);
+        modal.find('#action').prop("href", action);
+    })
+</script>
 
 </body>
 

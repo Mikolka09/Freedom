@@ -29,19 +29,11 @@
                     <div class="col">
                         <div class="p-5">
                             <form class="user" method="POST" action="/register/new-user" th:object="${userForm}">
-                                <!--<div class="form-group">-->
-                                    <!--<div class="col-sm-6 mb-3 mb-sm-0">-->
                                     <div class="form-group">
                                         <label for="name"></label>
                                         <input type="text" class="form-control form-control-user" id="name" name="name"
                                                th:field="*{username}"  placeholder="Username">
                                     </div>
-                                   <!-- <div class="col-sm-6">
-                                        <label for="name"></label>
-                                        <input type="text" class="form-control form-control-user" id="name" name="name"
-                                               placeholder="Last Name">
-                                    </div>-->
-                              <!--  </div>-->
                                 <div class="form-group">
                                     <label for="email"></label>
                                     <input type="email" class="form-control form-control-user" id="email" name="email"

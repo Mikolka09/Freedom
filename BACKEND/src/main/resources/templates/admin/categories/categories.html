@@ -45,11 +45,13 @@
                             <a class="btn btn-primary btn-sm" style="border-radius:6px;" href="#"
                                th:data-id="${category.getId()}"
                                th:data-name="${category.getName()}"
-                               data-toggle="modal" data-target="#EditModal">
-                               <!--th:href="@{|/admin/categories/edit/${category.getId()}|}"-->
-                            Edit</a>
-                            <a class="btn btn-danger btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/category/delete/${category.getId()}|}">Delete</a>
+                               data-toggle="modal" data-target="#EditModal">Edit</a>
+                            <a class="btn btn-danger btn-sm" style="border-radius:6px;" href="#"
+                               th:data-id="${category.getId()}"
+                               th:data-name="${category.getName()}"
+                               data-toggle="modal" data-target="#DeleteModal">Delete</a>
+                            <!--th:href="@{|/admin/category/delete/${category.getId()}|}"-->
+
                         </td>
                     </tr>
                 </table>
@@ -74,6 +76,7 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
+<th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
 <th:block th:insert="/admin/fragments/edit-category-modal.html::edit-category-modal"></th:block>
 <th:block th:insert="/admin/fragments/create-category-modal.html::create-category-modal"></th:block>
 <!-- Logout Modal-->
@@ -98,6 +101,19 @@
         modal.find('#id').val(id);
         modal.find('#name').val(name);
     })
+    $('#DeleteModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget);
+        let id = button.data('id');
+        let name = button.data('name');
+        let action = "/admin/category/delete/" + id;
+        let label = "Are you sure you're ready to delete Category - \"" + name.toUpperCase() + "\"?";
+        let text = "Select \"Delete\" below if you are ready to remove this Category."
+        let modal = $(this);
+        modal.find('#deleteModalLabel').text(label);
+        modal.find('#text').text(text);
+        modal.find('#action').prop("href", action);
+    })
+
 </script>
 </body>
 
