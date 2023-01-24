@@ -72,12 +72,21 @@ public class UserService implements UserDetailsService {
         if (userFromDB != null) {
             return false;
         }
+        user.setUsername(user.getUsername().toUpperCase());
         user.setAvatarUrl("avatar/user.png");
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(Status.ACTIVE);
         userRepository.save(user);
         return true;
+    }
+
+    public void saveNewPassword(User user){
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if(userFromDB != null){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+        }
     }
 
     public boolean checkPassword(Long id, String pass) {

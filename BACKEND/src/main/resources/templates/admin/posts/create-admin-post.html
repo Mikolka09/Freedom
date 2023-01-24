@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:insert="/admin/fragments/head.html::head"></th:block>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <th:block th:insert="/admin/fragments/sidebar.html::sidebar"></th:block>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <th:block th:insert="/admin/fragments/topbar.html::topbar"></th:block>
+
+
+            <!-- Begin Page Content -->
+            <div class="col-md-12 col-md-offset-2" th:fragment="create-post">
+                <h1 class="text-center">Create Post</h1>
+                <div class="row">
+                    <div class="col">
+                        <form action="/admin/store-post" enctype="multipart/form-data" method="POST">
+                            <input type="hidden" name="id" th:value="${user_id}">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" name="title" class="form-control" id="title"
+                                               placeholder="Title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="shortName">Short Name</label>
+                                        <input type="text" name="shortName" class="form-control" id="shortName"
+                                               placeholder="Short Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category_id">Category</label>
+                                        <select class="form-control" name="category_id" id="category_id">
+                                            <option th:each="category : ${categories}"
+                                                    th:value="${category.id}"
+                                                    th:text="${category.name}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="file">Image</label>
+                                        <input class="form-control" type="file" name="file" id="file"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tag_id">Tag</label>
+                                        <select class="form-control" name="tag_id" id="tag_id" multiple>
+                                            <option th:each="tag : ${tags}"
+                                                    th:value="${tag.id}"
+                                                    th:text="${tag.name}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control" name="description" id="description"
+                                                  rows="19"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="btn btn-success" value="Create"/>
+                                <a class="btn btn-info" id="sign-out" href="/admin/posts">Cancel</a>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <th:block th:insert="/admin/fragments/footer.html::footer"></th:block>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/admin/vendor/jquery/jquery.min.js"></script>
+<script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/admin/js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>

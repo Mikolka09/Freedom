@@ -1,6 +1,7 @@
 package itstep.social_freedom.service;
 
 import itstep.social_freedom.entity.Post;
+import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,8 @@ public class PostService {
     public void deletePost(Long postId) {
         if (postRepository.findById(postId).isPresent()) {
             Post post = findPostById(postId);
-            postRepository.delete(post);
+            post.setStatus(Status.DELETED);
+            postRepository.save(post);
         }
     }
 

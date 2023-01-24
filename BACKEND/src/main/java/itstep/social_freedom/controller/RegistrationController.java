@@ -71,7 +71,7 @@ public class RegistrationController {
         userForm.setUsername(username);
 
         if (userService.checkPassword(id, oldPass)) {
-            if (AdminController.addPassword(userForm, redirectAttributes, passwordConfirm, password, userForm))
+            if (AdminController.addPassword(userForm, redirectAttributes, passwordConfirm, password, userForm, userService))
                 return "redirect:" + (path);
         } else {
             redirectAttributes.getFlashAttributes().clear();

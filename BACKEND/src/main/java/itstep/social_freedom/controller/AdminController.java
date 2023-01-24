@@ -49,9 +49,37 @@ public class AdminController {
 
     @GetMapping("/admin/posts")
     public String posts(Model model) {
-        List<Post> posts = postService.posts();
+        User user = userService.getCurrentUsername();
+        List<Post> posts = postService.posts().stream()
+                .filter(post -> post.getStatus() == Status.VERIFIED)
+                .collect(Collectors.toList());
+        ;
         model.addAttribute("posts", posts);
+        model.addAttribute("user", user);
         return "admin/posts/posts";
+    }
+
+    @GetMapping("/admin/create-post/{id}")
+    public String createPost(@PathVariable(name = "id") Long id, Model model) {
+        model.addAttribute("user_id", id);
+        List<Category> categories = categoryService.allCategory();
+        List<Tag> tags = tagService.allTag();
+        model.addAttribute("categories", categories);
+        model.addAttribute("tags", tags);
+        return "admin/posts/create-admin-post";
+    }
+
+    @PostMapping("/admin/store-post")
+    public String store(@RequestParam(value = "id") Long user_id,
+                        @RequestParam(value = "file") MultipartFile file,
+                        @RequestParam(value = "title") String title,
+                        @RequestParam(value = "shortName") String shortName,
+                        @RequestParam(value = "category_id") Long category_id,
+                        @RequestParam(value = "description") String description,
+                        @RequestParam(value = "tag_id") Long[] tag_id) {
+        Post post = new Post();
+        post.setStatus(Status.NOT_VERIFIED);
+        return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
     @GetMapping("/admin/users/create-user")
@@ -62,7 +90,7 @@ public class AdminController {
 
     @PostMapping("/register/new-user")
     public String addNewUser(@ModelAttribute("userForm") @Valid User userForm,
-                          BindingResult bindingResult, Model model) {
+                             BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", "Not all fields are filled!");
@@ -90,10 +118,12 @@ public class AdminController {
         Post post = postService.findPostById(post_id);
         List<Category> categories = categoryService.allCategory();
         List<Tag> tags = tagService.allTag();
+        List<Status> enums = Arrays.asList(Status.values());
         model.addAttribute("user_id", post.getUser().getId());
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
         model.addAttribute("post", post);
+        model.addAttribute("status", enums);
     }
 
     @GetMapping("/admin/post/verify/{id}")
@@ -104,7 +134,7 @@ public class AdminController {
 
     @GetMapping("/admin/posts-verified")
     public String postsVerified(Model model) {
-        List<Post> posts = postService.posts().stream().filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
+        List<Post> posts = postService.posts().stream().filter(x -> x.getStatus() == Status.NOT_VERIFIED).collect(Collectors.toList());
         model.addAttribute("posts", posts);
         return "admin/posts/posts-verified";
     }
@@ -157,9 +187,9 @@ public class AdminController {
                             @RequestParam(value = "file") MultipartFile file,
                             @RequestParam(value = "title") String title,
                             @RequestParam(value = "shortName") String shortName,
-                            @RequestParam(value = "category_id") Long category_id,
+                            @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
                             @RequestParam(value = "description") String description,
-                            @RequestParam(value = "tag_id") Long[] tag_id) {
+                            @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
         Post post = postService.findPostById(post_id);
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
@@ -170,13 +200,12 @@ public class AdminController {
                               @RequestParam(value = "file") MultipartFile file,
                               @RequestParam(value = "title") String title,
                               @RequestParam(value = "shortName") String shortName,
-                              @RequestParam(value = "category_id") Long category_id,
+                              @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
                               @RequestParam(value = "description") String description,
-                              @RequestParam(value = "tag_id") Long[] tag_id,
-                              @RequestParam(value = "verify") Boolean verify) {
+                              @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id,
+                              @RequestParam(value = "status") String status) {
         Post post = postService.findPostById(post_id);
-
-        if (verify) post.setStatus(Status.VERIFIED);
+        if (!status.isEmpty()) post.setStatus(Status.valueOf(status));
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
@@ -238,7 +267,8 @@ public class AdminController {
             user.setName(name);
         }
 
-        if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user)) return "redirect:" + (path);
+        if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
+            return "redirect:" + (path);
 
         if (!status.isEmpty()) user.setStatus(Status.valueOf(status));
 
@@ -266,7 +296,8 @@ public class AdminController {
             return "redirect:" + (path);
         }
 
-        if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user)) return "redirect:" + (path);
+        if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
+            return "redirect:" + (path);
 
         return "redirect:/admin/users";
     }
@@ -284,7 +315,8 @@ public class AdminController {
             post.setTitle(title);
         if (!Objects.equals(shortName, ""))
             post.setShortName(shortName);
-        post.setCategory(categoryService.findCategoryById(category_id));
+        if (!category_id.toString().equals("0"))
+            post.setCategory(categoryService.findCategoryById(category_id));
         if (!Objects.equals(description, ""))
             post.setBody(description);
         if (tag_id != null) {
@@ -310,7 +342,7 @@ public class AdminController {
     static boolean addPassword(@ModelAttribute("userForm") @Valid User userForm, RedirectAttributes redirectAttributes,
                                @RequestParam("passwordConfirm") String passwordConfirm,
                                @RequestParam("password") String password,
-                               User user) {
+                               User user, UserService service) {
         if (Objects.equals(password, "") && Objects.equals(passwordConfirm, "")) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
@@ -322,6 +354,7 @@ public class AdminController {
         } else {
             user.setPassword(password);
             user.setPasswordConfirm(passwordConfirm);
+            service.saveNewPassword(user);
         }
         return false;
     }

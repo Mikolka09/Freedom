@@ -42,6 +42,10 @@
             <!-- Begin Page Content -->
             <div class="col-md-12 col-md-offset-1">
                 <h1 class="text-center">List Posts</h1>
+                <p>
+                    <a class="btn btn-success btn-sm" th:href="@{|/admin/create-post/${user.getId()}|}"
+                       style="border-radius:6px;">Create new post</a>
+                </p>
                 <table class="table table-hover align-self-center">
                     <thead>
                     <tr style="background: #cff4fc;">
@@ -52,6 +56,7 @@
                         <th scope="col">Category</th>
                         <th scope="col">Tags</th>
                         <th scope="col">Likes</th>
+                        <th scope="col">Status</th>
                         <th scope="col">CreateAt</th>
                         <th scope="col">UpdateAt</th>
                         <th scope="col">Buttons</th>
@@ -61,7 +66,7 @@
                     <tr th:each="post:${posts}">
                         <td th:text="${post.getUser().getUsername()}"></td>
                         <td><img width="100px"
-                                 th:src="@{|http://localhost:8080/${post.getImgUrl()}|}"></td>
+                                 th:src="@{|/${post.getImgUrl()}|}"></td>
                         <td th:text="${post.getTitle()}"></td>
                         <td th:text="${post.getShortName()}"></td>
                         <td th:text="${post.getCategory().getName()}"></td>
@@ -73,6 +78,7 @@
                             </select>
                         </td>
                         <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
+                        <td th:text="${post.getStatus()}"></td>
                         <td th:text="${#dates.format(post.getCreatedAt(), 'dd MMM yyyy')}"></td>
                         <td th:text="${#dates.format(post.getUpdatedAt(), 'dd MMM yyyy')}"></td>
                         <td>
@@ -81,7 +87,9 @@
                             <a class="btn btn-info btn-sm" style="border-radius:6px;"
                                th:href="@{|/post/preview/${post.getId()}|}">Preview</a>
                             <a class="btn btn-danger btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/post/delete/${post.getId()}|}">Delete</a>
+                               th:data-id="${post.getId()}"
+                               th:data-name="${post.getShortName()}"
+                               data-toggle="modal" data-target="#DeleteModal">Delete</a>
                         </td>
                     </tr>
                 </table>
@@ -108,6 +116,7 @@
 
 <!-- Logout Modal-->
 <th:block th:include="/admin/fragments/logout-modal"></th:block>
+<th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/admin/vendor/jquery/jquery.min.js"></script>
@@ -118,6 +127,23 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/admin/js/sb-admin-2.min.js"></script>
+
+<script>
+
+    $('#DeleteModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget);
+        let id = button.data('id');
+        let name = button.data('name');
+        let action = "/admin/post/delete/" + id;
+        let label = "Are you sure you're ready to delete Post - \"" + name.toUpperCase() + "\"?";
+        let text = "Select \"Delete\" below if you are ready to remove this Post."
+        let modal = $(this);
+        modal.find('#deleteModalLabel').text(label);
+        modal.find('#text').text(text);
+        modal.find('#action').prop("href", action);
+    })
+
+</script>
 
 </body>
 

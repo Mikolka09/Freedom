@@ -47,10 +47,12 @@ public class PostController {
     @GetMapping("/post/create/{id}")
     public String create(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("user_id", id);
+        String action = "/post/store";
         List<Category> categories = categoryService.allCategory();
         List<Tag> tags = tagService.allTag();
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
+        model.addAttribute("action", action);
         return "post/create-post";
     }
 
@@ -110,7 +112,7 @@ public class PostController {
             if (!file.isEmpty())
                 post.setImgUrl(fileService.uploadFile(file, ""));
         }
-        if (!postService.savePost(post))
+        if(!postService.savePost(post))
             return "redirect:/post/store";
         return "redirect:/post/" + user_id;
     }
