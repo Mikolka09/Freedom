@@ -46,6 +46,7 @@
                                             <div>Category</div>
                                             <div class="btn-group btn-group-sm" role="group" aria-label="Category">
                                                 <button type="button" class="btn btn-info m-1"
+                                                        title="If you want to change, click on the button"
                                                         data-toggle="collapse" data-target="#collapseCategory"
                                                         aria-expanded="false" aria-controls="collapseCategory"
                                                         th:text="${post.getCategory().getName()}">
@@ -71,6 +72,7 @@
                                             <div for="tag_id">Tags</div>
                                             <div class="btn-group btn-group-sm" role="group" aria-label="Tags">
                                                 <button type="button" class="btn btn-info m-1"
+                                                        title="If you want to change, click on the button"
                                                         data-toggle="collapse" data-target="#collapseExample"
                                                         aria-expanded="false" aria-controls="collapseExample"
                                                         th:each="tag : ${post.getTags()}" th:text="${tag.getName()}">
@@ -98,7 +100,7 @@
                             <div class="form-group form-button">
                                 <input type="submit" name="signup" id="signup" class="btn btn-success"
                                        value="Save"/>
-                                <a class="btn btn-info" id="sign-out" href="/admin/posts">Cancel</a>
+                                <a class="btn btn-primary" id="sign-out" href="/admin/posts">Cancel</a>
                             </div>
 
                         </form>

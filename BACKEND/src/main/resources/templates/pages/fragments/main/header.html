@@ -31,7 +31,7 @@
                         <ul>
                             <li class="dropdown">
                                 <a href="#"><img class="px-1 rounded-circle" width="40px"
-                                                 th:src="${user.getAvatarUrl()}" alt="Url">
+                                                 th:src="@{|/${user.getAvatarUrl()}|}" alt="Url">
                                     <span th:text="${user.getUsername()}"></span> <i
                                             class="bi bi-chevron-down dropdown-indicator"></i></a>
                                 <ul>

@@ -32,33 +32,41 @@ public class AdminController {
     @Autowired
     private FileService fileService;
 
+    private void CreateModelUser(Model model){
+        User user = userService.getCurrentUsername();
+        model.addAttribute("user", user);
+    }
 
+    //Main page AdminDashboard
     @GetMapping("/admin")
-    public String index() {
+    public String index(Model model) {
+        CreateModelUser(model);
         return "admin/index";
     }
 
+    //Get a list of deleted users
     @GetMapping("/admin/users/deleted")
     public String deletedUsers(Model model) {
         List<User> users = userService.allUsers().stream()
-                .filter(user -> user.getStatus() == Status.DELETED)
+                .filter(user -> (user.getStatus() == Status.DELETED || user.getStatus() == Status.NOT_ACTIVE))
                 .collect(Collectors.toList());
         model.addAttribute("users", users);
+        CreateModelUser(model);
         return "admin/users/deleted-users";
     }
 
+    //Get a list of posts
     @GetMapping("/admin/posts")
     public String posts(Model model) {
-        User user = userService.getCurrentUsername();
         List<Post> posts = postService.posts().stream()
                 .filter(post -> post.getStatus() == Status.VERIFIED)
                 .collect(Collectors.toList());
-        ;
         model.addAttribute("posts", posts);
-        model.addAttribute("user", user);
+        CreateModelUser(model);
         return "admin/posts/posts";
     }
 
+    //Create a new post
     @GetMapping("/admin/create-post/{id}")
     public String createPost(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("user_id", id);
@@ -66,9 +74,11 @@ public class AdminController {
         List<Tag> tags = tagService.allTag();
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
+        CreateModelUser(model);
         return "admin/posts/create-admin-post";
     }
 
+    //Saving a post
     @PostMapping("/admin/store-post")
     public String store(@RequestParam(value = "id") Long user_id,
                         @RequestParam(value = "file") MultipartFile file,
@@ -82,12 +92,15 @@ public class AdminController {
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
+    //Creating a new user
     @GetMapping("/admin/users/create-user")
     public String createUser(Model model) {
         model.addAttribute("userForm", new User());
+        CreateModelUser(model);
         return "admin/users/create-user";
     }
 
+    //Saving a new user
     @PostMapping("/register/new-user")
     public String addNewUser(@ModelAttribute("userForm") @Valid User userForm,
                              BindingResult bindingResult, Model model) {
@@ -108,12 +121,14 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+    //Post editing
     @GetMapping("/admin/post/edit/{id}")
     public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
         gettingPost(post_id, model, postService, categoryService, tagService);
         return "admin/posts/posts-edit";
     }
 
+    //Getting post data
     static void gettingPost(@PathVariable(name = "id") Long post_id, Model model, PostService postService, CategoryService categoryService, TagService tagService) {
         Post post = postService.findPostById(post_id);
         List<Category> categories = categoryService.allCategory();
@@ -126,31 +141,38 @@ public class AdminController {
         model.addAttribute("status", enums);
     }
 
+    //Post Verification
     @GetMapping("/admin/post/verify/{id}")
     public String verifyPost(@PathVariable(name = "id") Long post_id, Model model) {
         gettingPost(post_id, model, postService, categoryService, tagService);
         return "admin/posts/post-verify";
     }
 
+    //Getting a list of unverified posts
     @GetMapping("/admin/posts-verified")
     public String postsVerified(Model model) {
-        List<Post> posts = postService.posts().stream().filter(x -> x.getStatus() == Status.NOT_VERIFIED).collect(Collectors.toList());
+        List<Post> posts = postService.posts().stream().filter(x -> (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED)).collect(Collectors.toList());
         model.addAttribute("posts", posts);
+        CreateModelUser(model);
         return "admin/posts/posts-verified";
     }
 
+    //Getting a list of users
     @GetMapping("/admin/users")
     public String usersList(Model model) {
         List<User> users = userService.allUsers().stream().filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("allUsers", users);
+        CreateModelUser(model);
         return "admin/users/users";
     }
 
+    //Deleting a user
     @GetMapping("/admin/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin/users";
     }
+
 
     @GetMapping("/admin/gt/{userId}")
     public String gtUser(@PathVariable("userId") Long userId, Model model) {
@@ -158,6 +180,7 @@ public class AdminController {
         return "admin";
     }
 
+    //Editing user data
     @GetMapping("admin/users/edit/{id}")
     public String editUser(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
@@ -165,6 +188,7 @@ public class AdminController {
         return "admin/users/user-edit";
     }
 
+    //Recovering a deleted user
     @GetMapping("admin/users/recovery/{id}")
     public String recoveryUser(@PathVariable(name = "id") Long id, Model model) {
         List<Status> enums = Arrays.asList(Status.values());
@@ -174,6 +198,7 @@ public class AdminController {
         return "admin/users/user-recovery";
     }
 
+    //Changing the user's password
     @GetMapping("admin/users/newpass/{id}")
     public String newpassUser(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
@@ -181,6 +206,7 @@ public class AdminController {
         return "admin/users/user-newpass";
     }
 
+    //Post editing
     @PostMapping("/admin/post/edit-store/{id}")
     public String editStore(@RequestParam(value = "user_id") Long user_id,
                             @PathVariable(name = "id") Long post_id,
@@ -194,8 +220,10 @@ public class AdminController {
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
+    //Post Verification
     @PostMapping("/admin/post/verify-store/{id}")
     public String verifyStore(@RequestParam(value = "user_id") Long user_id,
+                              RedirectAttributes redirectAttributes,
                               @PathVariable(name = "id") Long post_id,
                               @RequestParam(value = "file") MultipartFile file,
                               @RequestParam(value = "title") String title,
@@ -205,11 +233,20 @@ public class AdminController {
                               @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id,
                               @RequestParam(value = "status") String status) {
         Post post = postService.findPostById(post_id);
-        if (!status.isEmpty()) post.setStatus(Status.valueOf(status));
+        String path = "/admin/post/verify/" + post_id;
+        if (!status.isEmpty()) {
+            if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED"))
+                post.setStatus(Status.valueOf(status));
+            else {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "Wrong status selected!");
+                return "redirect:" + path;
+            }
+        }
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
-
+    //Editing user data
     @PostMapping("/admin/edit-store")
     public String Edit(@ModelAttribute("userForm") @Valid User userForm,
                        BindingResult bindingResult,
@@ -225,20 +262,27 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
-            return "redirect:" + (path);
+            return "redirect:" + path;
         }
-        user.setEmail(email);
+        if (!Objects.equals(email, "") && email.equals(user.getEmail()))
+            user.setEmail(email);
+        else {
+            redirectAttributes.getFlashAttributes().clear();
+            redirectAttributes.addFlashAttribute("error", "Email cannot be changed!");
+            return "redirect:" + path;
+        }
         user.setUsername(username);
         if (name == null || name.equals("")) {
             user.setName(null);
         } else {
             user.setName(name);
         }
-        if (addFile(redirectAttributes, file, user, fileService, userService)) return "redirect:" + (path);
+        if (addFile(redirectAttributes, file, user, fileService, userService)) return "redirect:" + path;
 
         return "redirect:/admin/users";
     }
 
+    //User recovery
     @PostMapping("/admin/recovery")
     public String recovery(@ModelAttribute("userForm") @Valid User userForm,
                            BindingResult bindingResult,
@@ -257,9 +301,15 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
-            return "redirect:" + (path);
+            return "redirect:" + path;
         }
-        user.setEmail(email);
+        if (!Objects.equals(email, "") && email.equals(user.getEmail()))
+            user.setEmail(email);
+        else {
+            redirectAttributes.getFlashAttributes().clear();
+            redirectAttributes.addFlashAttribute("error", "Email cannot be changed!");
+            return "redirect:" + path;
+        }
         user.setUsername(username);
         if (name == null || name.equals("")) {
             user.setName(null);
@@ -268,16 +318,23 @@ public class AdminController {
         }
 
         if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
-            return "redirect:" + (path);
+            return "redirect:" + path;
 
-        if (!status.isEmpty()) user.setStatus(Status.valueOf(status));
+        if (!status.isEmpty()) {
+            if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED")) {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "Wrong status selected!");
+                return "redirect:" + path;
+            } else
+                user.setStatus(Status.valueOf(status));
+        }
 
-        if (addFile(redirectAttributes, file, user, fileService, userService)) return "redirect:" + (path);
+        if (addFile(redirectAttributes, file, user, fileService, userService)) return "redirect:" + path;
 
         return "redirect:/admin/users/deleted";
     }
 
-
+    //New user password
     @PostMapping("/admin/newpassword")
     public String newpassword(@ModelAttribute("userForm") @Valid User userForm,
                               BindingResult bindingResult,
@@ -293,21 +350,23 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
-            return "redirect:" + (path);
+            return "redirect:" + path;
         }
 
         if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
-            return "redirect:" + (path);
+            return "redirect:" + path;
 
         return "redirect:/admin/users";
     }
 
+    //Deleting a post
     @GetMapping("/admin/post/delete/{id}")
     public String deletePost(@PathVariable(name = "id") Long post_id) {
         postService.deletePost(post_id);
         return "redirect:/admin/posts/";
     }
 
+    //Saving a new post
     public String setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
                           String description, Long[] tag_id, Post post) {
         post.setUser(userService.findUserById(user_id));
@@ -339,6 +398,7 @@ public class AdminController {
         return "redirect:/admin/posts";
     }
 
+    //Saving a new password
     static boolean addPassword(@ModelAttribute("userForm") @Valid User userForm, RedirectAttributes redirectAttributes,
                                @RequestParam("passwordConfirm") String passwordConfirm,
                                @RequestParam("password") String password,
@@ -359,6 +419,7 @@ public class AdminController {
         return false;
     }
 
+    //Saving a file
     static boolean addFile(RedirectAttributes redirectAttributes, @RequestParam("avatar") MultipartFile file,
                            User user, FileService fileService, UserService userService) {
         if (file != null) {

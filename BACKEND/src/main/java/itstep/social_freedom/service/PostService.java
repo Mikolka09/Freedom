@@ -53,7 +53,6 @@ public class PostService {
     }
 
     public String[] arrayBody(String body) {
-        String[] arr = body.split("\n");
-        return arr;
+        return body.split("\n");
     }
 }
