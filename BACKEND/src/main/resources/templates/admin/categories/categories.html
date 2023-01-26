@@ -77,7 +77,7 @@
 </a>
 
 <th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
-<th:block th:insert="/admin/fragments/edit-category-modal.html::edit-category-modal"></th:block>
+<th:block th:insert="/admin/fragments/edit-modal.html::edit-modal"></th:block>
 <th:block th:insert="/admin/fragments/create-category-modal.html::create-category-modal"></th:block>
 <!-- Logout Modal-->
 <th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
@@ -97,9 +97,13 @@
         let button = $(event.relatedTarget);
         let id = button.data('id');
         let name = button.data('name');
+        let action = "/admin/categories/category-store";
+        let title = "Edit Category";
         let modal = $(this);
         modal.find('#id').val(id);
         modal.find('#name').val(name);
+        modal.find('#exampleModalLabel').text(title);
+        modal.find('#action').prop("action", action);
     })
     $('#DeleteModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget);

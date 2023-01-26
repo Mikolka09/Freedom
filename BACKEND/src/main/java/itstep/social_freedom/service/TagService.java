@@ -21,4 +21,19 @@ public class TagService {
     public Tag findTagById(Long id) {
         return tagRepository.findById(id).orElse(new Tag());
     }
+
+    public boolean save(Tag tag) {
+        Tag tagDB = tagRepository.findTagsByName(tag.getName());
+        if (tagDB != null)
+            return false;
+        tagRepository.save(tag);
+        return true;
+    }
+
+    public void delete(Long id) {
+        if (tagRepository.findById(id).isPresent()) {
+            Tag tag = tagRepository.findById(id).orElse(new Tag());
+            tagRepository.delete(tag);
+        }
+    }
 }

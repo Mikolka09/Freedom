@@ -21,47 +21,35 @@
 
 
             <!-- Begin Page Content -->
-            <div class="col-md-12 col-md-offset-1">
-                <h1 class="text-center">List Users</h1>
+            <div class="col-md-8 col-md-offset-1">
+                <h1 class="text-center">List Tags</h1>
                 <p>
-                    <a class="btn btn-success btn-sm" href="users/create-user" style="border-radius:6px;">Create new
-                        User</a>
+                    <a class="btn btn-success btn-sm" href="#" style="border-radius:6px;"
+                       data-toggle="modal" data-target="#CreateTagModal">Create new tag</a>
                 </p>
                 <table class="table table-hover align-self-center">
                     <thead>
                     <tr style="background: #cff4fc;">
-                        <th scope="col">Avatar</th>
-                        <th scope="col">Username</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
                         <th scope="col">CreateAt</th>
                         <th scope="col">UpdateAt</th>
                         <th scope="col">Buttons</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="user:${allUsers}">
-                        <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
-                                 th:src="@{|/${user.getAvatarUrl()}|}"></td>
-                        <td th:text="${user.getUsername()}"></td>
-                        <td th:text="${user.getName()==null? 'NULL':user.getName()}"></td>
-                        <td th:text="${user.getEmail()}"></td>
-                        <td th:text="${user.getStatus()}"></td>
-                        <td th:text="${#dates.format(user.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                        <td th:text="${#dates.format(user.getUpdatedAt(), 'dd MMM yyyy')}"></td>
+                    <tr th:each="tag:${tags}">
+                        <td th:text="${tag.getName()}"></td>
+                        <td th:text="${#dates.format(tag.getCreatedAt(), 'dd MMM yyyy')}"></td>
+                        <td th:text="${#dates.format(tag.getUpdatedAt(), 'dd MMM yyyy')}"></td>
                         <td>
-                            <a class="btn btn-primary btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/view/${user.getId()}|}">View</a>
-                            <a class="btn btn-success btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/edit/${user.getId()}|}">Edit</a>
-                            <a class="btn btn-info btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/newpass/${user.getId()}|}">Edit Pass</a>
+                            <a class="btn btn-primary btn-sm" style="border-radius:6px;" href="#"
+                               th:data-id="${tag.getId()}"
+                               th:data-name="${tag.getName()}"
+                               data-toggle="modal" data-target="#EditModal">Edit</a>
                             <a class="btn btn-danger btn-sm" style="border-radius:6px;" href="#"
-                               th:data-id="${user.getId()}"
-                               th:data-name="${user.getUsername()}"
+                               th:data-id="${tag.getId()}"
+                               th:data-name="${tag.getName()}"
                                data-toggle="modal" data-target="#DeleteModal">Delete</a>
-                            <!--th:href="@{|/admin/users/delete/${user.getId()}|}"-->
                         </td>
                     </tr>
                 </table>
@@ -86,9 +74,11 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
+<th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
+<th:block th:insert="/admin/fragments/edit-modal.html::edit-modal"></th:block>
+<th:block th:insert="/admin/fragments/create-tag-modal.html::create-tag-modal"></th:block>
 <!-- Logout Modal-->
 <th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
-<th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/admin/vendor/jquery/jquery.min.js"></script>
@@ -101,20 +91,32 @@
 <script src="/admin/js/sb-admin-2.min.js"></script>
 
 <script>
+    $('#EditModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget);
+        let id = button.data('id');
+        let name = button.data('name');
+        let action = "/admin/tags/tag-store";
+        let title = "Edit Tag";
+        let modal = $(this);
+        modal.find('#id').val(id);
+        modal.find('#name').val(name);
+        modal.find('#exampleModalLabel').text(title);
+        modal.find('#action').prop("action", action);
+    })
     $('#DeleteModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget);
         let id = button.data('id');
         let name = button.data('name');
-        let action = "/admin/users/delete/" + id;
-        let label = "Are you sure you're ready to delete User - \"" + name.toUpperCase() + "\"?";
-        let text = "Select \"Delete\" below if you are ready to remove this User."
+        let action = "/admin/tag/delete/" + id;
+        let label = "Are you sure you're ready to delete Tag - \"" + name.toUpperCase() + "\"?";
+        let text = "Select \"Delete\" below if you are ready to remove this Tag."
         let modal = $(this);
         modal.find('#deleteModalLabel').text(label);
         modal.find('#text').text(text);
         modal.find('#action').prop("href", action);
     })
-</script>
 
+</script>
 </body>
 
 </html>

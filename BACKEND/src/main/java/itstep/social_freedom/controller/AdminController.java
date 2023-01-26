@@ -34,7 +34,7 @@ public class AdminController {
 
     private void CreateModelUser(Model model){
         User user = userService.getCurrentUsername();
-        model.addAttribute("user", user);
+        model.addAttribute("admin", user);
     }
 
     //Main page AdminDashboard
@@ -42,6 +42,15 @@ public class AdminController {
     public String index(Model model) {
         CreateModelUser(model);
         return "admin/index";
+    }
+
+    //View Profile User
+    @GetMapping("/admin/users/view/{id}")
+    public String viewProfile(@PathVariable(name = "id") Long id, Model model){
+        User user = userService.findUserById(id);
+        model.addAttribute("user", user);
+        CreateModelUser(model);
+        return "admin/users/view-user";
     }
 
     //Get a list of deleted users
@@ -80,7 +89,7 @@ public class AdminController {
 
     //Saving a post
     @PostMapping("/admin/store-post")
-    public String store(@RequestParam(value = "id") Long user_id,
+    public String store(@RequestParam(value = "id") Long user_id, Model model,
                         @RequestParam(value = "file") MultipartFile file,
                         @RequestParam(value = "title") String title,
                         @RequestParam(value = "shortName") String shortName,
@@ -89,6 +98,7 @@ public class AdminController {
                         @RequestParam(value = "tag_id") Long[] tag_id) {
         Post post = new Post();
         post.setStatus(Status.NOT_VERIFIED);
+        CreateModelUser(model);
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
@@ -104,7 +114,7 @@ public class AdminController {
     @PostMapping("/register/new-user")
     public String addNewUser(@ModelAttribute("userForm") @Valid User userForm,
                              BindingResult bindingResult, Model model) {
-
+        CreateModelUser(model);
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", "Not all fields are filled!");
             return "admin/users/create-user";
@@ -125,6 +135,7 @@ public class AdminController {
     @GetMapping("/admin/post/edit/{id}")
     public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
         gettingPost(post_id, model, postService, categoryService, tagService);
+        CreateModelUser(model);
         return "admin/posts/posts-edit";
     }
 
@@ -144,6 +155,7 @@ public class AdminController {
     //Post Verification
     @GetMapping("/admin/post/verify/{id}")
     public String verifyPost(@PathVariable(name = "id") Long post_id, Model model) {
+        CreateModelUser(model);
         gettingPost(post_id, model, postService, categoryService, tagService);
         return "admin/posts/post-verify";
     }
@@ -185,6 +197,7 @@ public class AdminController {
     public String editUser(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
+        CreateModelUser(model);
         return "admin/users/user-edit";
     }
 
@@ -195,6 +208,7 @@ public class AdminController {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
         model.addAttribute("status", enums);
+        CreateModelUser(model);
         return "admin/users/user-recovery";
     }
 
@@ -203,12 +217,13 @@ public class AdminController {
     public String newpassUser(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
+        CreateModelUser(model);
         return "admin/users/user-newpass";
     }
 
     //Post editing
     @PostMapping("/admin/post/edit-store/{id}")
-    public String editStore(@RequestParam(value = "user_id") Long user_id,
+    public String editStore(@RequestParam(value = "user_id") Long user_id, Model model,
                             @PathVariable(name = "id") Long post_id,
                             @RequestParam(value = "file") MultipartFile file,
                             @RequestParam(value = "title") String title,
@@ -217,13 +232,14 @@ public class AdminController {
                             @RequestParam(value = "description") String description,
                             @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
         Post post = postService.findPostById(post_id);
+        CreateModelUser(model);
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
     //Post Verification
     @PostMapping("/admin/post/verify-store/{id}")
     public String verifyStore(@RequestParam(value = "user_id") Long user_id,
-                              RedirectAttributes redirectAttributes,
+                              RedirectAttributes redirectAttributes, Model model,
                               @PathVariable(name = "id") Long post_id,
                               @RequestParam(value = "file") MultipartFile file,
                               @RequestParam(value = "title") String title,
@@ -232,6 +248,7 @@ public class AdminController {
                               @RequestParam(value = "description") String description,
                               @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id,
                               @RequestParam(value = "status") String status) {
+        CreateModelUser(model);
         Post post = postService.findPostById(post_id);
         String path = "/admin/post/verify/" + post_id;
         if (!status.isEmpty()) {
@@ -249,14 +266,14 @@ public class AdminController {
     //Editing user data
     @PostMapping("/admin/edit-store")
     public String Edit(@ModelAttribute("userForm") @Valid User userForm,
-                       BindingResult bindingResult,
+                       BindingResult bindingResult, Model model,
                        RedirectAttributes redirectAttributes,
                        @RequestParam(value = "user_id") Long user_id,
                        @RequestParam(value = "avatar") MultipartFile file,
                        @RequestParam(value = "username") String username,
                        @RequestParam(value = "name") String name,
                        @RequestParam(value = "email") String email) {
-
+        CreateModelUser(model);
         String path = "../admin/users/edit/" + user_id;
         User user = userService.findUserById(user_id);
         if (bindingResult.hasErrors()) {
@@ -285,7 +302,7 @@ public class AdminController {
     //User recovery
     @PostMapping("/admin/recovery")
     public String recovery(@ModelAttribute("userForm") @Valid User userForm,
-                           BindingResult bindingResult,
+                           BindingResult bindingResult, Model model,
                            RedirectAttributes redirectAttributes,
                            @RequestParam(value = "user_id") Long user_id,
                            @RequestParam(value = "avatar") MultipartFile file,
@@ -295,7 +312,7 @@ public class AdminController {
                            @RequestParam(value = "passwordConfirm") String passwordConfirm,
                            @RequestParam(value = "password") String password,
                            @RequestParam(value = "status") String status) {
-
+        CreateModelUser(model);
         String path = "/admin/users/recovery/" + user_id;
         User user = userService.findUserById(user_id);
         if (bindingResult.hasErrors()) {
@@ -337,14 +354,14 @@ public class AdminController {
     //New user password
     @PostMapping("/admin/newpassword")
     public String newpassword(@ModelAttribute("userForm") @Valid User userForm,
-                              BindingResult bindingResult,
+                              BindingResult bindingResult, Model model,
                               RedirectAttributes redirectAttributes,
                               @RequestParam(value = "user_id") Long user_id,
                               @RequestParam(value = "username") String username,
                               @RequestParam(value = "email") String email,
                               @RequestParam(value = "passwordConfirm") String passwordConfirm,
                               @RequestParam(value = "password") String password) {
-
+        CreateModelUser(model);
         String path = "../admin/users/newpass/" + user_id;
         User user = userService.findUserById(user_id);
         if (bindingResult.hasErrors()) {

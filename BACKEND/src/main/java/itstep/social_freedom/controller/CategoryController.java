@@ -2,7 +2,9 @@ package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.Category;
 import itstep.social_freedom.entity.Post;
+import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.CategoryService;
+import itstep.social_freedom.service.UserService;
 import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +22,17 @@ import java.util.Objects;
 public class CategoryController {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private CategoryService categoryService;
 
     @GetMapping("/admin/categories")
     public String categories(Model model) {
         List<Category> categoryList = categoryService.allCategory();
         model.addAttribute("categories", categoryList);
+        User user = userService.getCurrentUsername();
+        model.addAttribute("admin", user);
         return "/admin/categories/categories";
     }
 
