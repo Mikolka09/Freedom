@@ -1,5 +1,6 @@
 package itstep.social_freedom.controller;
 
+import itstep.social_freedom.entity.Role;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.FileService;
 import itstep.social_freedom.service.PostService;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static itstep.social_freedom.controller.AdminController.addPassword;
@@ -31,7 +33,12 @@ public class UserController {
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
+        ArrayList<String> roles = new ArrayList<>();
+        for(Role r : user.getRoles()){
+            roles.add(r.getName());
+        }
         model.addAttribute("user", user);
+        model.addAttribute("roles", roles);
     }
 
     //Start index
@@ -130,6 +137,13 @@ public class UserController {
         }
 
         return "redirect:/user";
+    }
+
+    //Deleting a user
+    @GetMapping("user/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") Long id) {
+        userService.deleteUser(id);
+        return "redirect:/";
     }
 
 

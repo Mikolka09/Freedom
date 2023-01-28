@@ -40,9 +40,13 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Custom Data:</h6>
+                    <a class="collapse-item" th:href="@{|/user/data/view/${user.getId()}|}">View Profile</a>
                     <a class="collapse-item" th:href="@{|/user/data/edit-data/${user.getId()}|}">Edit Data</a>
                     <a class="collapse-item" th:href="@{|/user/data/edit-pass/${user.getId()}|}">Edit Password</a>
-                    <a class="collapse-item" href="/user/data/list-friends">List Friends</a>
+                    <hr style="margin: 0"/>
+                    <a class="collapse-item text-danger" href="#"
+                       th:data-id="${user.getId()}"
+                       data-toggle="modal" data-target="#DeleteModal">Delete Account</a>
                 </div>
             </div>
         </li>
@@ -90,6 +94,11 @@
         </li>-->
 
         <!-- Nav Item - Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>List Friends</span></a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="charts.html">
                 <i class="fas fa-fw fa-chart-area"></i>

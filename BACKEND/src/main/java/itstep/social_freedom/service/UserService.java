@@ -44,8 +44,6 @@ public class UserService implements UserDetailsService {
     public User getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = new User();
-        String st = auth.getName();
-        Object obj = auth.getPrincipal();
         if (Objects.equals(auth.getName(), "anonymousUser")) {
             return userRepository.findUserByEmail(user.getEmail());
         } else if (Objects.equals(auth.getName(), auth.getPrincipal().toString()) &&
@@ -81,12 +79,14 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public void saveNewPassword(User user){
+    public boolean saveNewPassword(User user){
         User userFromDB = userRepository.findByUsername(user.getUsername());
         if(userFromDB != null){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
+            return true;
         }
+        return false;
     }
 
     public boolean checkPassword(Long id, String pass) {

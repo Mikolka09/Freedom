@@ -33,11 +33,11 @@
                         <div class="col">
                             <div class="p-1">
                                 <form class="user" method="POST" action="/admin/newpassword">
-                                    <input type="hidden" name="user_id" th:value="${user.getId()}">
+                                    <input type="hidden" name="user_id" th:value="${user.getId()}"/>
                                     <div class="form-group row justify-content-center">
                                         <div class="col-md-1">
                                             <img style="border-radius: 50%; padding-bottom: 5px" width="80px"
-                                                 th:src="@{|/${user.getAvatarUrl()}|}" alt="Url">
+                                                 th:src="@{|/${user.getAvatarUrl()}|}" alt="Url"/>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -62,12 +62,12 @@
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <label for="pass"></label>
                                             <input type="password" class="form-control form-control-user" name="password"
-                                                   id="pass" placeholder="Password">
+                                                   id="pass" placeholder="Password"/>
                                         </div>
                                         <div class="col-sm-6">
                                             <label for="re_pass"></label>
                                             <input type="password" class="form-control form-control-user" name="passwordConfirm"
-                                                   id="re_pass" placeholder="Repeat Password">
+                                                   id="re_pass" placeholder="Repeat Password"/>
                                         </div>
                                     </div>
                                     <div class="row">

@@ -32,9 +32,15 @@ public class AdminController {
     @Autowired
     private FileService fileService;
 
-    private void CreateModelUser(Model model){
+    private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
-        model.addAttribute("admin", user);
+        String role = "";
+        ArrayList<String> roles = new ArrayList<>();
+        for(Role r : user.getRoles()){
+            roles.add(r.getName());
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("role", roles);
     }
 
     //Main page AdminDashboard
@@ -46,7 +52,7 @@ public class AdminController {
 
     //View Profile User
     @GetMapping("/admin/users/view/{id}")
-    public String viewProfile(@PathVariable(name = "id") Long id, Model model){
+    public String viewProfile(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
         CreateModelUser(model);
@@ -140,7 +146,10 @@ public class AdminController {
     }
 
     //Getting post data
-    static void gettingPost(@PathVariable(name = "id") Long post_id, Model model, PostService postService, CategoryService categoryService, TagService tagService) {
+    static void gettingPost(@PathVariable(name = "id") Long post_id, Model model,
+                            PostService postService,
+                            CategoryService categoryService,
+                            TagService tagService) {
         Post post = postService.findPostById(post_id);
         List<Category> categories = categoryService.allCategory();
         List<Tag> tags = tagService.allTag();
@@ -163,7 +172,8 @@ public class AdminController {
     //Getting a list of unverified posts
     @GetMapping("/admin/posts-verified")
     public String postsVerified(Model model) {
-        List<Post> posts = postService.posts().stream().filter(x -> (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED)).collect(Collectors.toList());
+        List<Post> posts = postService.posts().stream().filter(x ->
+                (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED)).collect(Collectors.toList());
         model.addAttribute("posts", posts);
         CreateModelUser(model);
         return "admin/posts/posts-verified";
@@ -172,7 +182,8 @@ public class AdminController {
     //Getting a list of users
     @GetMapping("/admin/users")
     public String usersList(Model model) {
-        List<User> users = userService.allUsers().stream().filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
+        List<User> users = userService.allUsers().stream().
+                filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("allUsers", users);
         CreateModelUser(model);
         return "admin/users/users";
@@ -409,7 +420,11 @@ public class AdminController {
         } else {
             user.setPassword(password);
             user.setPasswordConfirm(passwordConfirm);
-            service.saveNewPassword(user);
+            if (!service.saveNewPassword(user)) {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "Passwords do not save!");
+                return true;
+            }
         }
         return false;
     }

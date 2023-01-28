@@ -1,7 +1,6 @@
 package itstep.social_freedom.service;
 
 import itstep.social_freedom.entity.Category;
-import itstep.social_freedom.entity.User;
 import itstep.social_freedom.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

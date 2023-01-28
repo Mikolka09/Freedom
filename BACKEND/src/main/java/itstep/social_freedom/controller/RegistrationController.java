@@ -48,57 +48,5 @@ public class RegistrationController {
         return "register/login";
     }
 
-    @PostMapping("/register/edit")
-    public String Edit(@ModelAttribute("userForm") @Valid User userForm,
-                       BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes,
-                       @RequestParam(value = "id") Long id,
-                       @RequestParam(value = "avatar") MultipartFile file,
-                       @RequestParam(value = "username") String username,
-                       @RequestParam(value = "email") String email,
-                       @RequestParam(value = "passOld") String oldPass,
-                       @RequestParam(value = "password") String password,
-                       @RequestParam(value = "passwordConfirm") String passwordConfirm) {
-
-        String path = "../registration/edit/" + userForm.getId();
-
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.getFlashAttributes().clear();
-            redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
-            return "redirect:" + (path);
-        }
-        userForm.setEmail(email);
-        userForm.setUsername(username);
-
-        if (userService.checkPassword(id, oldPass)) {
-            if (AdminController.addPassword(userForm, redirectAttributes, passwordConfirm, password, userForm, userService))
-                return "redirect:" + (path);
-        } else {
-            redirectAttributes.getFlashAttributes().clear();
-            redirectAttributes.addFlashAttribute("error", "The old password was entered incorrectly!");
-            return "redirect:" + (path);
-        }
-
-        if (AdminController.addFile(redirectAttributes, file, userForm, fileService, userService))
-            return "redirect:" + (path);
-
-        return "redirect:/";
-    }
-
-    @GetMapping("registration/edit/{id}")
-    public String editUser(@PathVariable(name = "id") Long id, Model model) {
-
-        User user = userService.findUserById(id);
-        String url = user.getAvatarUrl();
-        user.setAvatarUrl("http://localhost:8080/" + url);
-        model.addAttribute("User", user);
-        return "/register/edit";
-    }
-
-    @GetMapping("registration/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") Long id) {
-        userService.deleteUser(id);
-        return "redirect:/";
-    }
 
 }
