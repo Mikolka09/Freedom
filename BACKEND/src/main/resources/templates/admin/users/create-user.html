@@ -51,8 +51,17 @@
                                                th:field="*{passwordConfirm}"  id="re_pass" placeholder="Repeat Password">
                                     </div>
                                 </div>
-                                <input type="submit" name="signup" id="signup" class="btn btn-primary btn-user btn-block"
-                                  value="Create User"/>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="submit" name="signup" id="signup"
+                                               class="btn btn-success btn-user btn-block"
+                                               value="Create"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <a type="button" href="/admin/users"
+                                           class="btn btn-info btn-user btn-block">Back</a>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>

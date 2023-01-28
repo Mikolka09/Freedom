@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREEDOM</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h1 class="text-center">Create Post</h1>
+        <div class="col-md-8">
+            <form action="/post/store" enctype="multipart/form-data" method="POST">
+                <input type="hidden" name="id" th:value="${user_id}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" class="form-control" id="title"
+                                       placeholder="Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="shortName">Short Name</label>
+                                <input type="text" name="shortName" class="form-control" id="shortName"
+                                       placeholder="Short Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="category_id">Category</label>
+                                <select class="form-control" name="category_id" id="category_id">
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="file">Image</label>
+                                <input class="form-control" type="file" name="file" id="file"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="tag_id">Tag</label>
+                                <select class="form-control" name="tag_id" id="tag_id" multiple>
+                                    <option th:each="tag : ${tags}"
+                                            th:value="${tag.id}"
+                                            th:text="${tag.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description" id="description" rows="26"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-button">
+                    <input type="submit" name="signup" id="signup" class="btn btn-success" value="Create"/>
+                    <a class="btn btn-info" id="sign-out" href="/static">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -274,26 +274,15 @@ public class AdminController {
                        @RequestParam(value = "name") String name,
                        @RequestParam(value = "email") String email) {
         CreateModelUser(model);
-        String path = "../admin/users/edit/" + user_id;
+        String path = "/admin/users/edit/" + user_id;
         User user = userService.findUserById(user_id);
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
             return "redirect:" + path;
         }
-        if (!Objects.equals(email, "") && email.equals(user.getEmail()))
-            user.setEmail(email);
-        else {
-            redirectAttributes.getFlashAttributes().clear();
-            redirectAttributes.addFlashAttribute("error", "Email cannot be changed!");
+        if (UserController.setDataUser(redirectAttributes, username, name, email, user))
             return "redirect:" + path;
-        }
-        user.setUsername(username);
-        if (name == null || name.equals("")) {
-            user.setName(null);
-        } else {
-            user.setName(name);
-        }
         if (addFile(redirectAttributes, file, user, fileService, userService)) return "redirect:" + path;
 
         return "redirect:/admin/users";
@@ -320,19 +309,8 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
             return "redirect:" + path;
         }
-        if (!Objects.equals(email, "") && email.equals(user.getEmail()))
-            user.setEmail(email);
-        else {
-            redirectAttributes.getFlashAttributes().clear();
-            redirectAttributes.addFlashAttribute("error", "Email cannot be changed!");
+        if (UserController.setDataUser(redirectAttributes, username, name, email, user))
             return "redirect:" + path;
-        }
-        user.setUsername(username);
-        if (name == null || name.equals("")) {
-            user.setName(null);
-        } else {
-            user.setName(name);
-        }
 
         if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
             return "redirect:" + path;
@@ -362,7 +340,7 @@ public class AdminController {
                               @RequestParam(value = "passwordConfirm") String passwordConfirm,
                               @RequestParam(value = "password") String password) {
         CreateModelUser(model);
-        String path = "../admin/users/newpass/" + user_id;
+        String path = "/admin/users/newpass/" + user_id;
         User user = userService.findUserById(user_id);
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();

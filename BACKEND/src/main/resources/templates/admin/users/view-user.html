@@ -105,10 +105,33 @@
                                     <div class="col-sm-6">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">Count Post: </div>
+                                                <div class="view-user">Number of posts: </div>
                                             </div>
                                             <div class="col-6 p-3">
                                                 <div class="view-user-data" th:text="${user.getPosts().size()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Number of friend: </div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data"
+                                                     th:text="0"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Number of comments: </div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data" th:text="${user.getComments().size()}"></div>
                                             </div>
                                         </div>
                                     </div>

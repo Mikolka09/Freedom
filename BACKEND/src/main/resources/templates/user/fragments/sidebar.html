@@ -1,12 +1,15 @@
-<div>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="sidebar">
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">Admin - FreeDom</div>
+            <div class="sidebar-brand-text mx-3">User - FreeDom</div>
         </a>
 
         <!-- Divider -->
@@ -14,9 +17,9 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="/admin">
+            <a class="nav-link" href="/user">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
+                <span>UserDashboard</span></a>
         </li>
 
         <!-- Divider -->
@@ -24,7 +27,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Users Data
+            User Data
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
@@ -32,13 +35,14 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>
-                <span>Users</span>
+                <span>My Data</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Users:</h6>
-                    <a class="collapse-item" href="/admin/users">Users List</a>
-                    <a class="collapse-item" href="/admin/users/deleted">Deleted Users</a>
+                    <h6 class="collapse-header">Custom Data:</h6>
+                    <a class="collapse-item" th:href="@{|/user/data/edit-data/${user.getId()}|}">Edit Data</a>
+                    <a class="collapse-item" th:href="@{|/user/data/edit-pass/${user.getId()}|}">Edit Password</a>
+                    <a class="collapse-item" href="/user/data/list-friends">List Friends</a>
                 </div>
             </div>
         </li>
@@ -54,8 +58,9 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Custom Posts:</h6>
-                    <a class="collapse-item" href="/admin/posts">Posts List</a>
-                    <a class="collapse-item" href="/admin/posts-verified">Posts not verified</a>
+                    <a class="collapse-item" href="/user/posts">My Posts</a>
+                    <a class="collapse-item" href="login.html">My Comments</a>
+                    <a class="collapse-item" href="login.html">Friends Posts</a>
                 </div>
             </div>
         </li>
@@ -64,43 +69,38 @@
         <hr class="sidebar-divider">
 
         <!-- Heading -->
-        <div class="sidebar-heading">
-            My Data
+       <!-- <div class="sidebar-heading">
+            Moderator Menu
         </div>
 
-        <!-- Nav Item - Pages Collapse Menu -->
+        &lt;!&ndash; Nav Item - Pages Collapse Menu &ndash;&gt;
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-fw fa-folder"></i>
-                <span>Pages</span>
+                <span>Pages Menu</span>
             </a>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">All Data:</h6>
-                    <a class="collapse-item" href="login.html">List Comments</a>
-                    <a class="collapse-item" href="register.html">List Tags</a>
-                    <a class="collapse-item" href="/admin/categories">List Categories</a>
-                    <div class="collapse-divider"></div>
-                    <h6 class="collapse-header">Other Pages:</h6>
-                    <a class="collapse-item" href="404.html">404 Page</a>
-                    <a class="collapse-item" href="blank.html">Blank Page</a>
+                    <h6 class="collapse-header">All Pages:</h6>
+                    <a class="collapse-item" href="login.html">Posts</a>
+                    <a class="collapse-item" href="/admin/tags">Posts not verified</a>
                 </div>
             </div>
-        </li>
+        </li>-->
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
             <a class="nav-link" href="charts.html">
                 <i class="fas fa-fw fa-chart-area"></i>
-                <span>Charts</span></a>
+                <span>Mail</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
             <a class="nav-link" href="tables.html">
                 <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
+                <span>Chat</span></a>
         </li>
 
         <!-- Divider -->

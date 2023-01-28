@@ -1,9 +1,7 @@
 package itstep.social_freedom.controller;
 
 
-import itstep.social_freedom.entity.Category;
-import itstep.social_freedom.entity.Post;
-import itstep.social_freedom.entity.Tag;
+import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -117,15 +115,19 @@ public class PostController {
         return "redirect:/post/" + user_id;
     }
 
-    @GetMapping("/post/preview/{id}")
+    //Preview post
+    @GetMapping("/user/posts/preview/{id}")
     public String previewPost(@PathVariable(name = "id") Long post_id, Model model) {
         Post post = postService.findPostById(post_id);
+        User user = userService.getCurrentUsername();
         String[] bodies = postService.arrayBody(post.getBody());
         List<Category> categories = categoryService.allCategory();
         model.addAttribute("categories", categories);
         model.addAttribute("bodies", bodies);
         model.addAttribute("post", post);
-        return "/post/preview-post";
+        model.addAttribute("user", user);
+        model.addAttribute("status", Status.values());
+        return "/user/posts/preview-post";
     }
 
     @GetMapping("/post/delete/{id}")
