@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -30,32 +31,35 @@ public class PostController {
     @Autowired
     private FileService fileService;
 
-    @GetMapping("/post/{id}")
-    public String index(@PathVariable(name = "id") Long id, Model model) {
-        List<Post> posts = postService.allPosts(id);
-        if (!posts.isEmpty()) {
-            model.addAttribute("user_id", id);
-            model.addAttribute("posts", posts);
-            return "post/index";
-        } else {
-            return "redirect:create/" + id;
-        }
+    private void CreateModelUser(Model model) {
+        User user = userService.getCurrentUsername();
+        model.addAttribute("user", user);
     }
 
-    @GetMapping("/post/create/{id}")
-    public String create(@PathVariable(name = "id") Long id, Model model) {
+    @GetMapping("/user/posts/{id}")
+    public String index(@PathVariable(name = "id") Long id, Model model) {
+        List<Post> posts = postService.posts().stream()
+                .filter(post -> (post.getStatus() == Status.VERIFIED || post.getStatus() == Status.NOT_VERIFIED))
+                .collect(Collectors.toList());
+        CreateModelUser(model);
         model.addAttribute("user_id", id);
-        String action = "/post/store";
+        model.addAttribute("posts", posts);
+        return "user/posts/index";
+    }
+
+    @GetMapping("/user/posts/create/{id}")
+    public String create(@PathVariable(name = "id") Long id, Model model) {
+        model.addAttribute("userId", id);
         List<Category> categories = categoryService.allCategory();
         List<Tag> tags = tagService.allTag();
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
-        model.addAttribute("action", action);
-        return "post/create-post";
+        CreateModelUser(model);
+        return "user/posts/create-post";
     }
 
-    @PostMapping("/post/store")
-    public String store(@RequestParam(value = "id") Long user_id,
+    @PostMapping("/user/posts/store")
+    public String store(@RequestParam(value = "id") Long user_id, Model model,
                         @RequestParam(value = "file") MultipartFile file,
                         @RequestParam(value = "title") String title,
                         @RequestParam(value = "shortName") String shortName,
@@ -63,25 +67,30 @@ public class PostController {
                         @RequestParam(value = "description") String description,
                         @RequestParam(value = "tag_id") Long[] tag_id) {
         Post post = new Post();
+        post.setStatus(Status.NOT_VERIFIED);
+        CreateModelUser(model);
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
-    @GetMapping("/post/edit/{id}")
+    @GetMapping("/user/posts/edit/{id}")
     public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
         AdminController.gettingPost(post_id, model, postService, categoryService, tagService);
-        return "/post/edit-post";
+        CreateModelUser(model);
+        return "/user/posts/edit-post";
     }
 
-    @PostMapping("/post/edit-store/{id}")
-    public String editStore(@RequestParam(value = "user_id") Long user_id,
+    @PostMapping("/user/posts/edit-store/{id}")
+    public String editStore(@RequestParam(value = "user_id") Long user_id, Model model,
                             @PathVariable(name = "id") Long post_id,
                             @RequestParam(value = "file") MultipartFile file,
                             @RequestParam(value = "title") String title,
                             @RequestParam(value = "shortName") String shortName,
-                            @RequestParam(value = "category_id") Long category_id,
+                            @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
                             @RequestParam(value = "description") String description,
-                            @RequestParam(value = "tag_id") Long[] tag_id) {
+                            @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
         Post post = postService.findPostById(post_id);
+        post.setStatus(Status.NOT_VERIFIED);
+        CreateModelUser(model);
         return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
     }
 
@@ -92,7 +101,8 @@ public class PostController {
             post.setTitle(title);
         if (!Objects.equals(shortName, ""))
             post.setShortName(shortName);
-        post.setCategory(categoryService.findCategoryById(category_id));
+        if (!category_id.toString().equals("0"))
+            post.setCategory(categoryService.findCategoryById(category_id));
         if (!Objects.equals(description, ""))
             post.setBody(description);
         if (tag_id != null) {
@@ -110,9 +120,9 @@ public class PostController {
             if (!file.isEmpty())
                 post.setImgUrl(fileService.uploadFile(file, ""));
         }
-        if(!postService.savePost(post))
-            return "redirect:/post/store";
-        return "redirect:/post/" + user_id;
+        if (!postService.savePost(post))
+            return "redirect:/user/posts/store";
+        return "redirect:/user/posts/" + user_id;
     }
 
     //Preview post
@@ -130,11 +140,11 @@ public class PostController {
         return "/user/posts/preview-post";
     }
 
-    @GetMapping("/post/delete/{id}")
+    @GetMapping("/user/posts/delete/{id}")
     public String deletePost(@PathVariable(name = "id") Long post_id) {
         postService.deletePost(post_id);
         Long user_id = userService.getCurrentUsername().getId();
-        return "redirect:../../post/" + user_id;
+        return "redirect:/user/posts/" + user_id;
     }
 
 }

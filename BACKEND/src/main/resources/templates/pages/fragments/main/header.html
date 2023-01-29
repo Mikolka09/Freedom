@@ -35,8 +35,8 @@
                                     <span th:text="${user.getUsername()}"></span> <i
                                             class="bi bi-chevron-down dropdown-indicator"></i></a>
                                 <ul>
-                                    <li><a th:if="${#lists.contains(roles,'ROLE_USER')}" href="/user">UserDashBoard</a></li>
-                                    <li><a th:if="${#lists.contains(roles,'ROLE_ADMIN')}" href="/admin">AdminDashBoard</a></li>
+                                    <li><a th:if="${role=='ROLE_USER'}" href="/user">UserDashBoard</a></li>
+                                    <li><a th:if="${role=='ROLE_ADMIN'}" href="/admin">AdminDashBoard</a></li>
                                     <li>
                                         <hr style="margin: 0">
                                         <a href="/logout">LogOut</a></li>

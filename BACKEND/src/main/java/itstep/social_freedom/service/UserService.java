@@ -79,9 +79,9 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public boolean saveNewPassword(User user){
+    public boolean saveNewPassword(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-        if(userFromDB != null){
+        if (userFromDB != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
             return true;
@@ -98,19 +98,39 @@ public class UserService implements UserDetailsService {
     public boolean save(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
         if (userFromDB == null) {
-            userFromDB = userRepository.findById(user.getId()).orElse(new User());
-            userFromDB.setUsername(user.getUsername());
+            return saveNewUser(user);
+        } else if (Objects.equals(userFromDB.getId(), user.getId())) {
             userFromDB.setEmail(user.getEmail());
             if (user.getAvatarUrl() != null)
                 userFromDB.setAvatarUrl(user.getAvatarUrl());
             userFromDB.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(userFromDB);
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean saveNewUser(User user) {
+        User userFromDB;
+        userFromDB = userRepository.findById(user.getId()).orElse(new User());
+        userFromDB.setUsername(user.getUsername());
+        userFromDB.setEmail(user.getEmail());
+        if (user.getAvatarUrl() != null)
+            userFromDB.setAvatarUrl(user.getAvatarUrl());
+        userFromDB.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(userFromDB);
+        return true;
+    }
+
+    public boolean saveEdit(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if (userFromDB == null) {
+            return saveNewUser(user);
         } else if (Objects.equals(userFromDB.getId(), user.getId())) {
             userFromDB.setEmail(user.getEmail());
             if (user.getAvatarUrl() != null)
                 userFromDB.setAvatarUrl(user.getAvatarUrl());
-            userFromDB.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(userFromDB);
             return true;
         } else {

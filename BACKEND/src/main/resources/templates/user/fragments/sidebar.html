@@ -62,7 +62,7 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Custom Posts:</h6>
-                    <a class="collapse-item" href="/user/posts">My Posts</a>
+                    <a class="collapse-item" th:href="@{|/user/posts/${user.getId()}|}">My Posts</a>
                     <a class="collapse-item" href="login.html">My Comments</a>
                     <a class="collapse-item" href="login.html">Friends Posts</a>
                 </div>

@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class PageController {
@@ -25,9 +26,19 @@ public class PageController {
     private void CreateModel(Model model){
         User user = userService.getCurrentUsername();
         List<Category> categories = categoryService.allCategory();
+        String role = "";
+        if(user != null) {
+            for (Role r : user.getRoles()) {
+                if (Objects.equals(r.getName(), "ROLE_ADMIN"))
+                    role = r.getName();
+                if (Objects.equals(r.getName(), "ROLE_USER"))
+                    role = r.getName();
+            }
+        }
         model.addAttribute("user", user);
         model.addAttribute("categories", categories);
         model.addAttribute("status", Status.values());
+        model.addAttribute("role", role);
     }
 
     @GetMapping("/")

@@ -1,26 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Admin - Users</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="/admin/css/sb-admin-2.min.css" rel="stylesheet">
-
-</head>
+<th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
 <body id="page-top">
 
@@ -28,7 +9,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <th:block th:include="/admin/fragments/sidebar"></th:block>
+    <th:block th:insert="/admin/fragments/sidebar.html::sidebar"></th:block>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -36,7 +17,7 @@
 
         <!-- Main Content -->
         <div id="content">
-            <th:block th:include="/admin/fragments/topbar"></th:block>
+            <th:block th:insert="/admin/fragments/topbar.html::topbar"></th:block>
 
 
             <!-- Begin Page Content -->
@@ -100,7 +81,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <th:block th:include="/admin/fragments/footer"></th:block>
+        <th:block th:insert="/admin/fragments/footer.html::footer"></th:block>
         <!-- End of Footer -->
 
     </div>
@@ -115,7 +96,7 @@
 </a>
 
 <!-- Logout Modal-->
-<th:block th:include="/admin/fragments/logout-modal"></th:block>
+<th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
 <th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
 
 <!-- Bootstrap core JavaScript-->

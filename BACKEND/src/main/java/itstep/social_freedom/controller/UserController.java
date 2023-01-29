@@ -33,12 +33,7 @@ public class UserController {
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
-        ArrayList<String> roles = new ArrayList<>();
-        for(Role r : user.getRoles()){
-            roles.add(r.getName());
-        }
         model.addAttribute("user", user);
-        model.addAttribute("roles", roles);
     }
 
     //Start index
@@ -71,6 +66,7 @@ public class UserController {
         CreateModelUser(model);
         String path = "/user/data/edit-data/" + id;
         User user = userService.findUserById(id);
+        boolean edit = false;
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
@@ -83,7 +79,7 @@ public class UserController {
         }
         if (setDataUser(redirectAttributes, username, name, email, user)) return "redirect:" + path;
         user.setPassword(oldPass);
-        if (AdminController.addFile(redirectAttributes, file, user, fileService, userService))
+        if (AdminController.addFile(redirectAttributes, file, user, fileService, userService, edit))
             return "redirect:" + (path);
 
         return "redirect:/user/data/view/" + id;
@@ -130,7 +126,7 @@ public class UserController {
         if (userService.checkPassword(user_id, passOld)) {
             if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
                 return "redirect:" + path;
-        }else {
+        } else {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "The old password was entered incorrectly!");
             return "redirect:" + (path);

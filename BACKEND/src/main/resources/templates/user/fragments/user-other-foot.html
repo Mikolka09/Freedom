@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="user-other-foot">
+  <!-- Bootstrap core JavaScript-->
+  <script src="/user/vendor/jquery/jquery.min.js"></script>
+  <script src="/user/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/user/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/user/js/sb-admin-2.min.js"></script>
+
+  <!-- JS -->
+  <script src="/register/js/main.js"></script>
+
+  <script>
+    $('#DeleteModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget);
+      let id = button.data('id');
+      let action = "/user/delete/" + id;
+      let label = "Are you sure you want to delete your account?";
+      let text = "Select \"Delete\" below if you are ready to remove your account"
+      let modal = $(this);
+      modal.find('#deleteModalLabel').text(label);
+      modal.find('#text').text(text);
+      modal.find('#action').prop("href", action);
+    })
+  </script>
+
+</div>
+
+

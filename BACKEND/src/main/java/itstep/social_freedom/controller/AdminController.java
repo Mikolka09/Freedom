@@ -34,13 +34,7 @@ public class AdminController {
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
-        String role = "";
-        ArrayList<String> roles = new ArrayList<>();
-        for(Role r : user.getRoles()){
-            roles.add(r.getName());
-        }
-        model.addAttribute("user", user);
-        model.addAttribute("role", roles);
+        model.addAttribute("admin", user);
     }
 
     //Main page AdminDashboard
@@ -287,6 +281,7 @@ public class AdminController {
         CreateModelUser(model);
         String path = "/admin/users/edit/" + user_id;
         User user = userService.findUserById(user_id);
+        boolean edit = true;
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
@@ -294,7 +289,7 @@ public class AdminController {
         }
         if (UserController.setDataUser(redirectAttributes, username, name, email, user))
             return "redirect:" + path;
-        if (addFile(redirectAttributes, file, user, fileService, userService)) return "redirect:" + path;
+        if (addFile(redirectAttributes, file, user, fileService, userService, edit)) return "redirect:" + path;
 
         return "redirect:/admin/users";
     }
@@ -315,6 +310,7 @@ public class AdminController {
         CreateModelUser(model);
         String path = "/admin/users/recovery/" + user_id;
         User user = userService.findUserById(user_id);
+        boolean edit = true;
         if (bindingResult.hasErrors()) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
@@ -335,7 +331,7 @@ public class AdminController {
                 user.setStatus(Status.valueOf(status));
         }
 
-        if (addFile(redirectAttributes, file, user, fileService, userService)) return "redirect:" + path;
+        if (addFile(redirectAttributes, file, user, fileService, userService, edit)) return "redirect:" + path;
 
         return "redirect:/admin/users/deleted";
     }
@@ -400,7 +396,7 @@ public class AdminController {
                 post.setImgUrl(fileService.uploadFile(file, ""));
         }
         if (!postService.savePost(post))
-            return "redirect:/admin/post/edit/ + user_id";
+            return "redirect:/admin/post/edit/" + user_id;
         return "redirect:/admin/posts";
     }
 
@@ -431,16 +427,24 @@ public class AdminController {
 
     //Saving a file
     static boolean addFile(RedirectAttributes redirectAttributes, @RequestParam("avatar") MultipartFile file,
-                           User user, FileService fileService, UserService userService) {
+                           User user, FileService fileService, UserService userService, boolean edit) {
         if (file != null) {
             if (!file.isEmpty())
                 user.setAvatarUrl(fileService.uploadFile(file, "avatar/"));
         }
 
-        if (!userService.save(user)) {
-            redirectAttributes.getFlashAttributes().clear();
-            redirectAttributes.addFlashAttribute("error", "A user with the same name already exists!");
-            return true;
+        if (edit) {
+            if (!userService.saveEdit(user)) {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "A user with the same name already exists!");
+                return true;
+            }
+        } else {
+            if (!userService.save(user)) {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "A user with the same name already exists!");
+                return true;
+            }
         }
         return false;
     }
