@@ -99,7 +99,9 @@ public class AdminController {
         Post post = new Post();
         post.setStatus(Status.NOT_VERIFIED);
         CreateModelUser(model);
-        return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
+        if (setPost(user_id, file, title, shortName, category_id, description, tag_id, post))
+            return "redirect:/admin/posts";
+        return "redirect:/admin/create-post/" + user_id;
     }
 
     //Creating a new user
@@ -238,7 +240,9 @@ public class AdminController {
                             @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
         Post post = postService.findPostById(post_id);
         CreateModelUser(model);
-        return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
+        if (setPost(user_id, file, title, shortName, category_id, description, tag_id, post))
+            return "redirect:/admin/posts";
+        return "redirect:/admin/post/edit/" + user_id;
     }
 
     //Post Verification
@@ -257,7 +261,7 @@ public class AdminController {
         Post post = postService.findPostById(post_id);
         String path = "/admin/post/verify/" + post_id;
         if (!status.isEmpty()) {
-            if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED"))
+            if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED") || status.equals("DELETED"))
                 post.setStatus(Status.valueOf(status));
             else {
                 redirectAttributes.getFlashAttributes().clear();
@@ -265,7 +269,9 @@ public class AdminController {
                 return "redirect:" + path;
             }
         }
-        return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
+        if (setPost(user_id, file, title, shortName, category_id, description, tag_id, post))
+            return "redirect:/admin/posts-verified";
+        return "redirect:/admin/post/verify/" + user_id;
     }
 
     //Editing user data
@@ -369,8 +375,8 @@ public class AdminController {
     }
 
     //Saving a new post
-    public String setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
-                          String description, Long[] tag_id, Post post) {
+    public boolean setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
+                           String description, Long[] tag_id, Post post) {
         post.setUser(userService.findUserById(user_id));
         if (!Objects.equals(title, ""))
             post.setTitle(title);
@@ -395,9 +401,9 @@ public class AdminController {
             if (!file.isEmpty())
                 post.setImgUrl(fileService.uploadFile(file, ""));
         }
-        if (!postService.savePost(post))
-            return "redirect:/admin/post/edit/" + user_id;
-        return "redirect:/admin/posts";
+        return postService.savePost(post);
+           /* return "redirect:/admin/post/edit/" + user_id;
+        return "redirect:/admin/posts";*/
     }
 
     //Saving a new password
