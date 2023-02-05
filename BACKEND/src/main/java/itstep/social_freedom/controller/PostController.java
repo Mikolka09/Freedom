@@ -38,7 +38,7 @@ public class PostController {
 
     @GetMapping("/user/posts/{id}")
     public String index(@PathVariable(name = "id") Long id, Model model) {
-        List<Post> posts = postService.posts().stream()
+        List<Post> posts = postService.allPosts(id).stream()
                 .filter(post -> (post.getStatus() == Status.VERIFIED || post.getStatus() == Status.NOT_VERIFIED))
                 .collect(Collectors.toList());
         CreateModelUser(model);

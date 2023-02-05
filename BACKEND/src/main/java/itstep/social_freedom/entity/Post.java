@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @Table(name = "posts")
-public class Post extends BaseEntity {
+public class Post extends BaseEntity implements Comparable<Post> {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -60,5 +61,10 @@ public class Post extends BaseEntity {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public int compareTo(Post post) {
+        return post.getCreatedAt().compareTo(post.getCreatedAt());
     }
 }

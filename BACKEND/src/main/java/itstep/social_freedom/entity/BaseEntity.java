@@ -41,4 +41,5 @@ public class BaseEntity {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }

@@ -1,21 +1,22 @@
 package itstep.social_freedom.controller;
 
-import itstep.social_freedom.entity.Category;
-import itstep.social_freedom.entity.Role;
-import itstep.social_freedom.entity.Status;
-import itstep.social_freedom.entity.User;
+import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.CategoryService;
+import itstep.social_freedom.service.PostService;
 import itstep.social_freedom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class PageController {
+
+    @Autowired
+    private PostService postService;
 
     @Autowired
     private UserService userService;
@@ -43,6 +44,10 @@ public class PageController {
 
     @GetMapping("/")
     public String index(Model model) {
+        List<Post> posts = postService.posts()
+                .stream().filter(post -> post.getStatus() == Status.VERIFIED)
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed()).collect(Collectors.toList());
+        model.addAttribute("posts", posts);
         CreateModel(model);
         return "pages/index";
     }
