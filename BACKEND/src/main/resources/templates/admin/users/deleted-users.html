@@ -23,35 +23,42 @@
             <!-- Begin Page Content -->
             <div class="col-md-12 col-md-offset-1">
                 <h1 class="text-center">List Deleted Users</h1>
-                <table class="table table-hover align-self-center">
-                    <thead>
-                    <tr style="background: #cff4fc;">
-                        <th scope="col">Avatar</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">CreateAt</th>
-                        <th scope="col">UpdateAt</th>
-                        <th scope="col">Buttons</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="user:${users}">
-                        <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
-                                 th:src="@{|/${user.getAvatarUrl()}|}"></td>
-                        <td th:text="${user.getUsername()}"></td>
-                        <td th:text="${user.getName()==null? 'NULL':user.getName()}"></td>
-                        <td th:text="${user.getEmail()}"></td>
-                        <td th:text="${user.getStatus()}"></td>
-                        <td th:text="${#dates.format(user.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                        <td th:text="${#dates.format(user.getUpdatedAt(), 'dd MMM yyyy')}"></td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/recovery/${user.getId()}|}">Recovery</a>
-                        </td>
-                    </tr>
-                </table>
+                <div class="scroll-table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">CreateAt</th>
+                            <th scope="col">UpdateAt</th>
+                            <th scope="col">Buttons</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody>
+                            <tr th:each="user:${users}">
+                                <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
+                                         th:src="@{|/${user.getAvatarUrl()}|}"></td>
+                                <td th:text="${user.getUsername()}"></td>
+                                <td th:text="${user.getName()==null? 'NULL':user.getName()}"></td>
+                                <td th:text="${user.getEmail()}"></td>
+                                <td th:text="${user.getStatus()}"></td>
+                                <td th:text="${#dates.format(user.getCreatedAt(), 'dd MMM yyyy')}"></td>
+                                <td th:text="${#dates.format(user.getUpdatedAt(), 'dd MMM yyyy')}"></td>
+                                <td>
+                                    <a th:href="@{|/admin/users/recovery/${user.getId()}|}" title="Recovery">
+                                        <img src="/img/icon/restore.png" width="30px"/></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 

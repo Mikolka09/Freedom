@@ -402,8 +402,6 @@ public class AdminController {
                 post.setImgUrl(fileService.uploadFile(file, ""));
         }
         return postService.savePost(post);
-           /* return "redirect:/admin/post/edit/" + user_id;
-        return "redirect:/admin/posts";*/
     }
 
     //Saving a new password

@@ -27,43 +27,50 @@
                     <a class="btn btn-success btn-sm" href="users/create-user" style="border-radius:6px;">Create new
                         User</a>
                 </p>
-                <table class="table table-hover align-self-center">
-                    <thead>
-                    <tr style="background: #cff4fc;">
-                        <th scope="col">Avatar</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">CreateAt</th>
-                        <th scope="col">UpdateAt</th>
-                        <th scope="col">Buttons</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="user:${allUsers}">
-                        <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
-                                 th:src="@{|/${user.getAvatarUrl()}|}"></td>
-                        <td th:text="${user.getUsername()}"></td>
-                        <td th:text="${user.getName()==null? 'NULL':user.getName()}"></td>
-                        <td th:text="${user.getEmail()}"></td>
-                        <td th:text="${user.getStatus()}"></td>
-                        <td th:text="${#dates.format(user.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                        <td th:text="${#dates.format(user.getUpdatedAt(), 'dd MMM yyyy')}"></td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/view/${user.getId()}|}">View</a>
-                            <a class="btn btn-success btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/edit/${user.getId()}|}">Edit</a>
-                            <a class="btn btn-info btn-sm" style="border-radius:6px;"
-                               th:href="@{|/admin/users/newpass/${user.getId()}|}">Edit Pass</a>
-                            <a class="btn btn-danger btn-sm" style="border-radius:6px;" href="#"
-                               th:data-id="${user.getId()}"
-                               th:data-name="${user.getUsername()}"
-                               data-toggle="modal" data-target="#DeleteModal">Delete</a>
-                        </td>
-                    </tr>
-                </table>
+                <div class="scroll-table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">CreateAt</th>
+                            <th scope="col">UpdateAt</th>
+                            <th scope="col">Buttons</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody>
+                            <tr th:each="user:${allUsers}">
+                                <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
+                                         th:src="@{|/${user.getAvatarUrl()}|}"></td>
+                                <td th:text="${user.getUsername()}"></td>
+                                <td th:text="${user.getName()==null? 'NULL':user.getName()}"></td>
+                                <td th:text="${user.getEmail()}"></td>
+                                <td th:text="${user.getStatus()}"></td>
+                                <td th:text="${#dates.format(user.getCreatedAt(), 'dd MMM yyyy')}"></td>
+                                <td th:text="${#dates.format(user.getUpdatedAt(), 'dd MMM yyyy')}"></td>
+                                <td>
+                                    <a th:href="@{|/admin/users/view/${user.getId()}|}" title="View">
+                                        <img src="/img/icon/view.png" width="30px"/></a>
+                                    <a th:href="@{|/admin/users/edit/${user.getId()}|}" title="Edit">
+                                        <img src="/img/icon/edit.png" width="30px"/></a>
+                                    <a th:href="@{|/admin/users/newpass/${user.getId()}|}" title="Edit Password">
+                                        <img src="/img/icon/password.png" width="30px"/></a>
+                                    <a th:data-id="${user.getId()}" href="#" title="Delete"
+                                       th:data-name="${user.getUsername()}"
+                                       data-toggle="modal" data-target="#DeleteModal">
+                                        <img src="/img/icon/delete.png" width="30px"/></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 

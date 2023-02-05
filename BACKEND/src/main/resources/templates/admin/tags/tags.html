@@ -27,32 +27,39 @@
                     <a class="btn btn-success btn-sm" href="#" style="border-radius:6px;"
                        data-toggle="modal" data-target="#CreateTagModal">Create new tag</a>
                 </p>
-                <table class="table table-hover align-self-center">
-                    <thead>
-                    <tr style="background: #cff4fc;">
-                        <th scope="col">Name</th>
-                        <th scope="col">CreateAt</th>
-                        <th scope="col">UpdateAt</th>
-                        <th scope="col">Buttons</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="tag:${tags}">
-                        <td th:text="${tag.getName()}"></td>
-                        <td th:text="${#dates.format(tag.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                        <td th:text="${#dates.format(tag.getUpdatedAt(), 'dd MMM yyyy')}"></td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" style="border-radius:6px;" href="#"
-                               th:data-id="${tag.getId()}"
-                               th:data-name="${tag.getName()}"
-                               data-toggle="modal" data-target="#EditModal">Edit</a>
-                            <a class="btn btn-danger btn-sm" style="border-radius:6px;" href="#"
-                               th:data-id="${tag.getId()}"
-                               th:data-name="${tag.getName()}"
-                               data-toggle="modal" data-target="#DeleteModal">Delete</a>
-                        </td>
-                    </tr>
-                </table>
+                <div class="scroll-table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">CreateAt</th>
+                            <th scope="col">UpdateAt</th>
+                            <th scope="col">Buttons</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody>
+                            <tr th:each="tag:${tags}">
+                                <td th:text="${tag.getName()}"></td>
+                                <td th:text="${#dates.format(tag.getCreatedAt(), 'dd MMM yyyy')}"></td>
+                                <td th:text="${#dates.format(tag.getUpdatedAt(), 'dd MMM yyyy')}"></td>
+                                <td>
+                                    <a th:data-id="${tag.getId()}" href="#" title="Edit"
+                                       th:data-name="${tag.getName()}"
+                                       data-toggle="modal" data-target="#EditModal">
+                                        <img src="/img/icon/edit.png" width="30px"/></a>
+                                    <a th:data-id="${tag.getId()}" href="#" title="Delete"
+                                       th:data-name="${tag.getName()}"
+                                       data-toggle="modal" data-target="#DeleteModal">
+                                        <img src="/img/icon/delete.png" width="30px"/></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 
