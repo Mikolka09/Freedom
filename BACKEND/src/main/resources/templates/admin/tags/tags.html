@@ -43,8 +43,12 @@
                             <tbody>
                             <tr th:each="tag:${tags}">
                                 <td th:text="${tag.getName()}"></td>
-                                <td th:text="${#dates.format(tag.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                                <td th:text="${#dates.format(tag.getUpdatedAt(), 'dd MMM yyyy')}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(tag.getCreatedAt()),
+                                #dates.month(tag.getCreatedAt()), #dates.day(tag.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(tag.getUpdatedAt()),
+                                #dates.month(tag.getUpdatedAt()), #dates.day(tag.getUpdatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
                                 <td>
                                     <a th:data-id="${tag.getId()}" href="#" title="Edit"
                                        th:data-name="${tag.getName()}"

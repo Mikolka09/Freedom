@@ -43,8 +43,12 @@
                             <tbody>
                             <tr th:each="category:${categories}">
                                 <td th:text="${category.getName()}"></td>
-                                <td th:text="${#dates.format(category.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                                <td th:text="${#dates.format(category.getUpdatedAt(), 'dd MMM yyyy')}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(category.getCreatedAt()),
+                                #dates.month(category.getCreatedAt()), #dates.day(category.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(category.getUpdatedAt()),
+                                #dates.month(category.getUpdatedAt()), #dates.day(category.getUpdatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
                                 <td>
                                     <a th:data-id="${category.getId()}" href="#" title="Edit"
                                        th:data-name="${category.getName()}"

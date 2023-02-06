@@ -27,53 +27,65 @@
                     <a class="btn btn-success btn-sm" th:href="@{|/user/posts/create/${user.getId()}|}"
                        style="border-radius:6px;">Create new post</a>
                 </p>
-                <table class="table table-hover align-self-center">
-                    <thead>
-                    <tr style="background: #cff4fc;">
-                        <th scope="col">Username</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Short Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Tags</th>
-                        <th scope="col">Likes</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">CreateAt</th>
-                        <th scope="col">UpdateAt</th>
-                        <th scope="col">Buttons</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="post:${posts}">
-                        <td th:text="${post.getUser().getUsername()}"></td>
-                        <td><img width="100px"
-                                 th:src="@{|/${post.getImgUrl()}|}"></td>
-                        <td th:text="${post.getTitle()}"></td>
-                        <td th:text="${post.getShortName()}"></td>
-                        <td th:text="${post.getCategory().getName()}"></td>
-                        <td>
-                            <select class="form-control" name="tag_id" id="tag_id">
-                                <option th:each="tag : ${post.getTags()}"
-                                        th:value="${tag.id}"
-                                        th:text="${tag.name}"></option>
-                            </select>
-                        </td>
-                        <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
-                        <td th:text="${post.getStatus()}"></td>
-                        <td th:text="${#dates.format(post.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                        <td th:text="${#dates.format(post.getUpdatedAt(), 'dd MMM yyyy')}"></td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" style="border-radius:6px;"
-                               th:href="@{|/user/posts/edit/${post.getId()}|}">Edit</a>
-                            <a class="btn btn-info btn-sm" style="border-radius:6px;"
-                               th:href="@{|/user/posts/preview/${post.getId()}|}">Preview</a>
-                            <a class="btn btn-danger btn-sm" style="border-radius:6px;"
-                               th:data-id="${post.getId()}"
-                               th:data-name="${post.getShortName()}"
-                               data-toggle="modal" data-target="#DeleteModal">Delete</a>
-                        </td>
-                    </tr>
-                </table>
+                <div class="scroll-table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th scope="col">Username</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Short Name</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Tags</th>
+                            <th scope="col">Likes</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">CreateAt</th>
+                            <th scope="col">UpdateAt</th>
+                            <th scope="col">Buttons</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="scroll-table-body">
+                        <table>
+                            <tbody>
+                            <tr th:each="post:${posts}">
+                                <td th:text="${post.getUser().getUsername()}"></td>
+                                <td><img width="100px"
+                                         th:src="@{|/${post.getImgUrl()}|}"></td>
+                                <td th:text="${post.getTitle()}"></td>
+                                <td th:text="${post.getShortName()}"></td>
+                                <td th:text="${post.getCategory().getName()}"></td>
+                                <td>
+                                    <select class="form-control" name="tag_id" id="tag_id">
+                                        <option th:each="tag : ${post.getTags()}"
+                                                th:value="${tag.id}"
+                                                th:text="${tag.name}"></option>
+                                    </select>
+                                </td>
+                                <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
+                                <td th:text="${post.getStatus()}"></td>
+<!--                                <td th:text="${#dates.format(post.getCreatedAt(), 'dd MMM yyyy')}"></td>-->
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
+                                #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getUpdatedAt()),
+                                #dates.month(post.getUpdatedAt()), #dates.day(post.getUpdatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+                                <td>
+                                    <a th:href="@{|/user/posts/edit/${post.getId()}|}" title="Edit">
+                                        <img src="/img/icon/edit.png" width="30px"/></a>
+                                    <a th:href="@{|/user/posts/preview/${post.getId()}|}" title="Preview">
+                                        <img src="/img/icon/preview.png" width="30px"/></a>
+                                    <a th:data-id="${post.getId()}" href="#" title="Delete"
+                                       th:data-name="${post.getShortName()}"
+                                       data-toggle="modal" data-target="#DeleteModal">
+                                        <img src="/img/icon/delete.png" width="30px"/></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 

@@ -48,8 +48,12 @@
                                 <td th:text="${user.getName()==null? 'NULL':user.getName()}"></td>
                                 <td th:text="${user.getEmail()}"></td>
                                 <td th:text="${user.getStatus()}"></td>
-                                <td th:text="${#dates.format(user.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                                <td th:text="${#dates.format(user.getUpdatedAt(), 'dd MMM yyyy')}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(user.getCreatedAt()),
+                                #dates.month(user.getCreatedAt()), #dates.day(user.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(user.getUpdatedAt()),
+                                #dates.month(user.getUpdatedAt()), #dates.day(user.getUpdatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
                                 <td>
                                     <a th:href="@{|/admin/users/recovery/${user.getId()}|}" title="Recovery">
                                         <img src="/img/icon/restore.png" width="30px"/></a>

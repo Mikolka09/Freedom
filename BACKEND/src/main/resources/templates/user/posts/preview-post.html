@@ -18,7 +18,9 @@
                     <div class="single-post">
                         <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}"></span>
                             <span class="mx-1">&bullet;</span>
-                            <span th:text="${#dates.format(post.getCreatedAt(), 'dd MMM yyyy')}"></span></div>
+                            <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
+                                #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></span></div>
                         <h1 class="mb-5" th:text="${post.getTitle()}">13 Amazing Poems from Shel Silverstein with
                             Valuable Life Lessons</h1>
                         <figure class="my-4 offset-1">

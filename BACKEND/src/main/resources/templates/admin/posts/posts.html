@@ -64,8 +64,12 @@
                                 </td>
                                 <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
                                 <td th:text="${post.getStatus()}"></td>
-                                <td th:text="${#dates.format(post.getCreatedAt(), 'dd MMM yyyy')}"></td>
-                                <td th:text="${#dates.format(post.getUpdatedAt(), 'dd MMM yyyy')}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
+                                #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getUpdatedAt()),
+                                #dates.month(post.getUpdatedAt()), #dates.day(post.getUpdatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
                                 <td>
                                     <a th:href="@{|/admin/post/edit/${post.getId()}|}" title="Edit">
                                         <img src="/img/icon/edit.png" width="30px"/></a>

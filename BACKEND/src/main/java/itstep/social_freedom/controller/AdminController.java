@@ -377,30 +377,7 @@ public class AdminController {
     //Saving a new post
     public boolean setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
                            String description, Long[] tag_id, Post post) {
-        post.setUser(userService.findUserById(user_id));
-        if (!Objects.equals(title, ""))
-            post.setTitle(title);
-        if (!Objects.equals(shortName, ""))
-            post.setShortName(shortName);
-        if (!category_id.toString().equals("0"))
-            post.setCategory(categoryService.findCategoryById(category_id));
-        if (!Objects.equals(description, ""))
-            post.setBody(description);
-        if (tag_id != null) {
-            if (tag_id.length != 0) {
-                Set<Tag> tagSet = new HashSet<>();
-                for (Long t : tag_id) {
-                    Tag tag = tagService.findTagById(t);
-                    tagSet.add(tag);
-                }
-                post.setTags(tagSet);
-            }
-        }
-
-        if (file != null) {
-            if (!file.isEmpty())
-                post.setImgUrl(fileService.uploadFile(file, ""));
-        }
+        PostController.addPost(user_id, file, title, shortName, category_id, description, tag_id, post, userService, categoryService, tagService, fileService);
         return postService.savePost(post);
     }
 
