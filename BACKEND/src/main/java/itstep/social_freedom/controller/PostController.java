@@ -62,14 +62,14 @@ public class PostController {
     public String store(@RequestParam(value = "id") Long user_id, Model model,
                         @RequestParam(value = "file") MultipartFile file,
                         @RequestParam(value = "title") String title,
-                        @RequestParam(value = "shortName") String shortName,
+                        @RequestParam(value = "shortDesc") String shortDesc,
                         @RequestParam(value = "category_id") Long category_id,
                         @RequestParam(value = "description") String description,
                         @RequestParam(value = "tag_id") Long[] tag_id) {
         Post post = new Post();
         post.setStatus(Status.NOT_VERIFIED);
         CreateModelUser(model);
-        return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
+        return setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post);
     }
 
     @GetMapping("/user/posts/edit/{id}")
@@ -84,14 +84,14 @@ public class PostController {
                             @PathVariable(name = "id") Long post_id,
                             @RequestParam(value = "file") MultipartFile file,
                             @RequestParam(value = "title") String title,
-                            @RequestParam(value = "shortName") String shortName,
+                            @RequestParam(value = "shortDesc") String shortDesc,
                             @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
                             @RequestParam(value = "description") String description,
                             @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
         Post post = postService.findPostById(post_id);
         post.setStatus(Status.NOT_VERIFIED);
         CreateModelUser(model);
-        return setPost(user_id, file, title, shortName, category_id, description, tag_id, post);
+        return setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post);
     }
 
     public String setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,

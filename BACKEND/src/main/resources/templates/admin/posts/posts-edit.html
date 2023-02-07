@@ -38,9 +38,10 @@
                                                    placeholder="Title" th:value="${post.getTitle()}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="shortName">Short Name</label>
-                                            <input type="text" name="shortName" class="form-control" id="shortName"
-                                                   placeholder="Short Name" th:value="${post.getShortName()}">
+                                            <label for="shortDesc">Short Description</label>
+                                            <textarea name="shortDesc" class="form-control" id="shortDesc"
+                                                      placeholder="Short Description" rows="3"
+                                                      th:text="${post.getShortDescription()}"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <div>Category</div>
@@ -64,7 +65,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="file">Image</label>
-                                            <img width="100px" th:src="@{|/${post.getImgUrl()}|}"
+                                            <img width="100px" style="padding-bottom: 5px;" th:src="@{|/${post.getImgUrl()}|}"
                                                  alt="Url">
                                             <input class="form-control" type="file" name="file" id="file"/>
                                         </div>
@@ -91,9 +92,8 @@
                                     <div class="col-8">
                                         <div class="form-group">
                                             <label for="description">Description</label>
-                                            <textarea class="form-control" name="description" id="description"
-                                                      rows="19"
-                                                      th:text="${post.getBody()}"></textarea>
+                                            <textarea class="form-control" name="description" id="description" rows="19"
+                                                    placeholder="Description" th:text="${post.getBody()}"></textarea>
                                         </div>
                                     </div>
                                 </div>

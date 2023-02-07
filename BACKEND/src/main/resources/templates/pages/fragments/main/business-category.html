@@ -23,13 +23,13 @@
                                 #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
                         <h3><a href="single-post.html" th:text="${busPosts.get(0).getTitle()}">What is the son of Football Coach John Gruden, Deuce Gruden
                             doing Now?</a></h3>
-                        <p th:text="${busPosts.get(0).getShortName()}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio placeat
+                        <p th:text="${busPosts.get(0).getShortDescription()}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio placeat
                             exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas, nobis error
                             deserunt aliquam temporibus sapiente, laudantium dolorum itaque libero eos deleniti?</p>
                         <div class="d-flex align-items-center author">
                             <div class="photo"><img th:src="@{|/${busPosts.get(0).getUser().getAvatarUrl()}|}" alt="" class="img-fluid"></div>
                             <div class="name">
-                                <h3 class="m-0 p-0" th:text="${busPosts.get(0).getUser().getUsername()}">Wade Warren</h3>
+                                <h3 class="m-0 p-0" th:text="${busPosts.get(0).getUser().getFullName()}">Wade Warren</h3>
                             </div>
                         </div>
                     </div>
@@ -47,8 +47,8 @@
                                 #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
                             <h2 class="mb-2"><a href="single-post.html" th:text="${busPosts.get(1).getTitle()}">11 Work From Home Part-Time Jobs You Can Do
                                 Now</a></h2>
-                            <span class="author mb-3 d-block" th:text="${busPosts.get(1).getUser().getUsername()}">Jenny Wilson</span>
-                            <p class="mb-4 d-block" th:text="${busPosts.get(1).getShortName()}">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
+                            <span class="author mb-3 d-block" th:text="${busPosts.get(1).getUser().getFullName()}">Jenny Wilson</span>
+                            <p class="mb-4 d-block" th:text="${busPosts.get(1).getShortDescription()}">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
                                 temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
                         </div>
 
@@ -60,12 +60,12 @@
                                 #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
                             <h2 class="mb-2"><a href="single-post.html" th:text="${busPosts.get(2).getTitle()}">5 Great Startup Tips for Female Founders</a>
                             </h2>
-                            <span class="author mb-3 d-block" th:text="${busPosts.get(2).getUser().getUsername()}">Jenny Wilson</span>
+                            <span class="author mb-3 d-block" th:text="${busPosts.get(2).getUser().getFullName()}">Jenny Wilson</span>
                         </div>
                     </div>
                     <div class="col-lg-8">
                         <div class="post-entry-1">
-                            <a href="single-post.html"><img src="/img/post-landscape-7.jpg" alt=""
+                            <a href="single-post.html"><img th:src="@{|/${busPosts.get(3).getImgUrl()}|}" alt=""
                                                             class="img-fluid"></a>
                             <div class="post-meta"><span class="date">Business</span> <span
                                     class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
@@ -74,8 +74,8 @@
                                 #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
                             <h2 class="mb-2"><a href="single-post.html" th:text="${busPosts.get(3).getTitle()}">How to Avoid Distraction and Stay Focused
                                 During Video Calls?</a></h2>
-                            <span class="author mb-3 d-block" th:text="${busPosts.get(3).getUser().getUsername()}">Jenny Wilson</span>
-                            <p class="mb-4 d-block" th:text="${busPosts.get(3).getShortName()}">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
+                            <span class="author mb-3 d-block" th:text="${busPosts.get(3).getUser().getFullName()}">Jenny Wilson</span>
+                            <p class="mb-4 d-block" th:text="${busPosts.get(3).getShortDescription()}">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
                                 temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
             </div>
             <div class="col-md-3" >
                 <th:block th:each="post,state:${busPosts}">
-                    <div class="post-entry-1 border-bottom" th:if="${state.index>3}">
+                    <div class="post-entry-1 border-bottom" th:if="${state.index>3 && state.index<10}">
                         <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
                             <span th:text="${#temporals.format(T(java.time.LocalDate).
                                     of(#dates.year(post.getCreatedAt()), #dates.month(post.
@@ -91,7 +91,7 @@
                                 #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
                         <h2 class="mb-2"><a href="single-post.html" th:text="${post.getTitle()}">How to Avoid Distraction and Stay Focused During
                             Video Calls?</a></h2>
-                        <span class="author mb-3 d-block" th:text="${post.getUser().getUsername()}">Jenny Wilson</span>
+                        <span class="author mb-3 d-block" th:text="${post.getUser().getFullName()}">Jenny Wilson</span>
                     </div>
                 </th:block>
 

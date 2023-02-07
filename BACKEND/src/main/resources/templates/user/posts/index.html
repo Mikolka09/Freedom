@@ -34,7 +34,7 @@
                             <th scope="col">Username</th>
                             <th scope="col">Image</th>
                             <th scope="col">Title</th>
-                            <th scope="col">Short Name</th>
+                            <th scope="col">Short Description</th>
                             <th scope="col">Category</th>
                             <th scope="col">Tags</th>
                             <th scope="col">Likes</th>
@@ -53,7 +53,7 @@
                                 <td><img width="100px"
                                          th:src="@{|/${post.getImgUrl()}|}"></td>
                                 <td th:text="${post.getTitle()}"></td>
-                                <td th:text="${post.getShortName()}"></td>
+                                <td th:text="${post.getShortDescription()}"></td>
                                 <td th:text="${post.getCategory().getName()}"></td>
                                 <td>
                                     <select class="form-control" name="tag_id" id="tag_id">
@@ -77,7 +77,7 @@
                                     <a th:href="@{|/user/posts/preview/${post.getId()}|}" title="Preview">
                                         <img src="/img/icon/preview.png" width="30px"/></a>
                                     <a th:data-id="${post.getId()}" href="#" title="Delete"
-                                       th:data-name="${post.getShortName()}"
+                                       th:data-name="${post.getTitle()}"
                                        data-toggle="modal" data-target="#DeleteModal">
                                         <img src="/img/icon/delete.png" width="30px"/></a>
                                 </td>

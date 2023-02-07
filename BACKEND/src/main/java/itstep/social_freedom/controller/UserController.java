@@ -26,9 +26,6 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private PostService postService;
-
-    @Autowired
     private FileService fileService;
 
     private void CreateModelUser(Model model) {
@@ -112,8 +109,6 @@ public class UserController {
                               BindingResult bindingResult, Model model,
                               RedirectAttributes redirectAttributes,
                               @RequestParam(value = "user_id") Long user_id,
-                              @RequestParam(value = "username") String username,
-                              @RequestParam(value = "email") String email,
                               @RequestParam(value = "passwordConfirm") String passwordConfirm,
                               @RequestParam(value = "password") String password,
                               @RequestParam(value = "passOld") String passOld) {
