@@ -12,7 +12,7 @@
 }
 .scroll-table thead th {
     font-weight: bold;
-    text-align: left;
+    text-align: center;
     border: none;
     padding: 10px 15px;
     background: #cff4fc;
@@ -21,12 +21,13 @@
     border-right: 1px solid #ddd;
 }
 .scroll-table tbody td {
-    text-align: left;
+    text-align: center;
     border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
-    padding: 10px 15px;
+    padding: 5px 5px;
     font-size: 14px;
     vertical-align: top;
+    word-wrap: break-word;
 }
 .scroll-table tbody tr:nth-child(even){
     background: #f3f3f3;

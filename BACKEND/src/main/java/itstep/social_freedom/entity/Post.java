@@ -16,7 +16,7 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @Table(name = "posts")
-public class Post extends BaseEntity implements Comparable<Post> {
+public class Post extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -38,8 +38,12 @@ public class Post extends BaseEntity implements Comparable<Post> {
     @ToString.Exclude
     private Set<Tag> tags = new HashSet<>();
 
+    @OneToMany(mappedBy = "post")
+    @ToString.Exclude
+    private Set<Comment> comments = new HashSet<>();
+
     private String title;
-    private String shortName;
+    private String shortDescription;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -63,8 +67,4 @@ public class Post extends BaseEntity implements Comparable<Post> {
         return getClass().hashCode();
     }
 
-    @Override
-    public int compareTo(Post post) {
-        return post.getCreatedAt().compareTo(post.getCreatedAt());
-    }
 }

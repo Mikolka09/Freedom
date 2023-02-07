@@ -282,7 +282,10 @@ public class AdminController {
                        @RequestParam(value = "user_id") Long user_id,
                        @RequestParam(value = "avatar") MultipartFile file,
                        @RequestParam(value = "username") String username,
-                       @RequestParam(value = "name") String name,
+                       @RequestParam(value = "fullName") String fullName,
+                       @RequestParam(value = "country") String country,
+                       @RequestParam(value = "city") String city,
+                       @RequestParam(value = "age") String age,
                        @RequestParam(value = "email") String email) {
         CreateModelUser(model);
         String path = "/admin/users/edit/" + user_id;
@@ -293,7 +296,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
             return "redirect:" + path;
         }
-        if (UserController.setDataUser(redirectAttributes, username, name, email, user))
+        if (UserController.setDataUser(redirectAttributes, username, fullName, country, city, age, email, user))
             return "redirect:" + path;
         if (addFile(redirectAttributes, file, user, fileService, userService, edit)) return "redirect:" + path;
 
@@ -308,7 +311,10 @@ public class AdminController {
                            @RequestParam(value = "user_id") Long user_id,
                            @RequestParam(value = "avatar") MultipartFile file,
                            @RequestParam(value = "username") String username,
-                           @RequestParam(value = "name") String name,
+                           @RequestParam(value = "fullName") String fullName,
+                           @RequestParam(value = "country") String country,
+                           @RequestParam(value = "city") String city,
+                           @RequestParam(value = "age") String age,
                            @RequestParam(value = "email") String email,
                            @RequestParam(value = "passwordConfirm") String passwordConfirm,
                            @RequestParam(value = "password") String password,
@@ -322,14 +328,15 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
             return "redirect:" + path;
         }
-        if (UserController.setDataUser(redirectAttributes, username, name, email, user))
+        if (UserController.setDataUser(redirectAttributes, username, fullName, country, city, age, email, user))
             return "redirect:" + path;
 
         if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
             return "redirect:" + path;
 
         if (!status.isEmpty()) {
-            if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED")) {
+            if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED") || status.equals("REQUEST") ||
+                    status.equals("ACCEPTED") || status.equals("DENIED")) {
                 redirectAttributes.getFlashAttributes().clear();
                 redirectAttributes.addFlashAttribute("error", "Wrong status selected!");
                 return "redirect:" + path;
@@ -348,8 +355,6 @@ public class AdminController {
                               BindingResult bindingResult, Model model,
                               RedirectAttributes redirectAttributes,
                               @RequestParam(value = "user_id") Long user_id,
-                              @RequestParam(value = "username") String username,
-                              @RequestParam(value = "email") String email,
                               @RequestParam(value = "passwordConfirm") String passwordConfirm,
                               @RequestParam(value = "password") String password) {
         CreateModelUser(model);

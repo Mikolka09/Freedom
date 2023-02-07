@@ -111,7 +111,7 @@ public class PostController {
         if (!Objects.equals(title, ""))
             post.setTitle(title);
         if (!Objects.equals(shortName, ""))
-            post.setShortName(shortName);
+            post.setShortDescription(shortName);
         if (!category_id.toString().equals("0"))
             post.setCategory(categoryService.findCategoryById(category_id));
         if (!Objects.equals(description, ""))

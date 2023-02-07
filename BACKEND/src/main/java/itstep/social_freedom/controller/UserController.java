@@ -60,7 +60,10 @@ public class UserController {
                        @RequestParam(value = "id") Long id,
                        @RequestParam(value = "avatar") MultipartFile file,
                        @RequestParam(value = "username") String username,
-                       @RequestParam(value = "name") String name,
+                       @RequestParam(value = "fullName") String fullName,
+                       @RequestParam(value = "country") String country,
+                       @RequestParam(value = "city") String city,
+                       @RequestParam(value = "age") String age,
                        @RequestParam(value = "email") String email,
                        @RequestParam(value = "passOld") String oldPass) {
         CreateModelUser(model);
@@ -77,7 +80,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("error", "The old password was entered incorrectly!");
             return "redirect:" + (path);
         }
-        if (setDataUser(redirectAttributes, username, name, email, user)) return "redirect:" + path;
+        if (setDataUser(redirectAttributes, username, fullName, country, city, age, email, user)) return "redirect:" + path;
         user.setPassword(oldPass);
         if (AdminController.addFile(redirectAttributes, file, user, fileService, userService, edit))
             return "redirect:" + (path);
@@ -145,7 +148,10 @@ public class UserController {
 
     static boolean setDataUser(RedirectAttributes redirectAttributes,
                                @RequestParam("username") String username,
-                               @RequestParam("name") String name,
+                               @RequestParam("fullName") String fullName,
+                               @RequestParam(value = "country") String country,
+                               @RequestParam(value = "city") String city,
+                               @RequestParam(value = "age") String age,
                                @RequestParam("email") String email, User user) {
         if (!Objects.equals(email, "") && email.equals(user.getEmail()))
             user.setEmail(email);
@@ -155,10 +161,27 @@ public class UserController {
             return true;
         }
         user.setUsername(username);
-        if (name == null || name.equals("")) {
-            user.setName(null);
+        if (fullName != null && !fullName.equals("")) {
+            user.setFullName(fullName);
         } else {
-            user.setName(name);
+            redirectAttributes.getFlashAttributes().clear();
+            redirectAttributes.addFlashAttribute("error", "FullName not entered!");
+            return true;
+        }
+        if(country ==null || country.equals("")){
+            user.setCountry(null);
+        }else{
+            user.setCountry(country);
+        }
+        if(city ==null || city.equals("")){
+            user.setCity(null);
+        }else{
+            user.setCity(city);
+        }
+        if(age ==null || age.equals("")){
+            user.setAge(0);
+        }else{
+            user.setAge(Integer.parseInt(age));
         }
         return false;
     }

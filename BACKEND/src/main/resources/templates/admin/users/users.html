@@ -33,9 +33,11 @@
                         <tr>
                             <th scope="col">Avatar</th>
                             <th scope="col">Username</th>
-                            <th scope="col">Name</th>
+                            <th scope="col">FullName</th>
+                            <th scope="col">Age</th>
                             <th scope="col">Email</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Rating</th>
                             <th scope="col">CreateAt</th>
                             <th scope="col">UpdateAt</th>
                             <th scope="col">Buttons</th>
@@ -49,9 +51,11 @@
                                 <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
                                          th:src="@{|/${user.getAvatarUrl()}|}"></td>
                                 <td th:text="${user.getUsername()}"></td>
-                                <td th:text="${user.getName()==null? 'NULL':user.getName()}"></td>
+                                <td th:text="${user.getFullName()==null? 'NULL':user.getFullName()}"></td>
+                                <td th:text="${user.getAge()}"></td>
                                 <td th:text="${user.getEmail()}"></td>
                                 <td th:text="${user.getStatus()}"></td>
+                                <td th:text="${user.getRating()}"></td>
                                 <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(user.getCreatedAt()),
                                 #dates.month(user.getCreatedAt()), #dates.day(user.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}"></td>

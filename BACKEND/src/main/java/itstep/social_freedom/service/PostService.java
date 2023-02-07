@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,11 +25,14 @@ public class PostService {
 
     public List<Post> allPosts(Long id) {
         return postRepository.findAll().stream().filter(x -> Objects.equals(x.getUser().getId(), id))
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
                 .collect(Collectors.toList());
     }
 
     public List<Post> posts() {
-        return postRepository.findAll();
+        return postRepository.findAll().stream()
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                .collect(Collectors.toList());
     }
 
     public boolean savePost(Post post) {

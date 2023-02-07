@@ -46,6 +46,9 @@ public class User extends BaseEntity implements UserDetails {
     @ToString.Exclude
     private Set<Comment> comments = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    private Set<User> friends;
+
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private Set<Post> posts = new HashSet<>();
@@ -54,7 +57,14 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "status")
     private Status status;
 
-    private String name;
+    private int offenses;
+    private int rating;
+
+    private String fullName;
+    private int age;
+    private String country;
+    private String city;
+
     private String googleName;
     private String googleUsername;
 

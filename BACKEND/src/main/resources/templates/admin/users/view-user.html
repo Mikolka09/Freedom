@@ -3,12 +3,24 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 <style>
-    .view-user{
+    .view-user {
         font-weight: bold;
     }
-    .view-user-data{
+
+    .view-user-data {
         color: blueviolet;
     }
+
+    .view-user-rating {
+        color: #e83e8c;
+        font-weight: bold;
+    }
+
+    .view-user-numbers {
+        color: #149063;
+        font-weight: bold;
+    }
+
 </style>
 <body id="page-top">
 
@@ -43,11 +55,21 @@
                                              th:src="@{|/${user.getAvatarUrl()}|}" alt="Url">
                                     </div>
                                 </div>
+                                <div class="form-group row justify-content-center">
+                                    <div class="row g-2">
+                                        <div class="col-6 p-3">
+                                            <div class="view-user">Age:</div>
+                                        </div>
+                                        <div class="col-6 p-3">
+                                            <div style="color: tomato; font-weight: bold;" th:text="${user.getAge()}"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">Username: </div>
+                                                <div class="view-user">Username:</div>
                                             </div>
                                             <div class="col-6 p-3">
                                                 <div class="view-user-data" th:text="${user.getUsername()}"></div>
@@ -57,11 +79,11 @@
                                     <div class="col-sm-6">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">Name: </div>
+                                                <div class="view-user">FullName:</div>
                                             </div>
                                             <div class="col-6 p-3">
                                                 <div class="view-user-data"
-                                                     th:text="${user.getName()==null?'NOT NAME':user.getName()}"></div>
+                                                     th:text="${user.getFullName()==null?'NOT NAME':user.getFullName()}"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -70,7 +92,31 @@
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">GoogleName: </div>
+                                                <div class="view-user">Country:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data"
+                                                     th:text="${user.getCountry()==null?'NOT COUNTRY':user.getCountry()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">City:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data"
+                                                     th:text="${user.getCity()==null?'NOT CITY':user.getCity()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">GoogleName:</div>
                                             </div>
                                             <div class="col-6 p-3">
                                                 <div class="view-user-data"
@@ -81,7 +127,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">GoogleUsername: </div>
+                                                <div class="view-user">GoogleUsername:</div>
                                             </div>
                                             <div class="col-6 p-3">
                                                 <div class="view-user-data"
@@ -94,10 +140,10 @@
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">Email: </div>
+                                                <div class="view-user">Email:</div>
                                             </div>
                                             <div class="col-6 p-3">
-                                                <div class="view-user-data"
+                                                <div style="font-weight: bold; color: #e9aa0b;"
                                                      th:text="${user.getEmail()}"></div>
                                             </div>
                                         </div>
@@ -105,10 +151,11 @@
                                     <div class="col-sm-6">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">Number of posts: </div>
+                                                <div class="view-user">Number of posts:</div>
                                             </div>
                                             <div class="col-6 p-3">
-                                                <div class="view-user-data" th:text="${user.getPosts().size()}"></div>
+                                                <div class="view-user-numbers"
+                                                     th:text="${user.getPosts().size()}"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -117,21 +164,45 @@
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">Number of friend: </div>
+                                                <div class="view-user">Number of friend:</div>
                                             </div>
                                             <div class="col-6 p-3">
-                                                <div class="view-user-data"
-                                                     th:text="0"></div>
+                                                <div class="view-user-numbers"
+                                                     th:text="${user.getFriends().size()}"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">Number of comments: </div>
+                                                <div class="view-user">Number of comments:</div>
                                             </div>
                                             <div class="col-6 p-3">
-                                                <div class="view-user-data" th:text="${user.getComments().size()}"></div>
+                                                <div class="view-user-numbers"
+                                                     th:text="${user.getComments().size()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Rating:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-rating"
+                                                     th:text="${user.getRating()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Offenses:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-rating" th:text="${user.getOffenses()}"></div>
                                             </div>
                                         </div>
                                     </div>

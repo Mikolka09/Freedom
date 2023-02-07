@@ -22,6 +22,10 @@ public class Comment extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String body;
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
