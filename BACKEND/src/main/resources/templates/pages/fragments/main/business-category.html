@@ -13,7 +13,7 @@
             <div class="col-md-9 order-md-2">
 
                 <div class="d-lg-flex post-entry-2">
-                    <a href="single-post.html" class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
+                    <a th:href="@{|/view-post/${busPosts.get(0).getId()}|}" class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
                         <img th:src="@{|/${busPosts.get(0).getImgUrl()}|}" alt="" class="img-fluid">
                     </a>
                     <div>
@@ -21,7 +21,7 @@
                             <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(busPosts.get(0).getCreatedAt()),
                                 #dates.month(busPosts.get(0).getCreatedAt()), #dates.day(busPosts.get(0).getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
-                        <h3><a href="single-post.html" th:text="${busPosts.get(0).getTitle()}">What is the son of Football Coach John Gruden, Deuce Gruden
+                        <h3><a th:href="@{|/view-post/${busPosts.get(0).getId()}|}" th:text="${busPosts.get(0).getTitle()}">What is the son of Football Coach John Gruden, Deuce Gruden
                             doing Now?</a></h3>
                         <p th:text="${busPosts.get(0).getShortDescription()}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio placeat
                             exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas, nobis error

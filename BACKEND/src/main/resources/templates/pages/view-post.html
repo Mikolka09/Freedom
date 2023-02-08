@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:insert="/pages/fragments/main/head.html::head"></th:block>
+
+<body>
+
+<th:block th:insert="/pages/fragments/main/header.html::header"></th:block>
+
+<main id="main">
+
+    <section class="single-post-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 post-content" data-aos="fade-up">
+
+                    <!-- ======= Single Post Content ======= -->
+
+                    <th:block th:insert="/pages/fragments/single-post/post-content.html::post-content"></th:block>
+
+                    <!-- ======= Comments ======= -->
+
+                    <th:block th:insert="/pages/fragments/single-post/post-comments.html::post-comments"></th:block>
+
+                    <!-- ======= Comments Form ======= -->
+
+                    <th:block
+                            th:insert="/pages/fragments/single-post/post-comments-form.html::post-comments-form"></th:block>
+
+                </div>
+                <div class="col-md-3">
+                    <!-- ======= Sidebar ======= -->
+                    <div class="aside-block">
+
+                        <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-popular" type="button" role="tab"
+                                        aria-controls="pills-popular" aria-selected="true">Popular
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-trending-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-trending" type="button" role="tab"
+                                        aria-controls="pills-trending" aria-selected="false">Trending
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-latest" type="button" role="tab"
+                                        aria-controls="pills-latest" aria-selected="false">Latest
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="pills-tabContent">
+
+                            <!-- Popular -->
+
+                            <th:block
+                                    th:insert="/pages/fragments/single-post/post-popular.html::post-popular"></th:block>
+
+                            <!-- Trending -->
+
+                            <th:block
+                                    th:insert="/pages/fragments/single-post/post-trending.html::post-trending"></th:block>
+
+                            <!-- Latest -->
+
+                            <th:block th:insert="/pages/fragments/single-post/post-latest.html::post-latest"></th:block>
+
+                        </div>
+                    </div>
+
+                    <div class="aside-block">
+                        <h3 class="aside-title">Video</h3>
+                        <div class="video-post">
+                            <a href="https://www.youtube.com/watch?v=AiFfDjmd0jU" class="glightbox link-video">
+                                <span class="bi-play-fill"></span>
+                                <img src="/img/post-landscape-5.jpg" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Video -->
+
+                    <div class="aside-block">
+                        <h3 class="aside-title">Categories</h3>
+                        <ul class="aside-links list-unstyled">
+                            <th:block th:each=" category : ${categories}">
+                                <li><a href="#"><i class="bi bi-chevron-right" style="font-style: normal;"
+                                                   th:text="${category.getName()}"></i></a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </div><!-- End Categories -->
+
+                    <div class="aside-block">
+                        <h3 class="aside-title">Tags</h3>
+                        <ul class="aside-tags list-unstyled">
+                            <th:block th:each="tag : ${post.getTags()}">
+                                <li><a href="#" th:text="${tag.getName()}"></a></li>
+                            </th:block>
+
+                        </ul>
+                    </div><!-- End Tags -->
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main><!-- End #main -->
+
+<th:block th:insert="/pages/fragments/main/footer.html::footer"></th:block>
+
+<th:block th:insert="/pages/fragments/main/foot.html::foot"></th:block>
+
+<script>
+    $('#likes-button').click(function (){
+        let postId = $('#likes-button').data('id');
+        if(postId){
+            $.get({
+                url:'/api/posts/likes/'+postId,
+                success: (data)=>{
+                    $('#likes').text(data.likes)
+
+                },
+                error:(err)=>{
+                    alert(err);
+                }
+
+            });
+            $('#likes-button').attr('disabled', true);
+        }
+    })
+</script>
+
+</body>
+</html>

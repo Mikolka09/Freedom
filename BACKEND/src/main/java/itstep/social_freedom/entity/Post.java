@@ -20,6 +20,7 @@ public class Post extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
     @ManyToOne

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -93,6 +94,20 @@ public class PageController {
     public String category(Model model) {
         CreateModel(model);
         return "pages/category";
+    }
+
+    @GetMapping("/view-post/{id}")
+    public String viewPost(@PathVariable(name = "id") Long post_id, Model model) {
+        Post post = postService.findPostById(post_id);
+        User user = userService.getCurrentUsername();
+        String[] bodies = postService.arrayBody(post.getBody());
+        List<Category> categories = categoryService.allCategory();
+        model.addAttribute("categories", categories);
+        model.addAttribute("bodies", bodies);
+        model.addAttribute("post", post);
+        model.addAttribute("user", user);
+        model.addAttribute("status", Status.values());
+        return "/pages/view-post";
     }
 
 }

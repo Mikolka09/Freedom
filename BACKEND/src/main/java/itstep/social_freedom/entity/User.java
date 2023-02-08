@@ -1,6 +1,7 @@
 package itstep.social_freedom.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,6 +52,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
+    @JsonIgnore
     private Set<Post> posts = new HashSet<>();
 
     @Enumerated(EnumType.STRING)

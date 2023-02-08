@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div class="single-post" th:fragment="post-content">
+    <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}"></span>
+        <span class="mx-1">&bullet;</span>
+        <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
+                                #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></span></div>
+    <h1 class="mb-5" th:text="${post.getTitle()}">13 Amazing Poems from Shel Silverstein with
+        Valuable Life Lessons</h1>
+    <figure class="my-2 offset-1">
+        <img th:src="@{|/${post.getImgUrl()}|}" alt="Image" width="800px" class="img-fluid">
+    </figure>
+    <div class="row mb-2">
+        <div class="col-sm-6 align-self-center" style="text-align: left;">
+            <a type="button" id="likes-button" th:data-id="${post.getId()}"><img src="/img/icon/likes.png" width="25px"></a>
+            <span id="likes" style="font-weight: bold; color: blueviolet" class="px-1"
+                  th:text="${post.getLikes()==null?0:post.getLikes()}"></span>
+        </div>
+        <div class="col-sm-6" style="text-align: right;  vertical-align: middle;">
+            <img class="px-1 rounded-circle" th:src="@{|/${post.getUser().getAvatarUrl()}|}" width="50px">
+            <span style="font-weight: bold" th:text="${post.getUser().getFullName()}"></span>
+        </div>
+    </div>
+    <th:block th:each="body :${bodies}">
+        <p th:text="${body}"></p>
+    </th:block>
+
+</div><!-- End Single Post Content -->
