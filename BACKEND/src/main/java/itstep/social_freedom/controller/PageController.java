@@ -99,14 +99,10 @@ public class PageController {
     @GetMapping("/view-post/{id}")
     public String viewPost(@PathVariable(name = "id") Long post_id, Model model) {
         Post post = postService.findPostById(post_id);
-        User user = userService.getCurrentUsername();
         String[] bodies = postService.arrayBody(post.getBody());
-        List<Category> categories = categoryService.allCategory();
-        model.addAttribute("categories", categories);
         model.addAttribute("bodies", bodies);
         model.addAttribute("post", post);
-        model.addAttribute("user", user);
-        model.addAttribute("status", Status.values());
+        CreateModel(model);
         return "/pages/view-post";
     }
 

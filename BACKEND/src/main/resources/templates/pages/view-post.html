@@ -24,8 +24,8 @@
 
                     <!-- ======= Comments Form ======= -->
 
-                    <th:block
-                            th:insert="/pages/fragments/single-post/post-comments-form.html::post-comments-form"></th:block>
+                    <th:block th:if="${user != null and user.getStatus()==status[0]}"
+                              th:insert="/pages/fragments/single-post/post-comments-form.html::post-comments-form"></th:block>
 
                 </div>
                 <div class="col-md-3">
@@ -114,23 +114,64 @@
 <th:block th:insert="/pages/fragments/main/foot.html::foot"></th:block>
 
 <script>
-    $('#likes-button').click(function (){
+    $('#likes-button').on('click', function () {
         let postId = $('#likes-button').data('id');
-        if(postId){
+        $('#likes-button').off('click');
+        if (postId) {
             $.get({
-                url:'/api/posts/likes/'+postId,
-                success: (data)=>{
+                url: '/api/posts/likes/' + postId,
+                success: (data) => {
                     $('#likes').text(data.likes)
-
                 },
-                error:(err)=>{
-                    alert(err);
+                error: (err) => {
+                    console.log(err);
                 }
-
             });
-            $('#likes-button').attr('disabled', true);
+            $('#img-like-do').attr('src', '/img/icon/like.png');
         }
-    })
+    });
+
+    $('#comment-button').on('click', function (e) {
+        e.preventDefault();
+        let userId = $('#userId').val();
+        let postId = $('#postId').val();
+        let text = $('#comment-message').val();
+        if (text !== "") {
+            $.get({
+                url: '/api/posts/comment/' + postId,
+                data: {
+                    userId: userId,
+                    text: text
+                },
+                success: (data) => {
+                    printComment(data);
+                    //console.log(data);
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+
+            $('#comment-name').val("");
+            $('#comment-email').val("");
+            $('#comment-message').val("");
+        }
+    });
+
+    function printComment(data) {
+        let comment = $('<div class="comment d-flex mb-4"></div>');
+        $('#comment-container').appendTo(comment);
+        let shrink = $('<div class="flex-shrink-0"></div>').appendTo(comment);
+        let avatar = $('<div class="avatar avatar-sm rounded-circle"></div>').appendTo(shrink);
+        $('<img id="img-comment-avatar" src="" alt="" class="avatar-img img-fluid">').attr('src', data.avatarUrl).appendTo(avatar);
+        let grow = $('<div class="flex-grow-1 ms-2 ms-sm-3"></div>');
+        let meta = $('<div class="comment-meta d-flex align-items-baseline"></div>').appendTo(grow);
+        $('<h6 id="img-comment-name" class="me-2"></h6>').text(data.fullName).appendTo(meta);
+        $('<span class="text-muted">2d</span>').text(data.createDate).appendTo(meta);
+        $('<div id="img-comment-text" class="comment-body"></div>').text(data.body).appendTo(grow);
+        $('#comments-size').text(data.comments);
+    }
+
 </script>
 
 </body>
