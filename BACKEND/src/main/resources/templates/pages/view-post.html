@@ -144,8 +144,8 @@
                     text: text
                 },
                 success: (data) => {
-                    printComment(data);
-                    //console.log(data);
+                    if (data === 201)
+                        location.reload();
                 },
                 error: (err) => {
                     console.log(err);
@@ -157,20 +157,6 @@
             $('#comment-message').val("");
         }
     });
-
-    function printComment(data) {
-        let comment = $('<div class="comment d-flex mb-4"></div>');
-        $('#comment-container').appendTo(comment);
-        let shrink = $('<div class="flex-shrink-0"></div>').appendTo(comment);
-        let avatar = $('<div class="avatar avatar-sm rounded-circle"></div>').appendTo(shrink);
-        $('<img id="img-comment-avatar" src="" alt="" class="avatar-img img-fluid">').attr('src', data.avatarUrl).appendTo(avatar);
-        let grow = $('<div class="flex-grow-1 ms-2 ms-sm-3"></div>');
-        let meta = $('<div class="comment-meta d-flex align-items-baseline"></div>').appendTo(grow);
-        $('<h6 id="img-comment-name" class="me-2"></h6>').text(data.fullName).appendTo(meta);
-        $('<span class="text-muted">2d</span>').text(data.createDate).appendTo(meta);
-        $('<div id="img-comment-text" class="comment-body"></div>').text(data.body).appendTo(grow);
-        $('#comments-size').text(data.comments);
-    }
 
 </script>
 

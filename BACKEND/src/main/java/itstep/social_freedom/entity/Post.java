@@ -1,6 +1,8 @@
 package itstep.social_freedom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -20,7 +22,9 @@ public class Post extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonIgnore
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Category category;
 
     @ManyToOne
@@ -35,12 +39,17 @@ public class Post extends BaseEntity{
     @JoinTable(name = "posts_tags",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    @JsonIgnore
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     @ToString.Exclude
     private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "post")
     @ToString.Exclude
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Set<Comment> comments = new HashSet<>();
 
     private String title;

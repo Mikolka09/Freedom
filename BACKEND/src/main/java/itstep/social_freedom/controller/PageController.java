@@ -99,8 +99,11 @@ public class PageController {
     @GetMapping("/view-post/{id}")
     public String viewPost(@PathVariable(name = "id") Long post_id, Model model) {
         Post post = postService.findPostById(post_id);
+        List<Comment> comments = post.getComments().stream().
+                sorted(Comparator.comparing(Comment::getCreatedAt)).collect(Collectors.toList());
         String[] bodies = postService.arrayBody(post.getBody());
         model.addAttribute("bodies", bodies);
+        model.addAttribute("comments", comments);
         model.addAttribute("post", post);
         CreateModel(model);
         return "/pages/view-post";

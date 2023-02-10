@@ -2,33 +2,35 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <div class="comments" th:fragment="post-comments">
-    <h5 class="comment-title py-4"><span id="comments-size"
-            th:if="${post.getComments().size()!=0}" th:text="${post.getComments().size()}"></span>
+    <h5 class="comment-title py-4"><span id="comments-size" th:if="${comments.size()!=0}"
+                                         th:text="${comments.size()}"></span>
         Comments</h5>
-    <th:block th:if="${post.getComments().size()!=0}" th:each="comment:${post.getComments()}">
-        <div id="comment-container">
-            <div class="comment d-flex mb-4">
-                <div class="flex-shrink-0">
-                    <div class="avatar avatar-sm rounded-circle">
-                        <img id="img-comment-avatar" th:src="@{|/${comment.getUser().getAvatarUrl()}|}" alt=""
-                             class="avatar-img img-fluid">
+    <div style="height: 500px; overflow: scroll;">
+        <th:block th:if="${comments.size()!=0}" th:each="comment:${comments}">
+            <div id="comment-container">
+                <div class="comment d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="avatar avatar-sm rounded-circle">
+                            <img id="img-comment-avatar" th:src="@{|/${comment.getUser().getAvatarUrl()}|}" alt=""
+                                 class="avatar-img img-fluid">
+                        </div>
                     </div>
-                </div>
-                <div class="flex-grow-1 ms-2 ms-sm-3">
-                    <div class="comment-meta d-flex align-items-baseline">
-                        <h6 id="img-comment-name" class="me-2" th:text="${comment.getUser().getFullName()}">Jordan
-                            Singer</h6>
-                        <span class="text-muted" th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(comment.getCreatedAt()),
+                    <div class="flex-grow-1 ms-2 ms-sm-3">
+                        <div class="comment-meta d-flex align-items-baseline">
+                            <h6 id="img-comment-name" class="me-2" th:text="${comment.getUser().getFullName()}">Jordan
+                                Singer</h6>
+                            <span class="text-muted" th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(comment.getCreatedAt()),
                                 #dates.month(comment.getCreatedAt()), #dates.day(comment.getCreatedAt())), 'dd MMMM yyyy',
                                 #locale.forLanguageTag('en'))}">2d</span>
-                    </div>
-                    <div id="img-comment-text" class="comment-body" th:text="${comment.getBody()}">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Non minima ipsum at amet
-                        doloremque qui magni, placeat deserunt pariatur itaque laudantium impedit aliquam
-                        eligendi repellendus excepturi quibusdam nobis esse accusantium.
+                        </div>
+                        <div id="img-comment-text" class="comment-body" th:text="${comment.getBody()}">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Non minima ipsum at amet
+                            doloremque qui magni, placeat deserunt pariatur itaque laudantium impedit aliquam
+                            eligendi repellendus excepturi quibusdam nobis esse accusantium.
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </th:block>
+        </th:block>
+    </div>
 </div><!-- End Comments -->

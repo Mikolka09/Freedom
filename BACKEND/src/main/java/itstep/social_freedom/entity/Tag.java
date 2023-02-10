@@ -1,6 +1,8 @@
 package itstep.social_freedom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -22,7 +24,9 @@ public class Tag extends BaseEntity {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             })
-    @JsonIgnore
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     @ToString.Exclude
     private Set<Post> posts = new HashSet<>();
 

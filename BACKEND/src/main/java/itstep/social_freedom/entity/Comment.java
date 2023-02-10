@@ -1,7 +1,9 @@
 package itstep.social_freedom.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -18,7 +20,7 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
+
     private User user;
 
     @Column(columnDefinition = "TEXT")
@@ -26,7 +28,6 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    @JsonIgnore
     private Post post;
 
     @Override

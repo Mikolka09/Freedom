@@ -1,6 +1,8 @@
 package itstep.social_freedom.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -21,6 +23,9 @@ public class Category extends BaseEntity {
 
     @OneToMany(mappedBy = "category")
     @ToString.Exclude
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Set<Post> posts = new HashSet<>();
 
     private String name;
