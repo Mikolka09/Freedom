@@ -2,6 +2,7 @@ package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.Category;
 import itstep.social_freedom.entity.Post;
+import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.CategoryService;
 import itstep.social_freedom.service.UserService;
@@ -33,6 +34,7 @@ public class CategoryController {
         model.addAttribute("categories", categoryList);
         User user = userService.getCurrentUsername();
         model.addAttribute("admin", user);
+        model.addAttribute("status", Status.values());
         return "/admin/categories/categories";
     }
 
@@ -49,20 +51,32 @@ public class CategoryController {
         Category category = categoryService.findCategoryById(id);
         if (!Objects.equals(name, "")) category.setName(name);
         categoryService.save(category);
-        return "redirect:../../admin/categories";
+        return "redirect:/admin/categories";
     }
+
+    @PostMapping("/admin/categories/category-recovery")
+    public String recoveryCategory(@RequestParam(value = "id") Long id,
+                                   @RequestParam(value = "status") String status) {
+        Category category = categoryService.findCategoryById(id);
+        if (Objects.equals(status, "DELETED") || Objects.equals(status, "ACTIVE"))
+            category.setStatus(Status.valueOf(status));
+        categoryService.save(category);
+        return "redirect:/admin/categories";
+    }
+
 
     @PostMapping("/admin/categories/create")
     public String createStore(@RequestParam(value = "name") String name) {
         Category category = new Category();
         if (!Objects.equals(name, "")) category.setName(name);
+        category.setStatus(Status.ACTIVE);
         categoryService.save(category);
-        return "redirect:../../admin/categories";
+        return "redirect:/admin/categories";
     }
 
-    @GetMapping("admin/category/delete/{id}")
+    @GetMapping("/admin/category/delete/{id}")
     public String deleteCategory(@PathVariable(name = "id") Long id) {
         categoryService.delete(id);
-        return "redirect:../../../admin/categories";
+        return "redirect:/admin/categories";
     }
 }

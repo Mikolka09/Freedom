@@ -50,12 +50,12 @@
                                          th:src="@{|/${post.getImgUrl()}|}"></td>
                                 <td th:text="${post.getTitle()}"></td>
                                 <td th:text="${post.getShortDescription()}"></td>
-                                <td th:text="${post.getCategory().getName()}"></td>
+                                <td th:text="${post.getCategory().getStatus()!=status[2]?post.getCategory().getName():'NULL'}"></td>
                                 <td>
                                     <select class="form-control" name="tag_id" id="tag_id">
                                         <option th:each="tag : ${post.getTags()}"
-                                                th:value="${tag.id}"
-                                                th:text="${tag.name}"></option>
+                                                th:value="${tag.getId()}"
+                                                th:text="${tag.getStatus()!=status[2]?tag.getName():'NULL'}"></option>
                                     </select>
                                 </td>
                                 <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>

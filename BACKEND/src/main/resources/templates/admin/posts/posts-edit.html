@@ -50,7 +50,7 @@
                                                         title="If you want to change, click on the button"
                                                         data-toggle="collapse" data-target="#collapseCategory"
                                                         aria-expanded="false" aria-controls="collapseCategory"
-                                                        th:text="${post.getCategory().getName()}">
+                                                        th:text="${post.getCategory().getStatus()!=status[2]?post.getCategory().getName():'NULL'}">
                                                 </button>
                                             </div>
                                         </div>
@@ -59,8 +59,8 @@
                                             <select class="form-control" name="category_id" id="category_id">
                                                 <option selected th:value="0">Please select...</option>
                                                 <option th:each="category : ${categories}"
-                                                        th:value="${category.id}"
-                                                        th:text="${category.name}"></option>
+                                                        th:value="${category.getId()}"
+                                                        th:text="${category.getName()}"></option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -76,7 +76,8 @@
                                                         title="If you want to change, click on the button"
                                                         data-toggle="collapse" data-target="#collapseExample"
                                                         aria-expanded="false" aria-controls="collapseExample"
-                                                        th:each="tag : ${post.getTags()}" th:text="${tag.getName()}">
+                                                        th:each="tag : ${post.getTags()}"
+                                                        th:text="${tag.getStatus()!=status[2]?tag.getName():'NULL'}">
                                                 </button>
                                             </div>
                                         </div>
@@ -84,8 +85,8 @@
                                             <label for="tag_id">New Tags</label>
                                             <select class="form-control" name="tag_id" id="tag_id" multiple>
                                                 <option th:each="tag : ${tags}"
-                                                        th:value="${tag.id}"
-                                                        th:text="${tag.name}"></option>
+                                                        th:value="${tag.getId()}"
+                                                        th:text="${tag.getName()}"></option>
                                             </select>
                                         </div>
                                     </div>

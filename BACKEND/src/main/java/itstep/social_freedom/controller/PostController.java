@@ -44,14 +44,17 @@ public class PostController {
         CreateModelUser(model);
         model.addAttribute("user_id", id);
         model.addAttribute("posts", posts);
+        model.addAttribute("status", Status.values());
         return "user/posts/index";
     }
 
     @GetMapping("/user/posts/create/{id}")
     public String create(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("userId", id);
-        List<Category> categories = categoryService.allCategory();
-        List<Tag> tags = tagService.allTag();
+        List<Category> categories = categoryService.allCategory().stream()
+                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+        List<Tag> tags = tagService.allTag().stream()
+                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
         CreateModelUser(model);
@@ -139,7 +142,8 @@ public class PostController {
         Post post = postService.findPostById(post_id);
         User user = userService.getCurrentUsername();
         String[] bodies = postService.arrayBody(post.getBody());
-        List<Category> categories = categoryService.allCategory();
+        List<Category> categories = categoryService.allCategory().stream()
+                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categories", categories);
         model.addAttribute("bodies", bodies);
         model.addAttribute("post", post);

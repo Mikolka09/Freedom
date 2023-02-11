@@ -32,6 +32,7 @@
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Status</th>
                             <th scope="col">CreateAt</th>
                             <th scope="col">UpdateAt</th>
                             <th scope="col">Buttons</th>
@@ -43,6 +44,7 @@
                             <tbody>
                             <tr th:each="tag:${tags}">
                                 <td th:text="${tag.getName()}"></td>
+                                <td th:text="${tag.getStatus()}"></td>
                                 <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(tag.getCreatedAt()),
                                 #dates.month(tag.getCreatedAt()), #dates.day(tag.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}"></td>
@@ -54,6 +56,11 @@
                                        th:data-name="${tag.getName()}"
                                        data-toggle="modal" data-target="#EditModal">
                                         <img src="/img/icon/edit.png" width="30px"/></a>
+                                    <a th:if="${tag.getStatus()==status[2]}"
+                                       th:data-id="${tag.getId()}" href="#" title="Recovery"
+                                       th:data-name="${tag.getName()}"
+                                       data-toggle="modal" data-target="#RecoveryModal">
+                                        <img src="/img/icon/restore.png" width="30px"/></a>
                                     <a th:data-id="${tag.getId()}" href="#" title="Delete"
                                        th:data-name="${tag.getName()}"
                                        data-toggle="modal" data-target="#DeleteModal">
@@ -87,6 +94,7 @@
 
 <th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
 <th:block th:insert="/admin/fragments/edit-modal.html::edit-modal"></th:block>
+<th:block th:insert="/admin/fragments/recovery-modal.html::recovery-modal"></th:block>
 <th:block th:insert="/admin/fragments/create-tag-modal.html::create-tag-modal"></th:block>
 <!-- Logout Modal-->
 <th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
@@ -113,7 +121,19 @@
         modal.find('#name').val(name);
         modal.find('#exampleModalLabel').text(title);
         modal.find('#action').prop("action", action);
-    })
+    });
+    $('#RecoveryModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget);
+        let id = button.data('id');
+        let name = button.data('name');
+        let action = "/admin/tags/tag-recovery";
+        let title = "Recovery Tag";
+        let modal = $(this);
+        modal.find('#id').val(id);
+        modal.find('#name').val(name);
+        modal.find('#exampleModalLabel').text(title);
+        modal.find('#action').prop("action", action);
+    });
     $('#DeleteModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget);
         let id = button.data('id');
@@ -125,7 +145,7 @@
         modal.find('#deleteModalLabel').text(label);
         modal.find('#text').text(text);
         modal.find('#action').prop("href", action);
-    })
+    });
 
 </script>
 </body>

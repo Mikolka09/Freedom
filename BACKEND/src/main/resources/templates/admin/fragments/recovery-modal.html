@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="recovery-modal">
+  <div class="modal fade" id="RecoveryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Recovery Category</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="container">
+          <form id="action" action="#" enctype="multipart/form-data"
+                method="POST">
+            <input type="hidden" name="id" id="id">
+            <div class="form-group">
+              <label for="name"></label>
+              <input type="text" class="form-control form-control-user" id="name" name="name" disabled>
+            </div>
+            <div class="form-group">
+            <label for="status"></label>
+            <select class="form-control" name="status" id="status" title="Select status!">
+              <option th:each="st : ${status}"
+                      th:text="${st}"></option>
+            </select>
+        </div>
+            <div class="form-group form-button">
+              <input type="submit" name="signup" id="signup" class="btn btn-primary btn-user btn-block"
+                     value="Recovery"/>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

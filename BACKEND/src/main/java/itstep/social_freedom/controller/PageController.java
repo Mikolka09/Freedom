@@ -27,7 +27,8 @@ public class PageController {
 
     private void CreateModel(Model model){
         User user = userService.getCurrentUsername();
-        List<Category> categories = categoryService.allCategory();
+        List<Category> categories = categoryService.allCategory().stream()
+                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
         String role = "";
         if(user != null) {
             for (Role r : user.getRoles()) {

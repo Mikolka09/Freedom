@@ -71,6 +71,7 @@ public class AdminController {
                 .filter(post -> post.getStatus() == Status.VERIFIED)
                 .collect(Collectors.toList());
         model.addAttribute("posts", posts);
+        model.addAttribute("status", Status.values());
         CreateModelUser(model);
         return "admin/posts/posts";
     }
@@ -79,8 +80,10 @@ public class AdminController {
     @GetMapping("/admin/create-post/{id}")
     public String createPost(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("user_id", id);
-        List<Category> categories = categoryService.allCategory();
-        List<Tag> tags = tagService.allTag();
+        List<Category> categories = categoryService.allCategory().stream()
+                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+        List<Tag> tags = tagService.allTag().stream()
+                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
         CreateModelUser(model);
@@ -147,8 +150,10 @@ public class AdminController {
                             CategoryService categoryService,
                             TagService tagService) {
         Post post = postService.findPostById(post_id);
-        List<Category> categories = categoryService.allCategory();
-        List<Tag> tags = tagService.allTag();
+        List<Category> categories = categoryService.allCategory().stream()
+                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+        List<Tag> tags = tagService.allTag().stream()
+                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
         List<Status> enums = Arrays.asList(Status.values());
         model.addAttribute("user_id", post.getUser().getId());
         model.addAttribute("categories", categories);
@@ -171,6 +176,7 @@ public class AdminController {
         List<Post> posts = postService.posts().stream().filter(x ->
                 (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED)).collect(Collectors.toList());
         model.addAttribute("posts", posts);
+        model.addAttribute("status", Status.values());
         CreateModelUser(model);
         return "admin/posts/posts-verified";
     }

@@ -16,7 +16,8 @@
 
                     <!-- ======= Single Post Content ======= -->
                     <div class="single-post">
-                        <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}"></span>
+                        <div class="post-meta"><span class="date"
+                                                     th:text="${post.getCategory().getStatus()!=status[2]?post.getCategory().getName():'NULL'}"></span>
                             <span class="mx-1">&bullet;</span>
                             <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
                                 #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
@@ -346,7 +347,8 @@
                     <div class="aside-block">
                         <h3 class="aside-title">Tags</h3>
                         <ul class="aside-tags list-unstyled">
-                            <li th:each="tag : ${post.getTags()}"><a href="#" th:text="${tag.getName()}"></a>
+                            <li th:each="tag : ${post.getTags()}"><a href="#"
+                                                                     th:text="${tag.getStatus()!=status[2]?tag.getName():'NULL'}"></a>
                             </li>
                         </ul>
                     </div><!-- End Tags -->
