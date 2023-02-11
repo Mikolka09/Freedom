@@ -10,6 +10,8 @@ import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+
 @RestController
 public class ApiPostController {
 
@@ -32,7 +34,7 @@ public class ApiPostController {
     }
 
     @GetMapping("/api/posts/comment/{id}")
-    private int addComment(@PathVariable long id,
+    private Comment[] addComment(@PathVariable long id,
                            @RequestParam(value = "userId") String userId,
                            @RequestParam(value = "text") String text) {
         Comment comment = new Comment();
@@ -44,7 +46,8 @@ public class ApiPostController {
             comment.setBody(text);
         }
         commentRepository.save(comment);
-        return Response.SC_CREATED;
+        return postService.findPostById(id).getComments().stream()
+                .sorted(Comparator.comparing(Comment::getCreatedAt)).toArray(Comment[]::new);
     }
 
 }

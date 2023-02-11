@@ -5,9 +5,9 @@
     <h5 class="comment-title py-4"><span id="comments-size" th:if="${comments.size()!=0}"
                                          th:text="${comments.size()}"></span>
         Comments</h5>
-    <div style="height: 500px; overflow: scroll;">
+    <div id="comments-container" style="height: 500px; overflow: scroll;">
         <th:block th:if="${comments.size()!=0}" th:each="comment:${comments}">
-            <div id="comment-container">
+            <div id="comment-one">
                 <div class="comment d-flex mb-4">
                     <div class="flex-shrink-0">
                         <div class="avatar avatar-sm rounded-circle">
