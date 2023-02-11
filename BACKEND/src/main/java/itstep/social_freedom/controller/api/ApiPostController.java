@@ -2,6 +2,7 @@ package itstep.social_freedom.controller.api;
 
 import itstep.social_freedom.entity.Comment;
 import itstep.social_freedom.entity.Post;
+import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.repository.CommentRepository;
 import itstep.social_freedom.repository.UserRepository;
@@ -46,7 +47,7 @@ public class ApiPostController {
             comment.setBody(text);
         }
         commentRepository.save(comment);
-        return postService.findPostById(id).getComments().stream()
+        return postService.findPostById(id).getComments().stream().filter(x->x.getStatus()== Status.ACTIVE)
                 .sorted(Comparator.comparing(Comment::getCreatedAt)).toArray(Comment[]::new);
     }
 

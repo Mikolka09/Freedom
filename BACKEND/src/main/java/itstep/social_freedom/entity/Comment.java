@@ -30,6 +30,10 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

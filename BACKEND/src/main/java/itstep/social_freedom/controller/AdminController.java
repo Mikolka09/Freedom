@@ -1,7 +1,9 @@
 package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.*;
+import itstep.social_freedom.repository.CommentRepository;
 import itstep.social_freedom.service.*;
+import org.bouncycastle.est.ESTAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,10 +29,15 @@ public class AdminController {
     private TagService tagService;
 
     @Autowired
+    private CommentService commentService;
+
+    @Autowired
     private PostService postService;
 
     @Autowired
     private FileService fileService;
+    @Autowired
+    private CommentRepository commentRepository;
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
@@ -189,6 +196,44 @@ public class AdminController {
         model.addAttribute("allUsers", users);
         CreateModelUser(model);
         return "admin/users/users";
+    }
+
+    //Getting a list of comments
+    @GetMapping("/admin/comments")
+    public String commentsLis(Model model){
+        List<Comment> comments = commentService.allComments();
+        model.addAttribute("comments", comments);
+        model.addAttribute("status", Status.values());
+        CreateModelUser(model);
+        return "admin/comments/comments";
+    }
+
+    @PostMapping("/admin/comments/comment-store")
+    public String editStore(@RequestParam(value = "id") Long id,
+                            @RequestParam(value = "body") String body) {
+        Comment comment = commentService.findCommentById(id);
+        if (!Objects.equals(body, "")) comment.setBody(body);
+        commentService.save(comment);
+        return "redirect:/admin/comments";
+    }
+
+    @PostMapping("/admin/comments/comment-recovery")
+    public String recoveryCategory(@RequestParam(value = "id") Long id,
+                                   @RequestParam(value = "body") String body,
+                                   @RequestParam(value = "status") String status) {
+        Comment comment = commentService.findCommentById(id);
+        if (Objects.equals(status, "DELETED") || Objects.equals(status, "ACTIVE"))
+            comment.setStatus(Status.valueOf(status));
+        if (!Objects.equals(body, "")) comment.setBody(body);
+        commentService.save(comment);
+        return "redirect:/admin/comments";
+    }
+
+    //Deleting a comment
+    @GetMapping("/admin/comments/delete/{id}")
+    public String deleteComment(@PathVariable(name = "id") Long id) {
+        commentService.delete(id);
+        return "redirect:/admin/comments";
     }
 
     //Deleting a user
