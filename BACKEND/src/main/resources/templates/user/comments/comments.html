@@ -22,22 +22,16 @@
 
             <!-- Begin Page Content -->
             <div class="col-md-12 col-md-offset-1">
-                <h1 class="text-center">List Posts</h1>
-                <p>
-                    <a class="btn btn-success btn-sm" th:href="@{|/user/posts/create/${user.getId()}|}"
-                       style="border-radius:6px;">Create new post</a>
-                </p>
+                <h1 class="text-center">List Comments</h1>
                 <div class="scroll-table">
                     <table>
                         <thead>
                         <tr>
+                            <th scope="col">Avatar</th>
                             <th scope="col">Username</th>
-                            <th scope="col">Image</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Short Description</th>
+                            <th scope="col">Title Post</th>
+                            <th scope="col">Comment</th>
                             <th scope="col">Category</th>
-                            <th scope="col">Tags</th>
-                            <th scope="col">Likes</th>
                             <th scope="col">Status</th>
                             <th scope="col">CreateAt</th>
                             <th scope="col">UpdateAt</th>
@@ -48,36 +42,30 @@
                     <div class="scroll-table-body">
                         <table>
                             <tbody>
-                            <tr th:each="post:${posts}">
-                                <td th:text="${post.getUser().getUsername()}"></td>
-                                <td><img width="100px"
-                                         th:src="@{|/${post.getImgUrl()}|}"></td>
-                                <td th:text="${post.getTitle()}"></td>
-                                <td th:text="${post.getShortDescription()}"></td>
-                                <td th:text="${post.getCategory().getStatus()!=status[2]?post.getCategory().getName():'NULL'}"></td>
-                                <td>
-                                    <select class="form-control" name="tag_id" id="tag_id">
-                                        <option th:each="tag : ${post.getTags()}"
-                                                th:value="${tag.getId()}"
-                                                th:text="${tag.getStatus()!=status[2]?tag.getName():'NULL'}"></option>
-                                    </select>
-                                </td>
-                                <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
-                                <td th:text="${post.getStatus()}"></td>
-<!--                                <td th:text="${#dates.format(post.getCreatedAt(), 'dd MMM yyyy')}"></td>-->
-                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
-                                #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                            <tr th:each="comment:${comments}">
+                                <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
+                                         th:src="@{|/${comment.getUser().getAvatarUrl()}|}"></td>
+                                <td th:text="${comment.getUser().getUsername()}"></td>
+                                <td th:text="${comment.getPost().getTitle()}"></td>
+                                <td th:text="${comment.getBody()}"></td>
+                                <td th:text="${comment.getPost().getCategory().getStatus()!=status[2]?comment.getPost().getCategory().getName():'NULL'}"></td>
+                                <td th:text="${comment.getStatus()}"></td>
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(comment.getCreatedAt()),
+                                #dates.month(comment.getCreatedAt()), #dates.day(comment.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}"></td>
-                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getUpdatedAt()),
-                                #dates.month(post.getUpdatedAt()), #dates.day(post.getUpdatedAt())), 'dd MMM yyyy',
+                                <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(comment.getUpdatedAt()),
+                                #dates.month(comment.getUpdatedAt()), #dates.day(comment.getUpdatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}"></td>
                                 <td>
-                                    <a th:href="@{|/user/posts/edit/${post.getId()}|}" title="Edit">
+                                    <a th:data-id="${comment.getId()}" href="#" title="Edit"
+                                       th:data-body="${comment.getBody()}"
+                                       th:data-title-post="${comment.getPost().getTitle()}"
+                                       th:data-username="${comment.getUser().getUsername()}"
+                                       th:data-category="${comment.getPost().getCategory().getName()}"
+                                       data-toggle="modal" data-target="#EditCommentUserModal">
                                         <img src="/img/icon/edit.png" width="30px"/></a>
-                                    <a th:href="@{|/user/posts/preview/${post.getId()}|}" title="Preview">
-                                        <img src="/img/icon/preview.png" width="30px"/></a>
-                                    <a th:data-id="${post.getId()}" href="#" title="Delete"
-                                       th:data-name="${post.getTitle()}"
+                                    <a th:data-id="${comment.getId()}" href="#" title="Delete"
+                                       th:data-name="${comment.getBody()}"
                                        data-toggle="modal" data-target="#DeleteModal">
                                         <img src="/img/icon/delete.png" width="30px"/></a>
                                 </td>
@@ -110,6 +98,7 @@
 <!-- Logout Modal-->
 <th:block th:insert="/user/fragments/logout-modal.html::logout-modal"></th:block>
 <th:block th:insert="/user/fragments/delete-modal.html::delete-modal"></th:block>
+<th:block th:insert="/user/fragments/edit-comment-modal.html::edit-comment-modal"></th:block>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/user/vendor/jquery/jquery.min.js"></script>
@@ -122,14 +111,31 @@
 <script src="/user/js/sb-admin-2.min.js"></script>
 
 <script>
-
+    $('#EditCommentUserModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget);
+        let id = button.data('id');
+        let body = button.data('body');
+        let title = button.data('title-post');
+        let username = button.data('username');
+        let category = button.data('category');
+        let action = "/user/comments/comment-store";
+        let label = "Edit Comment";
+        let modal = $(this);
+        modal.find('#id').val(id);
+        modal.find('#body').val(body);
+        modal.find('#title-post').val(title);
+        modal.find('#username').val(username);
+        modal.find('#category').val(category);
+        modal.find('#exampleModalLabel').text(label);
+        modal.find('#action').prop("action", action);
+    });
     $('#DeleteModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget);
         let id = button.data('id');
         let name = button.data('name');
-        let action = "/user/posts/delete/" + id;
-        let label = "Are you sure you're ready to delete Post - \"" + name.toUpperCase() + "\"?";
-        let text = "Select \"Delete\" below if you are ready to remove this Post."
+        let action = "/user/comments/delete/" + id;
+        let label = "Are you sure you're ready to delete Comment - \"" + name.toUpperCase()  + "\"?";
+        let text = "Select \"Delete\" below if you are ready to remove this Comment."
         let modal = $(this);
         modal.find('#deleteModalLabel').text(label);
         modal.find('#text').text(text);

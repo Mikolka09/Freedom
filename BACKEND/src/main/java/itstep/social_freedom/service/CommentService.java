@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -17,6 +19,11 @@ public class CommentService {
 
     public List<Comment> allComments() {
         return commentRepository.findAll();
+    }
+
+    public List<Comment> allCommentsUser(Long id){
+        return commentRepository.findAll().stream()
+                .filter(x-> Objects.equals(x.getUser().getId(), id)).collect(Collectors.toList());
     }
 
     public Comment findCommentById(Long id) {

@@ -3,7 +3,6 @@ package itstep.social_freedom.controller;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.repository.CommentRepository;
 import itstep.social_freedom.service.*;
-import org.bouncycastle.est.ESTAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -200,7 +199,7 @@ public class AdminController {
 
     //Getting a list of comments
     @GetMapping("/admin/comments")
-    public String commentsLis(Model model){
+    public String commentsList(Model model){
         List<Comment> comments = commentService.allComments();
         model.addAttribute("comments", comments);
         model.addAttribute("status", Status.values());
