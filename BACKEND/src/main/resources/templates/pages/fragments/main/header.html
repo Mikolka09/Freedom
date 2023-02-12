@@ -12,10 +12,13 @@
             <ul>
                 <li><a href="/">Blog</a></li>
                 <li><a href="single-post.html">Single Post</a></li>
-                <li class="dropdown"><a href="/category"><span>Categories</span> <i
+                <li class="dropdown"><a href="#"><span>Categories</span> <i
                         class="bi bi-chevron-down dropdown-indicator"></i></a>
                     <ul>
-                        <li th:each="category :${categories}"><a th:text="${category.getName()}" href="#"></a></li>
+                        <th:block th:each="category :${categories}">
+                            <li><a th:text="${category.getName()}" th:href="@{|/category/${category.getId()}|}"></a>
+                            </li>
+                        </th:block>
                     </ul>
                 </li>
 

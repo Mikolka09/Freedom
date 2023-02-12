@@ -6,12 +6,16 @@ import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.repository.CommentRepository;
 import itstep.social_freedom.repository.UserRepository;
+import itstep.social_freedom.service.CommentService;
 import itstep.social_freedom.service.PostService;
+import itstep.social_freedom.service.UserService;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
+
+import static java.lang.Integer.*;
 
 @RestController
 public class ApiPostController {
@@ -19,9 +23,9 @@ public class ApiPostController {
     @Autowired
     private PostService postService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
 
     @GetMapping("/api/posts/likes/{id}")
     private Post addLikes(@PathVariable long id) {
@@ -36,19 +40,23 @@ public class ApiPostController {
 
     @GetMapping("/api/posts/comment/{id}")
     private Comment[] addComment(@PathVariable long id,
-                           @RequestParam(value = "userId") String userId,
-                           @RequestParam(value = "text") String text) {
+                                 @RequestParam(value = "userId") Long userId,
+                                 @RequestParam(value = "text") String text) {
         Comment comment = new Comment();
-        User user = userRepository.findById((long) Integer.parseInt(userId)).orElse(new User());
+        User user = userService.findUserById(userId);
         Post post = postService.findPostById(id);
         if (post != null) {
             comment.setPost(post);
             comment.setUser(user);
             comment.setBody(text);
+            comment.setStatus(Status.ACTIVE);
         }
-        commentRepository.save(comment);
-        return postService.findPostById(id).getComments().stream().filter(x->x.getStatus()== Status.ACTIVE)
-                .sorted(Comparator.comparing(Comment::getCreatedAt)).toArray(Comment[]::new);
+        if (commentService.save(comment)) {
+            Comment[] comments = postService.findPostById(id).getComments().stream().filter(x -> x.getStatus() == Status.ACTIVE)
+                    .sorted(Comparator.comparing(Comment::getCreatedAt)).toArray(Comment[]::new);
+            return comments;
+        }
+        return null;
     }
 
 }

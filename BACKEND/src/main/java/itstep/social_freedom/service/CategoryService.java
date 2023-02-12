@@ -27,6 +27,10 @@ public class CategoryService {
         return categoryRepository.findById(id).orElse(new Category());
     }
 
+    public List<Category> findAllCategoryById(Long id) {
+        return categoryRepository.findAllById(id);
+    }
+
     public boolean save(Category category) {
         Category categoryDB = categoryRepository.findCategoriesByName(category.getName());
         if (categoryDB != null)

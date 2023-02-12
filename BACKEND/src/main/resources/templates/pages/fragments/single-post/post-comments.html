@@ -2,10 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <div class="comments" th:fragment="post-comments">
-    <h5 class="comment-title py-4"><span id="comments-size" th:if="${comments.size()!=0}"
-                                         th:text="${comments.size()}"></span>
-        Comments</h5>
-    <div id="comments-container" style="height: 500px; overflow: scroll;">
+    <h5 class="comment-title py-4"><span id="size"
+                                         th:text="${comments.size()==0?'':comments.size()}"></span> Comments</h5>
+    <div id="comments-container" style="max-height: 500px; overflow-y: auto;">
         <th:block th:if="${comments.size()!=0}" th:each="comment:${comments}">
             <div id="comment-one">
                 <div class="comment d-flex mb-4">
