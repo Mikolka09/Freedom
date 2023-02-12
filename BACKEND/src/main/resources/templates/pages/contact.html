@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:include="/pages/fragments/main/head"></th:block>
+<th:block th:insert="/pages/fragments/main/head.html::head"></th:block>
 
 <body>
 
   <!-- ======= Header ======= -->
-  <th:block th:replace="/pages/fragments/main/header.html::header"></th:block>
+  <th:block th:insert="/pages/fragments/main/header.html::header"></th:block>
 
   <main id="main">
     <section id="contact" class="contact mb-5">
@@ -78,9 +78,9 @@
 
   <!-- ======= Footer ======= -->
 
-  <th:block th:include="/pages/fragments/main/footer"></th:block>
+  <th:block th:insert="/pages/fragments/main/footer.html::footer"></th:block>
 
-  <th:block th:include="/pages/fragments/main/foot"></th:block>
+  <th:block th:insert="/pages/fragments/main/foot.html::foot"></th:block>
 
 </body>
 

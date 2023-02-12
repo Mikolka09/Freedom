@@ -22,9 +22,6 @@ public class Post extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
     private Category category;
 
     @ManyToOne

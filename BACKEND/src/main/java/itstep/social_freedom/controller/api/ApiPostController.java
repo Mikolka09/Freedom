@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.Integer.*;
 
@@ -52,11 +54,17 @@ public class ApiPostController {
             comment.setStatus(Status.ACTIVE);
         }
         if (commentService.save(comment)) {
-            Comment[] comments = postService.findPostById(id).getComments().stream().filter(x -> x.getStatus() == Status.ACTIVE)
+            return postService.findPostById(id).getComments().stream().filter(x -> x.getStatus() == Status.ACTIVE)
                     .sorted(Comparator.comparing(Comment::getCreatedAt)).toArray(Comment[]::new);
-            return comments;
         }
         return null;
+    }
+
+    @GetMapping("/api/posts/category/{id}")
+    private List<Post> createPagesPosts(@PathVariable long id){
+        List<Post> post = postService.posts().stream().filter(x->x.getCategory().getId()==id)
+                .filter(x->x.getStatus()== Status.VERIFIED).collect(Collectors.toList());
+        return post;
     }
 
 }

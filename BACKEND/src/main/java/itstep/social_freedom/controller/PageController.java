@@ -31,7 +31,7 @@ public class PageController {
 
     private void CreateModel(Model model) {
         User user = userService.getCurrentUsername();
-        List<Category> categories = categoryService.allCategory().stream()
+        List<Category> categoriesAll = categoryService.allCategory().stream()
                 .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         String role = "";
         if (user != null) {
@@ -43,7 +43,7 @@ public class PageController {
             }
         }
         model.addAttribute("user", user);
-        model.addAttribute("categories", categories);
+        model.addAttribute("categoriesAll", categoriesAll);
         model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
     }
@@ -101,6 +101,8 @@ public class PageController {
                 .filter(x -> Objects.equals(x.getCategory().getId(), id)).collect(Collectors.toList());
         if (posts.size() == 0)
             return "redirect:/";
+        double count = 8.0;
+        int pages = (int)Math.ceil(posts.size()/count);
         List<Category> categoriesAll = categoryService.allCategory().stream()
                 .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         List<Tag> tags = tagService.allTag().stream()
@@ -108,6 +110,7 @@ public class PageController {
         model.addAttribute("categoriesAll", categoriesAll);
         model.addAttribute("posts", posts);
         model.addAttribute("tags", tags);
+        model.addAttribute("pages", new int[pages]);
         CreateModel(model);
         return "pages/category";
     }

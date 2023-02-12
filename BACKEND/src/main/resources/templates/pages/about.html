@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:include="/pages/fragments/main/head"></th:block>
+<th:block th:insert="/pages/fragments/main/head.html::head"></th:block>
 
 <body>
 
 <!-- ======= Header ======= -->
 <!--/*@thymesVar id="categories" type=""*/-->
-<th:block th:replace="/pages/fragments/main/header.html::header"></th:block>
+<th:block th:insert="/pages/fragments/main/header.html::header"></th:block>
 
 <main id="main">
-    <th:block th:include="/pages/fragments/about/about-us"></th:block>
+    <th:block th:insert="/pages/fragments/about/about-us.html::about-us"></th:block>
 
-    <th:block th:include="/pages/fragments/about/latest-news"></th:block>
+    <th:block th:insert="/pages/fragments/about/latest-news.html::latest-news"></th:block>
 
-    <th:block th:include="/pages/fragments/about/our-team"></th:block>
+    <th:block th:insert="/pages/fragments/about/our-team.html::our-team"></th:block>
 
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->
 
-<th:block th:include="/pages/fragments/main/footer"></th:block>
+<th:block th:insert="/pages/fragments/main/footer.html::footer"></th:block>
 
-<th:block th:include="/pages/fragments/main/foot"></th:block>
+<th:block th:insert="/pages/fragments/main/foot.html::foot"></th:block>
 
 </body>
 

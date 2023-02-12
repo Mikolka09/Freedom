@@ -21,11 +21,23 @@
                 exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas, nobis error
                 deserunt aliquam temporibus sapiente, laudantium dolorum itaque libero eos
                 deleniti?</p>
-            <div class=" d-flex align-items-center author">
+            <div class="d-flex align-items-center author">
                 <div class="photo"><img th:src="@{|/${post.getUser().getAvatarUrl()}|}" alt="avatar"
                                         class="img-fluid"></div>
                 <div class="name">
                     <h3 class="m-0 p-0" th:text="${post.getUser().getFullName()}">Wade Warren</h3>
+                </div>
+                <div class="row mx-2">
+                    <div class="col-sm-6">
+                        <img id="img-like" src="/img/icon/like.png" width="25px">
+                        <span id="likes" style="font-weight: bold; color: blueviolet" class="px-1"
+                              th:text="${post.getLikes()==null?0:post.getLikes()}"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <img id="img-comment" src="/img/icon/comment.png" width="25px">
+                        <span id="comments-post" style="font-weight: bold; color: blueviolet" class="px-1"
+                              th:text="${post.getComments().size()==null?0:post.getComments().size()}"></span>
+                    </div>
                 </div>
             </div>
         </div>

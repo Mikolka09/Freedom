@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div class="aside-block" th:fragment="list-category">
+  <h3 class="aside-title">Categories</h3>
+  <ul class="aside-links list-unstyled">
+    <th:block th:each=" category : ${categoriesAll}">
+      <li><a th:href="@{|/category/${category.getId()}|}"><i class="bi bi-chevron-right" style="font-style: normal;"
+                                                             th:text="${category.getName()}"></i></a>
+      </li>
+    </th:block>
+  </ul>
+</div><!-- End Categories -->
