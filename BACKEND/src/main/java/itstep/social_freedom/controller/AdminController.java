@@ -87,9 +87,9 @@ public class AdminController {
     public String createPost(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("user_id", id);
         List<Category> categories = categoryService.allCategory().stream()
-                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         List<Tag> tags = tagService.allTag().stream()
-                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
         CreateModelUser(model);
@@ -157,9 +157,9 @@ public class AdminController {
                             TagService tagService) {
         Post post = postService.findPostById(post_id);
         List<Category> categories = categoryService.allCategory().stream()
-                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         List<Tag> tags = tagService.allTag().stream()
-                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         List<Status> enums = Arrays.asList(Status.values());
         model.addAttribute("user_id", post.getUser().getId());
         model.addAttribute("categories", categories);
@@ -199,7 +199,7 @@ public class AdminController {
 
     //Getting a list of comments
     @GetMapping("/admin/comments")
-    public String commentsList(Model model){
+    public String commentsList(Model model) {
         List<Comment> comments = commentService.allComments();
         model.addAttribute("comments", comments);
         model.addAttribute("status", Status.values());
@@ -319,8 +319,11 @@ public class AdminController {
                 return "redirect:" + path;
             }
         }
-        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post))
+        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post)) {
+            if (postService.posts().stream().noneMatch(x -> x.getStatus() == Status.NOT_VERIFIED))
+                return "redirect:/admin/posts";
             return "redirect:/admin/posts-verified";
+        }
         return "redirect:/admin/post/verify/" + user_id;
     }
 
@@ -395,7 +398,8 @@ public class AdminController {
         }
 
         if (addFile(redirectAttributes, file, user, fileService, userService, edit)) return "redirect:" + path;
-
+        if(userService.allUsers().stream().noneMatch(x -> x.getStatus() == Status.DELETED))
+            return "redirect:/admin/users";
         return "redirect:/admin/users/deleted";
     }
 

@@ -5,29 +5,39 @@
     <div class="container" data-aos="fade-up">
 
         <div class="section-header d-flex justify-content-between align-items-center mb-5">
-            <h2>Travel</h2>
-            <div><a href="category.html" class="more">See All Business</a></div>
+            <h2 th:text="${travelPosts.get(0).getCategory().getName()}">Travel</h2>
+            <div><a th:href="@{|/category/${travelPosts.get(0).getCategory().getId()}|}" class="more">See All Travel</a>
+            </div>
         </div>
 
         <div class="row">
             <div class="col-md-9 order-md-2">
 
                 <div class="d-lg-flex post-entry-2">
-                    <a href="single-post.html" class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
-                        <img src="/img/post-landscape-3.jpg" alt="" class="img-fluid">
+                    <a th:href="@{|/view-post/${travelPosts.get(0).getId()}|}"
+                       class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
+                        <img th:src="@{|/${travelPosts.get(0).getImgUrl()}|}" alt="" class="img-fluid">
                     </a>
                     <div>
-                        <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
-                            <span>Jul 5th '22</span></div>
-                        <h3><a href="single-post.html">What is the son of Football Coach John Gruden, Deuce Gruden
+                        <div class="post-meta"><span class="date" th:text="${travelPosts.get(0).getCategory().getName()}">Business</span>
+                            <span class="mx-1">&bullet;</span>
+                            <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(travelPosts.get(0).getCreatedAt()),
+                                #dates.month(travelPosts.get(0).getCreatedAt()), #dates.day(travelPosts.get(0).getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                        <h3><a th:href="@{|/view-post/${travelPosts.get(0).getId()}|}"
+                               th:text="${travelPosts.get(0).getTitle()}">What is the son of Football Coach John Gruden,
+                            Deuce Gruden
                             doing Now?</a></h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio placeat
+                        <p th:text="${travelPosts.get(0).getShortDescription()}">Lorem ipsum dolor sit amet consectetur
+                            adipisicing elit. Distinctio placeat
                             exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas, nobis error
                             deserunt aliquam temporibus sapiente, laudantium dolorum itaque libero eos deleniti?</p>
                         <div class="d-flex align-items-center author">
-                            <div class="photo"><img src="/img/person-4.jpg" alt="" class="img-fluid"></div>
+                            <div class="photo"><img th:src="@{|/${travelPosts.get(0).getUser().getAvatarUrl()}|}" alt=""
+                                                    class="img-fluid"></div>
                             <div class="name">
-                                <h3 class="m-0 p-0">Wade Warren</h3>
+                                <h3 class="m-0 p-0" th:text="${travelPosts.get(0).getUser().getFullName()}">Wade
+                                    Warren</h3>
                             </div>
                         </div>
                     </div>
@@ -36,88 +46,81 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="post-entry-1 border-bottom">
-                            <a href="single-post.html"><img src="/img/post-landscape-5.jpg" alt=""
-                                                            class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Business</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do
+                            <a th:href="@{|/view-post/${travelPosts.get(1).getId()}|}"><img
+                                    th:src="@{|/${travelPosts.get(1).getImgUrl()}|}" alt=""
+                                    class="img-fluid"></a>
+                            <div class="post-meta"><span class="date"
+                                                         th:text="${travelPosts.get(1).getCategory().getName()}">Business</span>
+                                <span
+                                        class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(travelPosts.get(1).getCreatedAt()), #dates.month(travelPosts.get(1).
+                                    getCreatedAt()), #dates.day(travelPosts.get(1).getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                            <h2 class="mb-2"><a th:href="@{|/view-post/${travelPosts.get(1).getId()}|}"
+                                                th:text="${travelPosts.get(1).getTitle()}">11 Work From Home Part-Time Jobs
+                                You Can Do
                                 Now</a></h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
-                            <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
+                            <span class="author mb-3 d-block" th:text="${travelPosts.get(1).getUser().getFullName()}">Jenny Wilson</span>
+                            <p class="mb-4 d-block" th:text="${travelPosts.get(1).getShortDescription()}">Lorem ipsum dolor
+                                sit, amet consectetur adipisicing elit. Vero
                                 temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
                         </div>
 
                         <div class="post-entry-1">
-                            <div class="post-meta"><span class="date">Business</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">5 Great Startup Tips for Female Founders</a>
+                            <div class="post-meta"><span class="date"
+                                                         th:text="${travelPosts.get(2).getCategory().getName()}">Business</span>
+                                <span
+                                        class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(travelPosts.get(2).getCreatedAt()), #dates.month(travelPosts.get(2).
+                                    getCreatedAt()), #dates.day(travelPosts.get(2).getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                            <h2 class="mb-2"><a th:href="@{|/view-post/${travelPosts.get(2).getId()}|}"
+                                                th:text="${travelPosts.get(2).getTitle()}">5 Great Startup Tips for Female
+                                Founders</a>
                             </h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                            <span class="author mb-3 d-block" th:text="${travelPosts.get(2).getUser().getFullName()}">Jenny Wilson</span>
                         </div>
                     </div>
                     <div class="col-lg-8">
                         <div class="post-entry-1">
-                            <a href="single-post.html"><img src="/img/post-landscape-7.jpg" alt=""
-                                                            class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Business</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused
+                            <a th:href="@{|/view-post/${travelPosts.get(3).getId()}|}"><img
+                                    th:src="@{|/${travelPosts.get(3).getImgUrl()}|}" alt=""
+                                    class="img-fluid"></a>
+                            <div class="post-meta"><span class="date"
+                                                         th:text="${travelPosts.get(3).getCategory().getName()}">Business</span>
+                                <span
+                                        class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(travelPosts.get(3).getCreatedAt()), #dates.month(travelPosts.get(3).
+                                    getCreatedAt()), #dates.day(travelPosts.get(3).getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                            <h2 class="mb-2"><a th:href="@{|/view-post/${travelPosts.get(3).getId()}|}"
+                                                th:text="${travelPosts.get(3).getTitle()}">How to Avoid Distraction and
+                                Stay Focused
                                 During Video Calls?</a></h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
-                            <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
+                            <span class="author mb-3 d-block" th:text="${travelPosts.get(3).getUser().getFullName()}">Jenny Wilson</span>
+                            <p class="mb-4 d-block" th:text="${travelPosts.get(3).getShortDescription()}">Lorem ipsum dolor
+                                sit, amet consectetur adipisicing elit. Vero
                                 temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="post-entry-1 border-bottom">
-                    <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused During
-                        Video Calls?</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                    <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">17 Pictures of Medium Length Hair in Layers That
-                        Will Inspire Your New Haircut</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                    <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">9 Half-up/half-down Hairstyles for Long and Medium
-                        Hair</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                    <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">Life Insurance And Pregnancy: A Working Mom’s
-                        Guide</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                    <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples
-                        Away)</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
-
-                <div class="post-entry-1 border-bottom">
-                    <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should
-                        Know</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                </div>
+                <th:block th:each="post,state:${travelPosts}">
+                    <div class="post-entry-1 border-bottom" th:if="${state.index>3 && state.index<10}">
+                        <div class="post-meta"><span class="date"
+                                                     th:text="${post.getCategory().getName()}">Business</span> <span
+                                class="mx-1">&bullet;</span>
+                            <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(post.getCreatedAt()), #dates.month(post.
+                                    getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                        <h2 class="mb-2"><a th:href="@{|/view-post/${post.getId()}|}" th:text="${post.getTitle()}">How
+                            to Avoid Distraction and Stay Focused During
+                            Video Calls?</a></h2>
+                        <span class="author mb-3 d-block" th:text="${post.getUser().getFullName()}">Jenny Wilson</span>
+                    </div>
+                </th:block>
             </div>
         </div>
     </div>

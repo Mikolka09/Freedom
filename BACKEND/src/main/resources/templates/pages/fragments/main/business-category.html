@@ -5,7 +5,7 @@
     <div class="container" data-aos="fade-up">
 
         <div class="section-header d-flex justify-content-between align-items-center mb-5">
-            <h2>Business</h2>
+            <h2 th:text="${busPosts.get(0).getCategory().getName()}">Business</h2>
             <div><a th:href="@{|/category/${busPosts.get(0).getCategory().getId()}|}" class="more">See All Business</a></div>
         </div>
 
@@ -17,7 +17,7 @@
                         <img th:src="@{|/${busPosts.get(0).getImgUrl()}|}" alt="" class="img-fluid">
                     </a>
                     <div>
-                        <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
+                        <div class="post-meta"><span class="date" th:text="${busPosts.get(0).getCategory().getName()}">Business</span> <span class="mx-1">&bullet;</span>
                             <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(busPosts.get(0).getCreatedAt()),
                                 #dates.month(busPosts.get(0).getCreatedAt()), #dates.day(busPosts.get(0).getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
@@ -40,7 +40,7 @@
                         <div class="post-entry-1 border-bottom">
                             <a th:href="@{|/view-post/${busPosts.get(1).getId()}|}"><img th:src="@{|/${busPosts.get(1).getImgUrl()}|}" alt=""
                                                             class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Business</span> <span
+                            <div class="post-meta"><span class="date" th:text="${busPosts.get(1).getCategory().getName()}">Business</span> <span
                                     class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
                                     of(#dates.year(busPosts.get(1).getCreatedAt()), #dates.month(busPosts.get(1).
                                     getCreatedAt()), #dates.day(busPosts.get(1).getCreatedAt())), 'dd MMM yyyy',
@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="post-entry-1">
-                            <div class="post-meta"><span class="date">Business</span> <span
+                            <div class="post-meta"><span class="date" th:text="${busPosts.get(2).getCategory().getName()}">Business</span> <span
                                     class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
                                     of(#dates.year(busPosts.get(2).getCreatedAt()), #dates.month(busPosts.get(2).
                                     getCreatedAt()), #dates.day(busPosts.get(2).getCreatedAt())), 'dd MMM yyyy',
@@ -67,7 +67,7 @@
                         <div class="post-entry-1">
                             <a th:href="@{|/view-post/${busPosts.get(3).getId()}|}"><img th:src="@{|/${busPosts.get(3).getImgUrl()}|}" alt=""
                                                             class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Business</span> <span
+                            <div class="post-meta"><span class="date" th:text="${busPosts.get(3).getCategory().getName()}">Business</span> <span
                                     class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
                                     of(#dates.year(busPosts.get(3).getCreatedAt()), #dates.month(busPosts.get(3).
                                     getCreatedAt()), #dates.day(busPosts.get(3).getCreatedAt())), 'dd MMM yyyy',
@@ -84,7 +84,7 @@
             <div class="col-md-3" >
                 <th:block th:each="post,state:${busPosts}">
                     <div class="post-entry-1 border-bottom" th:if="${state.index>3 && state.index<10}">
-                        <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
+                        <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}">Business</span> <span class="mx-1">&bullet;</span>
                             <span th:text="${#temporals.format(T(java.time.LocalDate).
                                     of(#dates.year(post.getCreatedAt()), #dates.month(post.
                                     getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
