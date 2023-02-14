@@ -103,11 +103,8 @@ public class PageController {
             return "redirect:/";
         double count = 8.0;
         int pages = (int)Math.ceil(posts.size()/count);
-        List<Category> categoriesAll = categoryService.allCategory().stream()
-                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         List<Tag> tags = tagService.allTag().stream()
                 .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
-        model.addAttribute("categoriesAll", categoriesAll);
         model.addAttribute("posts", posts);
         model.addAttribute("tags", tags);
         model.addAttribute("pages", new int[pages]);
