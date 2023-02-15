@@ -6,21 +6,23 @@
         <div class="row">
             <div class="col-12">
                 <div class="swiper sliderFeaturedPosts">
-                    <div class="swiper-wrapper">
+                    <div class="swiper-wrapper" th:if="${state.index<4}">
+                        <th:block th:each="post, state:${likesPosts}">
                         <div class="swiper-slide">
-                            <a href="single-post.html" class="img-bg d-flex align-items-end"
-                               style="background-image: url('/img/post-slide-1.jpg');">
+                            <a th:href="@{|/view-post/${post.getId()}|}" class="img-bg d-flex align-items-end"
+                               th:style="'background: url('${'/'+${post.getImgUrl()}}');'">
+                               <!--style="background-image: url('/img/post-slide-1.jpg');"-->
                                 <div class="img-bg-inner">
-                                    <h2>The Best Homemade Masks for Face (keep the Pimples Away)</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est
+                                    <h2 th:text="${post.getTitle()}">The Best Homemade Masks for Face (keep the Pimples Away)</h2>
+                                    <p th:text="${post.getShortDescription()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est
                                         mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam
                                         obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem
                                         atque.</p>
                                 </div>
                             </a>
                         </div>
-
-                        <div class="swiper-slide">
+                        </th:block>
+                        <!--<div class="swiper-slide">
                             <a href="single-post.html" class="img-bg d-flex align-items-end"
                                style="background-image: url('/img/post-slide-2.jpg');">
                                 <div class="img-bg-inner">
@@ -58,7 +60,7 @@
                                         atque.</p>
                                 </div>
                             </a>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="custom-swiper-button-next">
                         <span class="bi-chevron-right"></span>

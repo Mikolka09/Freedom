@@ -70,6 +70,10 @@ public class PageController {
                 .filter(post -> Objects.equals(post.getCategory().getName(), "Startups")).collect(Collectors.toList());
         List<Post> travelPosts = posts.stream()
                 .filter(post -> Objects.equals(post.getCategory().getName(), "Travel")).collect(Collectors.toList());
+        List<Post> trendingPosts = posts.stream()
+                .sorted((x1, x2)->Integer.compare(x2.getComments().size(), x1.getComments().size())).collect(Collectors.toList());
+        List<Post> likesPosts = posts.stream()
+                .sorted(Comparator.comparingInt(Post::getLikes).reversed()).collect(Collectors.toList());
         model.addAttribute("posts", posts);
         model.addAttribute("busPosts", busPosts);
         model.addAttribute("celPosts", celPosts);
@@ -80,6 +84,8 @@ public class PageController {
         model.addAttribute("sportPosts", sportPosts);
         model.addAttribute("starPosts", starPosts);
         model.addAttribute("travelPosts", travelPosts);
+        model.addAttribute("trendingPosts", trendingPosts);
+        model.addAttribute("likesPosts", likesPosts);
         CreateModel(model);
         return "pages/index";
     }
