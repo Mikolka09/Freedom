@@ -5,45 +5,56 @@
     <div class="container" data-aos="fade-up">
 
         <div class="section-header d-flex justify-content-between align-items-center mb-5">
-            <h2>Sport</h2>
-            <div><a href="category.html" class="more">See All Lifestyle</a></div>
+            <h2 th:text="${sportPosts.get(0).getCategory().getName()}">Sport</h2>
+            <div><a th:href="@{|/category/${sportPosts.get(0).getCategory().getId()}|}" class="more">See All Sport</a></div>
         </div>
 
         <div class="row g-5">
             <div class="col-lg-4">
                 <div class="post-entry-1 lg">
-                    <a href="single-post.html"><img src="/img/post-landscape-8.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2><a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
-                    <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
+                    <a th:href="@{|/view-post/${sportPosts.get(0).getId()}|}"><img th:src="@{|/${sportPosts.get(0).getImgUrl()}|}" alt="" class="img-fluid"></a>
+                    <div class="post-meta"><span class="date" th:text="${sportPosts.get(0).getCategory().getName()}">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                        <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(sportPosts.get(0).getCreatedAt()),
+                                #dates.month(sportPosts.get(0).getCreatedAt()), #dates.day(sportPosts.get(0).getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                    <h2><a th:href="@{|/view-post/${sportPosts.get(0).getId()}|}"
+                           th:text="${sportPosts.get(0).getTitle()}">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
+                    <p class="mb-4 d-block" th:text="${sportPosts.get(0).getShortDescription()}">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
                         temporibus repudiandae, inventore pariatur numquam cumque possimus exercitationem? Nihil
                         tempore odit ab minus eveniet praesentium, similique blanditiis molestiae ut saepe
                         perspiciatis officia nemo, eos quae cumque. Accusamus fugiat architecto rerum animi atque
                         eveniet, quo, praesentium dignissimos</p>
 
                     <div class="d-flex align-items-center author">
-                        <div class="photo"><img src="/img/person-7.jpg" alt="" class="img-fluid"></div>
+                        <div class="photo"><img th:src="@{|/${sportPosts.get(0).getUser().getAvatarUrl()}|}" alt="" class="img-fluid"></div>
                         <div class="name">
-                            <h3 class="m-0 p-0">Esther Howard</h3>
+                            <h3 class="m-0 p-0" th:text="${sportPosts.get(0).getUser().getFullName()}">Esther Howard</h3>
                         </div>
                     </div>
                 </div>
 
                 <div class="post-entry-1 border-bottom">
-                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples
+                    <div class="post-meta"><span class="date" th:text="${sportPosts.get(1).getCategory().getName()}">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                        <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(sportPosts.get(1).getCreatedAt()), #dates.month(sportPosts.get(1).
+                                    getCreatedAt()), #dates.day(sportPosts.get(1).getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                    <h2 class="mb-2"><a th:href="@{|/view-post/${sportPosts.get(1).getId()}|}"
+                                        th:text="${sportPosts.get(1).getTitle()}">The Best Homemade Masks for Face (keep the Pimples
                         Away)</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                    <span class="author mb-3 d-block" th:text="${sportPosts.get(1).getUser().getFullName()}">Jenny Wilson</span>
                 </div>
 
                 <div class="post-entry-1">
-                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
-                        <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should
+                    <div class="post-meta"><span class="date" th:text="${sportPosts.get(2).getCategory().getName()}">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                        <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(sportPosts.get(2).getCreatedAt()), #dates.month(sportPosts.get(2).
+                                    getCreatedAt()), #dates.day(sportPosts.get(2).getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                    <h2 class="mb-2"><a th:href="@{|/view-post/${sportPosts.get(2).getId()}|}"
+                                        th:text="${sportPosts.get(2).getTitle()}">10 Life-Changing Hacks Every Working Mom Should
                         Know</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                    <span class="author mb-3 d-block" th:text="${sportPosts.get(2).getUser().getFullName()}">Jenny Wilson</span>
                 </div>
 
             </div>
@@ -51,109 +62,53 @@
             <div class="col-lg-8">
                 <div class="row g-5">
                     <div class="col-lg-4 border-start custom-border">
-                        <div class="post-entry-1">
-                            <a href="single-post.html"><img src="/img/post-landscape-6.jpg" alt=""
-                                                            class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2><a href="single-post.html">Let’s Get Back to Work, New York</a></h2>
-                        </div>
-                        <div class="post-entry-1">
-                            <a href="single-post.html"><img src="/img/post-landscape-5.jpg" alt=""
-                                                            class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 17th '22</span></div>
-                            <h2><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video
-                                Calls?</a></h2>
-                        </div>
-                        <div class="post-entry-1">
-                            <a href="single-post.html"><img src="/img/post-landscape-4.jpg" alt=""
-                                                            class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Mar 15th '22</span></div>
-                            <h2><a href="single-post.html">Why Craigslist Tampa Is One of The Most Interesting
-                                Places On the Web?</a></h2>
-                        </div>
+                        <th:block th:each="post,state:${sportPosts}">
+                            <div class="post-entry-1" th:if="${state.index>2 && state.index<6}">
+                                <a th:href="@{|/view-post/${post.getId()}|}" ><img th:src="@{|/${post.getImgUrl()}|}" alt=""
+                                                                                   class="img-fluid"></a>
+                                <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}">Lifestyle</span> <span
+                                        class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(post.getCreatedAt()), #dates.month(post.
+                                    getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                                <h2><a th:href="@{|/view-post/${post.getId()}|}" th:text="${post.getTitle()}">Let’s Get Back to Work, New York</a></h2>
+                            </div>
+                        </th:block>
                     </div>
                     <div class="col-lg-4 border-start custom-border">
-                        <div class="post-entry-1">
-                            <a href="single-post.html"><img src="/img/post-landscape-3.jpg" alt=""
-                                                            class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2><a href="single-post.html">6 Easy Steps To Create Your Own Cute Merch For
-                                Instagram</a></h2>
-                        </div>
-                        <div class="post-entry-1">
-                            <a href="single-post.html"><img src="/img/post-landscape-2.jpg" alt=""
-                                                            class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Mar 1st '22</span></div>
-                            <h2><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a>
-                            </h2>
-                        </div>
-                        <div class="post-entry-1">
-                            <a href="single-post.html"><img src="/img/post-landscape-1.jpg" alt=""
-                                                            class="img-fluid"></a>
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2><a href="single-post.html">5 Great Startup Tips for Female Founders</a></h2>
-                        </div>
+                        <th:block th:each="post,state:${sportPosts}">
+                            <div class="post-entry-1" th:if="${state.index>5 && state.index<9}">
+                                <a th:href="@{|/view-post/${post.getId()}|}" ><img th:src="@{|/${post.getImgUrl()}|}" alt=""
+                                                                                   class="img-fluid"></a>
+                                <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}">Lifestyle</span> <span
+                                        class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(post.getCreatedAt()), #dates.month(post.
+                                    getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                                <h2><a th:href="@{|/view-post/${post.getId()}|}" th:text="${post.getTitle()}">Let’s Get Back to Work, New York</a></h2>
+                            </div>
+                        </th:block>
                     </div>
                     <div class="col-lg-4">
 
-                        <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused
-                                During Video Calls?</a></h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
-                        </div>
-
-                        <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">17 Pictures of Medium Length Hair in Layers
-                                That Will Inspire Your New Haircut</a></h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
-                        </div>
-
-                        <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">9 Half-up/half-down Hairstyles for Long and
-                                Medium Hair</a></h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
-                        </div>
-
-                        <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">Life Insurance And Pregnancy: A Working
-                                Mom’s Guide</a></h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
-                        </div>
-
-                        <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the
-                                Pimples Away)</a></h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
-                        </div>
-
-                        <div class="post-entry-1 border-bottom">
-                            <div class="post-meta"><span class="date">Lifestyle</span> <span
-                                    class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                            <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom
-                                Should Know</a></h2>
-                            <span class="author mb-3 d-block">Jenny Wilson</span>
-                        </div>
-
+                        <th:block th:each="post,state:${sportPosts}">
+                            <div class="post-entry-1 border-bottom" th:if="${state.index>8 && state.index<15}">
+                                <div class="post-meta"><span class="date"
+                                                             th:text="${post.getCategory().getName()}">Culture</span> <span
+                                        class="mx-1">&bullet;</span>
+                                    <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(post.getCreatedAt()), #dates.month(post.
+                                    getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                                <h2 class="mb-2"><a th:href="@{|/view-post/${post.getId()}|}" th:text="${post.getTitle()}">How
+                                    to Avoid Distraction and Stay Focused During
+                                    Video Calls?</a></h2>
+                                <span class="author mb-3 d-block" th:text="${post.getUser().getFullName()}">Jenny Wilson</span>
+                            </div>
+                        </th:block>
                     </div>
                 </div>
             </div>
-
         </div> <!-- End .row -->
     </div>
 </section>

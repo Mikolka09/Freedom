@@ -70,6 +70,7 @@ public class PageController {
                 .filter(post -> Objects.equals(post.getCategory().getName(), "Startups")).collect(Collectors.toList());
         List<Post> travelPosts = posts.stream()
                 .filter(post -> Objects.equals(post.getCategory().getName(), "Travel")).collect(Collectors.toList());
+        model.addAttribute("posts", posts);
         model.addAttribute("busPosts", busPosts);
         model.addAttribute("celPosts", celPosts);
         model.addAttribute("culPosts", culPosts);

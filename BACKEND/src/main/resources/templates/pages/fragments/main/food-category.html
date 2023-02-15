@@ -100,7 +100,7 @@
             </div>
             <div class="col-md-3">
                 <th:block th:each="post,state:${foodPosts}">
-                    <div class="post-entry-1 border-bottom" th:if="${state.index>3 && state.index<10}">
+                    <div class="post-entry-1 border-bottom" th:if="${state.index>3 && state.index<11}">
                         <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}">Business</span> <span class="mx-1">&bullet;</span>
                             <span th:text="${#temporals.format(T(java.time.LocalDate).
                                     of(#dates.year(post.getCreatedAt()), #dates.month(post.
