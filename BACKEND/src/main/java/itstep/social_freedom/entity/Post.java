@@ -59,7 +59,7 @@ public class Post extends BaseEntity{
     @Column(columnDefinition = "TEXT")
     private String body;
     private String imgUrl;
-    private Integer likes;
+    private int likes;
 
     @Override
     public boolean equals(Object o) {

@@ -107,6 +107,7 @@ public class AdminController {
                         @RequestParam(value = "tag_id") Long[] tag_id) {
         Post post = new Post();
         post.setStatus(Status.NOT_VERIFIED);
+        post.setLikes(0);
         CreateModelUser(model);
         if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post))
             return "redirect:/admin/posts";

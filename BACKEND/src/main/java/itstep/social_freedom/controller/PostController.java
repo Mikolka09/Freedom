@@ -71,6 +71,7 @@ public class PostController {
                         @RequestParam(value = "tag_id") Long[] tag_id) {
         Post post = new Post();
         post.setStatus(Status.NOT_VERIFIED);
+        post.setLikes(0);
         CreateModelUser(model);
         return setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post);
     }

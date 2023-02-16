@@ -14,7 +14,7 @@
                             deleniti voluptate nulla a dolores, exercitationem eveniet libero laudantium recusandae
                             officiis
                             qui aliquid blanditiis omnis quae. Explicabo?</p>
-                        <p><a href="about.html" class="footer-link-more">Learn More</a></p>
+                        <p><a href="/about" class="footer-link-more">Learn More</a></p>
                     </div>
                     <div class="col-6 col-lg-2">
                         <h3 class="footer-heading">Navigation</h3>
@@ -30,7 +30,8 @@
                         <h3 class="footer-heading">Categories</h3>
                         <ul class="footer-links list-unstyled">
                             <th:block th:each=" category : ${categoriesAll}">
-                                <li><a th:href="@{|/category/${category.getId()}|}"><i class="bi bi-chevron-right" style="font-style: normal;"
+                                <li><a th:href="@{|/category/${category.getId()}|}"><i class="bi bi-chevron-right"
+                                                                                       style="font-style: normal;"
                                                                                        th:text="${category.getName()}"></i></a>
                                 </li>
                             </th:block>
@@ -41,54 +42,24 @@
                         <h3 class="footer-heading">Recent Posts</h3>
 
                         <ul class="footer-links footer-blog-entry list-unstyled">
-                            <li>
-                                <a href="single-post.html" class="d-flex align-items-center">
-                                    <img src="/img/post-sq-1.jpg" alt="" class="img-fluid me-3">
-                                    <div>
-                                        <div class="post-meta d-block"><span class="date">Culture</span> <span
-                                                class="mx-1">&bullet;</span>
-                                            <span>Jul 5th '22</span></div>
-                                        <span>5 Great Startup Tips for Female Founders</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="single-post.html" class="d-flex align-items-center">
-                                    <img src="/img/post-sq-2.jpg" alt="" class="img-fluid me-3">
-                                    <div>
-                                        <div class="post-meta d-block"><span class="date">Culture</span> <span
-                                                class="mx-1">&bullet;</span>
-                                            <span>Jul 5th '22</span></div>
-                                        <span>What is the son of Football Coach John Gruden, Deuce Gruden doing Now?</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="single-post.html" class="d-flex align-items-center">
-                                    <img src="/img/post-sq-3.jpg" alt="" class="img-fluid me-3">
-                                    <div>
-                                        <div class="post-meta d-block"><span class="date">Culture</span> <span
-                                                class="mx-1">&bullet;</span>
-                                            <span>Jul 5th '22</span></div>
-                                        <span>Life Insurance And Pregnancy: A Working Mom’s Guide</span>
-                                    </div>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="single-post.html" class="d-flex align-items-center">
-                                    <img src="/img/post-sq-4.jpg" alt="" class="img-fluid me-3">
-                                    <div>
-                                        <div class="post-meta d-block"><span class="date">Culture</span> <span
-                                                class="mx-1">&bullet;</span>
-                                            <span>Jul 5th '22</span></div>
-                                        <span>How to Avoid Distraction and Stay Focused During Video Calls?</span>
-                                    </div>
-                                </a>
-                            </li>
-
+                            <th:block th:each="post, state:${posts}">
+                                <li th:if="${state.index<4}">
+                                    <a th:href="@{|/view-post/${post.getId()}|}" class="d-flex align-items-center">
+                                        <img th:src="@{|/${post.getImgUrl()}|}" alt="Img" class="img-fluid me-3">
+                                        <div>
+                                            <div class="post-meta d-block"><span class="date"
+                                                                                 th:text="${post.getCategory().getName()}">Culture</span>
+                                                <span
+                                                        class="mx-1">&bullet;</span>
+                                                <span th:text="${#temporals.format(T(java.time.LocalDate).
+                                    of(#dates.year(post.getCreatedAt()), #dates.month(post.
+                                    getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span></div>
+                                            <span th:text="${post.getTitle()}">5 Great Startup Tips for Female Founders</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </th:block>
                         </ul>
 
                     </div>

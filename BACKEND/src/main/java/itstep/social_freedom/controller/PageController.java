@@ -31,8 +31,14 @@ public class PageController {
 
     private void CreateModel(Model model) {
         User user = userService.getCurrentUsername();
+        List<Post> posts = postService.posts()
+                .stream().filter(post -> post.getStatus() == Status.VERIFIED).collect(Collectors.toList());
         List<Category> categoriesAll = categoryService.allCategory().stream()
                 .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
+        List<Post> trendingPosts = posts.stream()
+                .sorted((x1, x2)->Integer.compare(x2.getComments().size(), x1.getComments().size())).collect(Collectors.toList());
+        List<Post> likesPosts = posts.stream()
+                .sorted(Comparator.comparingInt(Post::getLikes).reversed()).collect(Collectors.toList());
         String role = "";
         if (user != null) {
             for (Role r : user.getRoles()) {
@@ -42,6 +48,9 @@ public class PageController {
                     role = r.getName();
             }
         }
+        model.addAttribute("trendingPosts", trendingPosts);
+        model.addAttribute("likesPosts", likesPosts);
+        model.addAttribute("posts", posts);
         model.addAttribute("user", user);
         model.addAttribute("categoriesAll", categoriesAll);
         model.addAttribute("status", Status.values());
@@ -70,10 +79,6 @@ public class PageController {
                 .filter(post -> Objects.equals(post.getCategory().getName(), "Startups")).collect(Collectors.toList());
         List<Post> travelPosts = posts.stream()
                 .filter(post -> Objects.equals(post.getCategory().getName(), "Travel")).collect(Collectors.toList());
-        List<Post> trendingPosts = posts.stream()
-                .sorted((x1, x2)->Integer.compare(x2.getComments().size(), x1.getComments().size())).collect(Collectors.toList());
-        List<Post> likesPosts = posts.stream()
-                .sorted(Comparator.comparingInt(Post::getLikes).reversed()).collect(Collectors.toList());
         model.addAttribute("posts", posts);
         model.addAttribute("busPosts", busPosts);
         model.addAttribute("celPosts", celPosts);
@@ -84,8 +89,6 @@ public class PageController {
         model.addAttribute("sportPosts", sportPosts);
         model.addAttribute("starPosts", starPosts);
         model.addAttribute("travelPosts", travelPosts);
-        model.addAttribute("trendingPosts", trendingPosts);
-        model.addAttribute("likesPosts", likesPosts);
         CreateModel(model);
         return "pages/index";
     }

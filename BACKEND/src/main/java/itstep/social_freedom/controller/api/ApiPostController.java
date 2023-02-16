@@ -32,10 +32,7 @@ public class ApiPostController {
     @GetMapping("/api/posts/likes/{id}")
     private Post addLikes(@PathVariable long id) {
         Post post = postService.findPostById(id);
-        if (post.getLikes() == null)
-            post.setLikes(1);
-        else
-            post.setLikes(post.getLikes() + 1);
+        post.setLikes(post.getLikes() + 1);
         postService.savePost(post);
         return post;
     }
@@ -61,9 +58,9 @@ public class ApiPostController {
     }
 
     @GetMapping("/api/posts/category/{id}")
-    private List<Post> createPagesPosts(@PathVariable long id){
-        List<Post> post = postService.posts().stream().filter(x->x.getCategory().getId()==id)
-                .filter(x->x.getStatus()== Status.VERIFIED).collect(Collectors.toList());
+    private List<Post> createPagesPosts(@PathVariable long id) {
+        List<Post> post = postService.posts().stream().filter(x -> x.getCategory().getId() == id)
+                .filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
         return post;
     }
 

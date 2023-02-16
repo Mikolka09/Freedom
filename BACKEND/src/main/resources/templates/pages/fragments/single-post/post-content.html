@@ -17,7 +17,7 @@
             <a type="button" id="likes-button" th:data-id="${post.getId()}">
                 <img id="img-like-do" src="/img/icon/like_do.png" width="25px"></a>
             <span id="likes" style="font-weight: bold; color: blueviolet" class="px-1"
-                  th:text="${post.getLikes()==null?0:post.getLikes()}"></span>
+                  th:text="${post.getLikes()}"></span>
         </div>
         <div class="col-sm-6" style="text-align: right;  vertical-align: middle;">
             <img class="px-1 rounded-circle" th:src="@{|/${post.getUser().getAvatarUrl()}|}" width="50px">

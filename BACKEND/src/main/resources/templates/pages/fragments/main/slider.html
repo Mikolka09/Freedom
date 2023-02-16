@@ -6,61 +6,24 @@
         <div class="row">
             <div class="col-12">
                 <div class="swiper sliderFeaturedPosts">
-                    <div class="swiper-wrapper" th:if="${state.index<4}">
+                    <div class="swiper-wrapper">
                         <th:block th:each="post, state:${likesPosts}">
-                        <div class="swiper-slide">
-                            <a th:href="@{|/view-post/${post.getId()}|}" class="img-bg d-flex align-items-end"
-                               th:style="'background: url('${'/'+${post.getImgUrl()}}');'">
-                               <!--style="background-image: url('/img/post-slide-1.jpg');"-->
-                                <div class="img-bg-inner">
-                                    <h2 th:text="${post.getTitle()}">The Best Homemade Masks for Face (keep the Pimples Away)</h2>
-                                    <p th:text="${post.getShortDescription()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est
-                                        mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam
-                                        obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem
-                                        atque.</p>
-                                </div>
-                            </a>
-                        </div>
+                            <div class="swiper-slide" th:if="${state.index<4}">
+                                <a th:href="@{|/view-post/${post.getId()}|}" class="img-bg d-flex align-items-end"
+                                   th:style="'background-image: url(' + '/'+${post.getImgUrl()} + ');'">
+                                    <!--style="background-image: url('/img/post-slide-1.jpg');"-->
+                                    <div class="img-bg-inner">
+                                        <h2 th:text="${post.getTitle()}">The Best Homemade Masks for Face (keep the
+                                            Pimples Away)</h2>
+                                        <p th:text="${post.getShortDescription()}">Lorem ipsum dolor sit amet,
+                                            consectetur adipisicing elit. Quidem neque est
+                                            mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam
+                                            obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem
+                                            atque.</p>
+                                    </div>
+                                </a>
+                            </div>
                         </th:block>
-                        <!--<div class="swiper-slide">
-                            <a href="single-post.html" class="img-bg d-flex align-items-end"
-                               style="background-image: url('/img/post-slide-2.jpg');">
-                                <div class="img-bg-inner">
-                                    <h2>17 Pictures of Medium Length Hair in Layers That Will Inspire Your New
-                                        Haircut</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est
-                                        mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam
-                                        obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem
-                                        atque.</p>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <a href="single-post.html" class="img-bg d-flex align-items-end"
-                               style="background-image: url('/img/post-slide-3.jpg');">
-                                <div class="img-bg-inner">
-                                    <h2>13 Amazing Poems from Shel Silverstein with Valuable Life Lessons</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est
-                                        mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam
-                                        obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem
-                                        atque.</p>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <a href="single-post.html" class="img-bg d-flex align-items-end"
-                               style="background-image: url('/img/post-slide-4.jpg');">
-                                <div class="img-bg-inner">
-                                    <h2>9 Half-up/half-down Hairstyles for Long and Medium Hair</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem neque est
-                                        mollitia! Beatae minima assumenda repellat harum vero, officiis ipsam magnam
-                                        obcaecati cumque maxime inventore repudiandae quidem necessitatibus rem
-                                        atque.</p>
-                                </div>
-                            </a>
-                        </div>-->
                     </div>
                     <div class="custom-swiper-button-next">
                         <span class="bi-chevron-right"></span>
