@@ -42,37 +42,37 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <label for="username"></label>
+                                            <label for="username">Username</label>
                                             <input type="text" class="form-control form-control-user" name="username"
                                                    id="username" placeholder="Your Username" disabled
                                                    th:value="${user.getUsername()}"/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <label for="name"></label>
+                                            <label for="name">FullName</label>
                                             <input type="text" class="form-control form-control-user" name="name" disabled
-                                                   id="name" placeholder="Your Name" th:value="${user.getFullName()}"/>
+                                                   id="name" placeholder="Your FullName" th:value="${user.getFullName()}"/>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <label for="email"></label>
+                                            <label for="email">Email</label>
                                             <input type="email" class="form-control form-control-user" id="email" disabled
                                                    name="email" placeholder="Email Address" th:value="${user.getEmail()}"/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <label for="passOld"></label>
+                                            <label for="passOld">Old Password</label>
                                             <input type="password" class="form-control form-control-user" name="passOld"
                                                    id="passOld" placeholder="Your Old Password">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <label for="pass"></label>
+                                            <label for="pass">New Password</label>
                                             <input type="password" class="form-control form-control-user" name="password"
                                                    id="pass" placeholder="New Password">
                                         </div>
                                         <div class="col-sm-6">
-                                            <label for="re_pass"></label>
+                                            <label for="re_pass">Repeat New Password</label>
                                             <input type="password" class="form-control form-control-user" name="passwordConfirm"
                                                    id="re_pass" placeholder="Repeat New Password">
                                         </div>

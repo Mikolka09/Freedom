@@ -119,6 +119,9 @@
         let modal = $(this);
         modal.find('#id').val(id);
         modal.find('#name').val(name);
+        modal.find('#category-img').hide();
+        modal.find('#file').hide();
+        modal.find('#label-img').hide();
         modal.find('#exampleModalLabel').text(title);
         modal.find('#action').prop("action", action);
     });
@@ -131,6 +134,9 @@
         let modal = $(this);
         modal.find('#id').val(id);
         modal.find('#name').val(name);
+        modal.find('#category-img').hide();
+        modal.find('#file').hide();
+        modal.find('#label-img').hide();
         modal.find('#exampleModalLabel').text(title);
         modal.find('#action').prop("action", action);
     });
