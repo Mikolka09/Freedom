@@ -28,6 +28,10 @@ public class Category extends BaseEntity {
 
     private String name;
 
+    private String shortDescription;
+
+    private String imgUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;

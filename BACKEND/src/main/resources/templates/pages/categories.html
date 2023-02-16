@@ -14,25 +14,8 @@
             <div class="row">
 
                 <div class="col-md-9" data-aos="fade-up">
-                    <h3 class="category-title" th:data-id-category="${categoryPosts.get(0).getCategory().getId()}">Category:
-                        <span th:text="${categoryPosts.get(0).getCategory().getName()}">Business</span>
-                    </h3>
-                    <div id="content-posts">
-                        <th:block th:insert="/pages/fragments/category/category-post.html::category-post"></th:block>
-                    </div>
+                    <th:block th:insert="/pages/fragments/category/categories.html::categories"></th:block>
 
-                    <div class="text-start py-4">
-                        <div class="custom-pagination">
-                            <a href="#" id="prev" class="prev">Prevous</a>
-                            <th:block th:each="page, state:${pages}">
-                                <a href="#" th:if="${state.index==0}" th:data-id="${state.index+1}" class="pb active"
-                                   th:text="${state.index+1}">1</a>
-                                <a href="#" class="pb" th:if="${state.index>0}" th:data-id="${state.index+1}"
-                                   th:text="${state.index+1}">1</a>
-                            </th:block>
-                            <a href="#" id="next" class="next">Next</a>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="col-md-3">

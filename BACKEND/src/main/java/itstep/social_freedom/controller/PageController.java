@@ -93,6 +93,14 @@ public class PageController {
         return "pages/index";
     }
 
+    @GetMapping("/categories")
+    public String categories(Model model) {
+        List<Tag> tags = tagService.allTag().stream()
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
+        CreateModel(model);
+        model.addAttribute("tags", tags);
+        return "pages/categories";
+    }
     @GetMapping("/about")
     public String about(Model model) {
         CreateModel(model);
@@ -107,15 +115,15 @@ public class PageController {
 
     @GetMapping("/category/{id}")
     public String category(Model model, @PathVariable Long id) {
-        List<Post> posts = postService.posts().stream().filter(x -> x.getStatus() == Status.VERIFIED)
+        List<Post> categoryPosts = postService.posts().stream().filter(x -> x.getStatus() == Status.VERIFIED)
                 .filter(x -> Objects.equals(x.getCategory().getId(), id)).collect(Collectors.toList());
-        if (posts.size() == 0)
+        if (categoryPosts.size() == 0)
             return "redirect:/";
         double count = 8.0;
-        int pages = (int)Math.ceil(posts.size()/count);
+        int pages = (int)Math.ceil(categoryPosts.size()/count);
         List<Tag> tags = tagService.allTag().stream()
                 .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
-        model.addAttribute("posts", posts);
+        model.addAttribute("categoryPosts", categoryPosts);
         model.addAttribute("tags", tags);
         model.addAttribute("pages", new int[pages]);
         CreateModel(model);

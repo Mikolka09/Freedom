@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:each="post, state:${posts}" th:fragment="category-post">
+<th:block th:each="post, state:${categoryPosts}" th:fragment="category-post">
     <div th:if="${state.index<8}" class="d-md-flex post-entry-2 half">
         <a th:href="@{|/view-post/${post.getId()}|}" class="me-4 thumbnail">
             <img th:src="@{|/${post.getImgUrl()}|}" alt="Img" class="img-fluid">

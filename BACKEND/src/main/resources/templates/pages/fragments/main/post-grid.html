@@ -6,7 +6,7 @@
         <div class="row g-5">
             <div class="col-lg-4">
                 <div class="post-entry-1 lg">
-                    <a th:href="@{|/view-post/${posts.get(0).getId()}|}"><img src="/img/post-landscape-1.jpg" alt=""
+                    <a th:href="@{|/view-post/${posts.get(0).getId()}|}"><img th:src="@{|/${posts.get(0).getImgUrl()}|}" alt=""
                                                                               class="img-fluid"></a>
                     <div class="post-meta"><span class="date"
                                                  th:text="${posts.get(0).getCategory().getName()}">Culture</span> <span

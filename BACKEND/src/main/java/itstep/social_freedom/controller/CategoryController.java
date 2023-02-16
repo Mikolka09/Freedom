@@ -5,6 +5,7 @@ import itstep.social_freedom.entity.Post;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.CategoryService;
+import itstep.social_freedom.service.FileService;
 import itstep.social_freedom.service.UserService;
 import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private FileService fileService;
+
     @GetMapping("/admin/categories")
     public String categories(Model model) {
         List<Category> categoryList = categoryService.allCategory();
@@ -47,9 +51,17 @@ public class CategoryController {
 
     @PostMapping("/admin/categories/category-store")
     public String editStore(@RequestParam(value = "id") Long id,
-                            @RequestParam(value = "name") String name) {
+                            @RequestParam(value = "file") MultipartFile file,
+                            @RequestParam(value = "name") String name,
+                            @RequestParam(value = "short") String shortDesc) {
         Category category = categoryService.findCategoryById(id);
         if (!Objects.equals(name, "")) category.setName(name);
+        if (!Objects.equals(shortDesc, ""))
+            category.setShortDescription(shortDesc);
+        if (file != null) {
+            if (!file.isEmpty())
+                category.setImgUrl(fileService.uploadFile(file, ""));
+        }
         categoryService.save(category);
         return "redirect:/admin/categories";
     }
@@ -66,9 +78,17 @@ public class CategoryController {
 
 
     @PostMapping("/admin/categories/create")
-    public String createStore(@RequestParam(value = "name") String name) {
+    public String createStore(@RequestParam(value = "name") String name,
+                              @RequestParam(value = "short") String shortDesc,
+                              @RequestParam(value = "file") MultipartFile file) {
         Category category = new Category();
         if (!Objects.equals(name, "")) category.setName(name);
+        if (!Objects.equals(shortDesc, ""))
+            category.setShortDescription(shortDesc);
+        if (file != null) {
+            if (!file.isEmpty())
+                category.setImgUrl(fileService.uploadFile(file, ""));
+        }
         category.setStatus(Status.ACTIVE);
         categoryService.save(category);
         return "redirect:/admin/categories";

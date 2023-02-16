@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<section th:fragment="categories">
+    <div class="container" data-aos="fade-up">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <h2 class="display-4">Categories</h2>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil sint sed, fugit distinctio
+                            ad eius itaque deserunt doloribus harum excepturi</p>
+                    </div>
+                </div>
+            </div>
+            <th:block th:each="category:${categoriesAll}">
+            <div class="col-lg-4 text-center mb-5">
+                <a th:href="@{|/category/${category.getId()}|}">
+                    <img th:src="@{|/${category.getImgUrl()}|}" alt="Business" class="img-fluid">
+                    <h4 th:text="${category.getName()}">Business</h4>
+                    <p th:text="${category.getShortDescription()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, perspiciatis repellat maxime,
+                        adipisci non ipsam at itaque rerum vitae</p>
+                </a>
+            </div>
+            </th:block>
+        </div>
+    </div>
+</section>

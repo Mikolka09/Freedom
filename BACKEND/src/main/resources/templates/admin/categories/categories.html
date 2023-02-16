@@ -31,7 +31,9 @@
                     <table>
                         <thead>
                         <tr>
+                            <th scope="col">Image</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Short Description</th>
                             <th scope="col">Status</th>
                             <th scope="col">CreateAt</th>
                             <th scope="col">UpdateAt</th>
@@ -43,7 +45,10 @@
                         <table>
                             <tbody>
                             <tr th:each="category:${categories}">
+                                <td><img width="100px"
+                                         th:src="@{|/${category.getImgUrl()}|}"></td>
                                 <td th:text="${category.getName()}"></td>
+                                <td th:text="${category.getShortDescription()}"></td>
                                 <td th:text="${category.getStatus()}"></td>
                                 <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(category.getCreatedAt()),
                                 #dates.month(category.getCreatedAt()), #dates.day(category.getCreatedAt())), 'dd MMM yyyy',
@@ -54,11 +59,15 @@
                                 <td>
                                     <a th:data-id="${category.getId()}" href="#" title="Edit"
                                        th:data-name="${category.getName()}"
+                                       th:data-short="${category.getShortDescription()}"
+                                       th:data-img="${category.getImgUrl()}"
                                        data-toggle="modal" data-target="#EditModal">
                                         <img src="/img/icon/edit.png" width="30px"/></a>
                                     <a th:if="${category.getStatus()==status[2]}"
                                        th:data-id="${category.getId()}" href="#" title="Recovery"
                                        th:data-name="${category.getName()}"
+                                       th:data-short="${category.getShortDescription()}"
+                                       th:data-img="${category.getImgUrl()}"
                                        data-toggle="modal" data-target="#RecoveryModal">
                                         <img src="/img/icon/restore.png" width="30px"/></a>
                                     <a th:data-id="${category.getId()}" href="#" title="Delete"
@@ -114,11 +123,15 @@
         let button = $(event.relatedTarget);
         let id = button.data('id');
         let name = button.data('name');
+        let short = button.data('short');
+        let img = "/" + button.data('img');
         let action = "/admin/categories/category-store";
         let title = "Edit Category";
         let modal = $(this);
         modal.find('#id').val(id);
         modal.find('#name').val(name);
+        modal.find('#short').text(short);
+        modal.find('#category-img').attr('src', img);
         modal.find('#exampleModalLabel').text(title);
         modal.find('#action').prop("action", action);
     });
@@ -126,11 +139,15 @@
         let button = $(event.relatedTarget);
         let id = button.data('id');
         let name = button.data('name');
+        let short = button.data('short');
+        let img = "/" + button.data('img');
         let action = "/admin/categories/category-recovery";
         let title = "Recovery Category";
         let modal = $(this);
         modal.find('#id').val(id);
         modal.find('#name').val(name);
+        modal.find('#short').text(short);
+        modal.find('#category-img').attr('src', img);
         modal.find('#exampleModalLabel').text(title);
         modal.find('#action').prop("action", action);
     });

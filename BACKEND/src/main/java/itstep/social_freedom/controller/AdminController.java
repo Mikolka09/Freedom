@@ -435,9 +435,9 @@ public class AdminController {
     }
 
     //Saving a new post
-    public boolean setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
+    public boolean setPost(Long user_id, MultipartFile file, String title, String shortDesc, Long category_id,
                            String description, Long[] tag_id, Post post) {
-        PostController.addPost(user_id, file, title, shortName, category_id, description, tag_id, post, userService, categoryService, tagService, fileService);
+        PostController.addPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, userService, categoryService, tagService, fileService);
         return postService.savePost(post);
     }
 

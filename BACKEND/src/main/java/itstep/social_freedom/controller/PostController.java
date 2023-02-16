@@ -98,24 +98,24 @@ public class PostController {
         return setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post);
     }
 
-    public String setPost(Long user_id, MultipartFile file, String title, String shortName, Long category_id,
+    public String setPost(Long user_id, MultipartFile file, String title, String shortDesc, Long category_id,
                           String description, Long[] tag_id, Post post) {
-        addPost(user_id, file, title, shortName, category_id,
+        addPost(user_id, file, title, shortDesc, category_id,
                 description, tag_id, post, userService, categoryService, tagService, fileService);
         if (!postService.savePost(post))
             return "redirect:/user/posts/store";
         return "redirect:/user/posts/" + user_id;
     }
 
-    static void addPost(Long user_id, MultipartFile file, String title, String shortName,
+    static void addPost(Long user_id, MultipartFile file, String title, String shortDesc,
                         Long category_id, String description, Long[] tag_id, Post post,
                         UserService userService, CategoryService categoryService, TagService tagService,
                         FileService fileService) {
         post.setUser(userService.findUserById(user_id));
         if (!Objects.equals(title, ""))
             post.setTitle(title);
-        if (!Objects.equals(shortName, ""))
-            post.setShortDescription(shortName);
+        if (!Objects.equals(shortDesc, ""))
+            post.setShortDescription(shortDesc);
         if (!category_id.toString().equals("0"))
             post.setCategory(categoryService.findCategoryById(category_id));
         if (!Objects.equals(description, ""))
