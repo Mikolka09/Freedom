@@ -64,7 +64,8 @@
                                        th:data-category="${comment.getPost().getCategory().getName()}"
                                        data-toggle="modal" data-target="#EditCommentModal">
                                         <img src="/img/icon/edit.png" width="30px"/></a>
-                                    <a th:data-id="${comment.getId()}" href="#" title="Recovery"
+                                    <a th:if="${comment.getStatus()==status[2]}"
+                                       th:data-id="${comment.getId()}" href="#" title="Recovery"
                                        th:data-body="${comment.getBody()}"
                                        th:data-title-post="${comment.getPost().getTitle()}"
                                        th:data-username="${comment.getUser().getUsername()}"
@@ -160,7 +161,7 @@
         let id = button.data('id');
         let name = button.data('name');
         let action = "/admin/comments/delete/" + id;
-        let label = "Are you sure you're ready to delete Comment - \"" + name.toUpperCase()  + "\"?";
+        let label = "Are you sure you're ready to delete Comment - \"" + name.toUpperCase() + "\"?";
         let text = "Select \"Delete\" below if you are ready to remove this Comment."
         let modal = $(this);
         modal.find('#deleteModalLabel').text(label);

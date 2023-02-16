@@ -51,7 +51,7 @@
         </li>
 
         <!-- Nav Item - Alerts -->
-        <li class="nav-item dropdown no-arrow mx-1">
+        <li class="nav-item dropdown no-arrow mx-1" th:if="${role!='ROLE_EDITOR'}">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
@@ -102,7 +102,7 @@
         </li>
 
         <!-- Nav Item - Messages -->
-        <li class="nav-item dropdown no-arrow mx-1">
+        <li class="nav-item dropdown no-arrow mx-1" th:if="${role!='ROLE_EDITOR'}">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
@@ -184,15 +184,15 @@
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">
-                <a class="dropdown-item" th:href="@{|/admin/users/view/${admin.getId()}|}">
+                <a class="dropdown-item" th:href="@{|/admin/users/view/${admin.getId()}|}" th:if="${role!='ROLE_EDITOR'}">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     View Profile
                 </a>
-                <a class="dropdown-item" th:href="@{|/admin/users/edit/${admin.getId()}|}">
+                <a class="dropdown-item" th:href="@{|/admin/users/edit/${admin.getId()}|}" th:if="${role!='ROLE_EDITOR'}">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Edit Profile
                 </a>
-                <div class="dropdown-divider"></div>
+                <div class="dropdown-divider" th:if="${role!='ROLE_EDITOR'}"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout

@@ -30,6 +30,14 @@ public class UserController {
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
+        String role = "";
+        if (user != null) {
+            for (Role r : user.getRoles()) {
+                if (Objects.equals(r.getName(), "ROLE_EDITOR"))
+                    role = r.getName();
+            }
+        }
+        model.addAttribute("role", role);
         model.addAttribute("user", user);
     }
 

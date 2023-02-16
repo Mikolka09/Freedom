@@ -72,27 +72,6 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Heading -->
-       <!-- <div class="sidebar-heading">
-            Moderator Menu
-        </div>
-
-        &lt;!&ndash; Nav Item - Pages Collapse Menu &ndash;&gt;
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-               aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Pages Menu</span>
-            </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">All Pages:</h6>
-                    <a class="collapse-item" href="login.html">Posts</a>
-                    <a class="collapse-item" href="/admin/tags">Posts not verified</a>
-                </div>
-            </div>
-        </li>-->
-
         <!-- Nav Item - Charts -->
         <li class="nav-item">
             <a class="nav-link" href="charts.html">
@@ -114,6 +93,16 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Nav Item - Editors -->
+        <li class="nav-item" th:if="${role=='ROLE_EDITOR'}">
+            <a class="nav-link" href="/admin">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Editor Menu</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block" th:if="${role=='ROLE_EDITOR'}">
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">

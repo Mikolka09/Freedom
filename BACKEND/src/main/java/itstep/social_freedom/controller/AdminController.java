@@ -28,6 +28,9 @@ public class AdminController {
     private TagService tagService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private CommentService commentService;
 
     @Autowired
@@ -40,6 +43,14 @@ public class AdminController {
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
+        String role = "";
+        if (user != null) {
+            for (Role r : user.getRoles()) {
+                if (Objects.equals(r.getName(), "ROLE_EDITOR"))
+                    role = r.getName();
+            }
+        }
+        model.addAttribute("role", role);
         model.addAttribute("admin", user);
     }
 
@@ -254,7 +265,9 @@ public class AdminController {
     @GetMapping("admin/users/edit/{id}")
     public String editUser(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
+        List<Role> roles = roleService.allRoles();
         model.addAttribute("user", user);
+        model.addAttribute("roles", roles);
         CreateModelUser(model);
         return "admin/users/user-edit";
     }
@@ -264,7 +277,9 @@ public class AdminController {
     public String recoveryUser(@PathVariable(name = "id") Long id, Model model) {
         List<Status> enums = Arrays.asList(Status.values());
         User user = userService.findUserById(id);
+        List<Role> roles = roleService.allRoles();
         model.addAttribute("user", user);
+        model.addAttribute("roles", roles);
         model.addAttribute("status", enums);
         CreateModelUser(model);
         return "admin/users/user-recovery";
@@ -340,7 +355,8 @@ public class AdminController {
                        @RequestParam(value = "country") String country,
                        @RequestParam(value = "city") String city,
                        @RequestParam(value = "age") String age,
-                       @RequestParam(value = "email") String email) {
+                       @RequestParam(value = "email") String email,
+                       @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id) {
         CreateModelUser(model);
         String path = "/admin/users/edit/" + user_id;
         User user = userService.findUserById(user_id);
@@ -352,7 +368,7 @@ public class AdminController {
         }
         if (UserController.setDataUser(redirectAttributes, username, fullName, country, city, age, email, user))
             return "redirect:" + path;
-        if (addFile(redirectAttributes, file, user, fileService, userService, edit)) return "redirect:" + path;
+        if (addRoles(redirectAttributes, file, role_id, user, edit)) return "redirect:" + path;
 
         return "redirect:/admin/users";
     }
@@ -370,6 +386,7 @@ public class AdminController {
                            @RequestParam(value = "city") String city,
                            @RequestParam(value = "age") String age,
                            @RequestParam(value = "email") String email,
+                           @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id,
                            @RequestParam(value = "passwordConfirm") String passwordConfirm,
                            @RequestParam(value = "password") String password,
                            @RequestParam(value = "status") String status) {
@@ -397,11 +414,24 @@ public class AdminController {
             } else
                 user.setStatus(Status.valueOf(status));
         }
-
-        if (addFile(redirectAttributes, file, user, fileService, userService, edit)) return "redirect:" + path;
+        if (addRoles(redirectAttributes, file, role_id, user, edit)) return "redirect:" + path;
         if(userService.allUsers().stream().noneMatch(x -> x.getStatus() == Status.DELETED))
             return "redirect:/admin/users";
         return "redirect:/admin/users/deleted";
+    }
+
+    private boolean addRoles(RedirectAttributes redirectAttributes, @RequestParam("avatar") MultipartFile file, @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id, User user, boolean edit) {
+        if (role_id != null) {
+            if (role_id.length != 0) {
+                Set<Role> rolesSet = new HashSet<>();
+                for (Long r : role_id) {
+                    Role role = roleService.findRoleById(r);
+                    rolesSet.add(role);
+                }
+                user.setRoles(rolesSet);
+            }
+        }
+        return addFile(redirectAttributes, file, user, fileService, userService, edit);
     }
 
     //New user password

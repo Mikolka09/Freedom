@@ -89,6 +89,30 @@
                                                    th:value="${user.getAge()}"/>
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <div>Roles</div>
+                                            <div class="btn-group btn-group-sm" role="group" aria-label="Roles">
+                                                <button type="button" class="btn btn-info m-1"
+                                                        title="If you want to change, click on the button"
+                                                        data-toggle="collapse" data-target="#collapseExample"
+                                                        aria-expanded="false" aria-controls="collapseExample"
+                                                        th:each="role : ${user.getRoles()}"
+                                                        th:text="${role.getName()}">
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="collapse form-group" id="collapseExample">
+                                                <label for="role_id">New Roles</label>
+                                                <select class="form-control" name="role_id" id="role_id" multiple>
+                                                    <option th:each="role : ${roles}"
+                                                            th:value="${role.getId()}"
+                                                            th:text="${role.getName()}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-6">
                                             <input type="submit" name="signup" id="signup"
