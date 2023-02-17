@@ -1,6 +1,5 @@
 package itstep.social_freedom.service;
 
-import itstep.social_freedom.entity.Category;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.Tag;
 import itstep.social_freedom.repository.TagRepository;

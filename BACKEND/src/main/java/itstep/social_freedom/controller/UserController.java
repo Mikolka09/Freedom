@@ -48,12 +48,6 @@ public class UserController {
         return "user/index";
     }
 
-    @GetMapping("/user/mail")
-    public String indexMail(Model model) {
-        CreateModelUser(model);
-        return "mail/index";
-    }
-
     //Edit user data
     @GetMapping("user/data/edit-data/{id}")
     public String editUser(@PathVariable(name = "id") Long id, Model model) {

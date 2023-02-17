@@ -66,6 +66,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "status")
     private Status status;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Message> messages = new HashSet<>();
+
     private int offenses;
     private int rating;
 
