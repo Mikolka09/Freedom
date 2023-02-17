@@ -26,7 +26,7 @@ public class MessageService {
 
     public List<Message> findAllMessagesUserById(Long userId) {
         return messageRepository.findAll().stream()
-                .filter(x -> Objects.equals(x.getUserRecipient().getId(), userId)).collect(Collectors.toList());
+                .filter(x -> Objects.equals(x.getInvite().getUserTo().getId(), userId)).collect(Collectors.toList());
     }
 
     public boolean saveMessage(Message message) {

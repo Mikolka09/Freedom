@@ -1,5 +1,6 @@
 package itstep.social_freedom.entity;
 
+
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -11,9 +12,9 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-public class Message extends BaseEntity {
+public class Alert extends BaseEntity {
 
-    private String message;
+    private String text;
 
     @ManyToOne
     @JoinColumn(name = "invite_id")
@@ -27,8 +28,8 @@ public class Message extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Message message = (Message) o;
-        return getId() != null && Objects.equals(getId(), message.getId());
+        Alert alert = (Alert) o;
+        return getId() != null && Objects.equals(getId(), alert.getId());
     }
 
     @Override

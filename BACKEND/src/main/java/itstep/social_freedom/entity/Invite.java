@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -15,11 +17,19 @@ import javax.persistence.*;
 @Table(name = "invites")
 public class Invite extends BaseEntity {
 
-    @Column(name = "userFrom")
+    @ManyToOne
+    @JoinColumn(name = "user_from_id")
     private User userFrom;
 
-    @Column(name = "userTo")
+    @ManyToOne
+    @JoinColumn(name = "user_to_id")
     private User userTo;
+
+    @OneToMany(mappedBy = "invite")
+    private Set<Alert> alerts = new HashSet<>();
+
+    @OneToMany(mappedBy = "invite")
+    private Set<Message> messages = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

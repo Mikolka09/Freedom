@@ -82,6 +82,10 @@
     </section>
 </main><!-- End #main -->
 
+<th:block th:insert="/user/fragments/profile-card.html::profile-card"></th:block>
+
+<th:block th:insert="/user/fragments/answer-modal.html::answer-modal"></th:block>
+
 <th:block th:insert="/pages/fragments/main/footer.html::footer"></th:block>
 
 <th:block th:insert="/pages/fragments/main/foot.html::foot"></th:block>
@@ -104,6 +108,66 @@
         }
     });
 
+    $('#modalAbandonedCart').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget);
+        let idTo = button.data('id');
+        let name = button.data('name');
+        let posts = button.data('posts');
+        let comments = button.data('comments');
+        let friends = button.data('friends');
+        let idFrom = button.data('user');
+        let rating = button.data('rating');
+        let avatar = "/" + button.data('avatar');
+        let modal = $(this);
+        modal.find('#userFrom').val(idFrom);
+        modal.find('#userTo').val(idTo);
+        modal.find('#name-user').text(name);
+        modal.find('#posts-user').text(posts);
+        modal.find('#comments-user').text(comments);
+        modal.find('#friends-user').text(friends);
+        modal.find('#rating-user').text(rating);
+        modal.find('#avatar').attr('src', avatar);
+        if (typeof idFrom == "undefined") {
+            modal.find('#message').attr('disabled', true);
+            modal.find('#follow').attr('disabled', true);
+        } else if (parseInt(idFrom) === parseInt(idTo)) {
+            modal.find('#message').attr('disabled', true);
+            modal.find('#follow').attr('disabled', true);
+        }
+    });
+
+    $('#follow').on('click', function (e) {
+        e.preventDefault();
+        let userFrom = $('#userFrom').val();
+        let userTo = $('#userTo').val();
+        $.get({
+            url: '/user/alerts/follow/' + userTo,
+            data: {
+                userId: userFrom
+            },
+            success: (data) => {
+                if(data===200){
+                  let text = "Friend request sent!";
+                    answerModal(text);
+                }else{
+                    let text = "A friend request has already been sent. Wait for a response from the user!";
+                    answerModal(text);
+                }
+
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+    });
+
+    function answerModal(text){
+        $('#answerModal').on('shown.bs.modal', function (){
+            $('#answer-text').text(text);
+        })
+
+    }
+
     $('#comment-button').on('click', function (e) {
         e.preventDefault();
         let userId = $('#userId').val();
@@ -117,7 +181,6 @@
                     text: text
                 },
                 success: (data) => {
-                    console.log(data);
                     printComments(data);
                 },
                 error: (err) => {
