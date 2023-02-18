@@ -146,10 +146,10 @@
                 userId: userFrom
             },
             success: (data) => {
-                if(data===200){
-                  let text = "Friend request sent!";
+                if (data === 200) {
+                    let text = "Friend request sent!";
                     answerModal(text);
-                }else{
+                } else {
                     let text = "A friend request has already been sent. Wait for a response from the user!";
                     answerModal(text);
                 }
@@ -161,11 +161,9 @@
         });
     });
 
-    function answerModal(text){
-        $('#answerModal').on('shown.bs.modal', function (){
-            $('#answer-text').text(text);
-        })
-
+    function answerModal(text) {
+        $('#answer-text').text(text);
+        new bootstrap.Modal(document.getElementById("answerModal")).show();
     }
 
     $('#comment-button').on('click', function (e) {

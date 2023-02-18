@@ -7,10 +7,7 @@ import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.AlertService;
 import itstep.social_freedom.service.InviteService;
 import itstep.social_freedom.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
