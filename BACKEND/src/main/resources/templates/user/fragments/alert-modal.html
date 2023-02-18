@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="alert-modal">
+    <div class="modal fade" id="AlertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <img src="/img/alert.jpg" alt="" width="50px;"/>
+                        <span class="px-2" style="color: #6f42c1; font-weight: bold; text-decoration-line: underline;"
+                              id="alertModalLabel"></span>
+                        <small id="date-alert" style="margin-left: 10px"></small></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center" id="text" style="color: #0a53be;">Select "Logout tosion</div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" id="actionConfirm" type="button" data-dismiss="modal">Confirm</a>
+                    <a class="btn btn-danger" id="actionDeny" href="#" data-dismiss="modal">Deny</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

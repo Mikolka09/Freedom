@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 public class AlertController {
@@ -36,7 +37,8 @@ public class AlertController {
 
     @GetMapping("/user/alerts")
     public String index(Model model) {
-        List<Alert> alerts = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId());
+        List<Alert> alerts = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
+                .stream().filter(x->x.getInvite().getStatus()==Status.REQUEST).collect(Collectors.toList());
         CreateModelUser(model);
         model.addAttribute("alerts", alerts);
         return "alert/index";

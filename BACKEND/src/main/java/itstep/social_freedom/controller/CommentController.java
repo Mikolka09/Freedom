@@ -1,8 +1,7 @@
 package itstep.social_freedom.controller;
 
-import itstep.social_freedom.entity.Comment;
-import itstep.social_freedom.entity.Status;
-import itstep.social_freedom.entity.User;
+import itstep.social_freedom.entity.*;
+import itstep.social_freedom.service.AlertService;
 import itstep.social_freedom.service.CommentService;
 import itstep.social_freedom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +23,13 @@ public class CommentController {
     private CommentService commentService;
 
     @Autowired
+    private AlertService alertService;
+
+    @Autowired
     private UserService userService;
 
     private void CreateModelUser(Model model) {
-        User user = userService.getCurrentUsername();
-        model.addAttribute("user", user);
+        PostController.giveMainData(model, userService, alertService);
     }
 
     //Getting a list of comments

@@ -6,6 +6,7 @@ import itstep.social_freedom.repository.AlertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -22,7 +23,8 @@ public class AlertService {
 
     public List<Alert> findAllAlertsUserById(Long userId){
         return alertRepository.findAll().stream()
-                .filter(x-> Objects.equals(x.getInvite().getUserTo().getId(), userId)).collect(Collectors.toList());
+                .filter(x-> Objects.equals(x.getInvite().getUserTo().getId(), userId))
+                .sorted(Comparator.comparing(Alert::getCreatedAt)).collect(Collectors.toList());
     }
 
     public boolean saveAlert(Alert alert) {

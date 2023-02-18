@@ -50,33 +50,10 @@
 <!-- Logout Modal-->
 <th:block th:insert="/user/fragments/logout-modal.html::logout-modal"></th:block>
 <th:block th:insert="/user/fragments/delete-modal.html::delete-modal"></th:block>
+<th:block th:insert="/user/fragments/delete-user-modal.html::delete-user-modal"></th:block>
+<th:block th:insert="/user/fragments/alert-modal.html::alert-modal"></th:block>
 
-<!-- Bootstrap core JavaScript-->
-<script src="/user/vendor/jquery/jquery.min.js"></script>
-<script src="/user/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="/user/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="/user/js/sb-admin-2.min.js"></script>
-
-<script>
-
-    $('#DeleteModal').on('show.bs.modal', function (event) {
-        let button = $(event.relatedTarget);
-        let id = button.data('id');
-        let name = button.data('name');
-        let action = "/user/posts/delete/" + id;
-        let label = "Are you sure you're ready to delete Post - \"" + name.toUpperCase() + "\"?";
-        let text = "Select \"Delete\" below if you are ready to remove this Post."
-        let modal = $(this);
-        modal.find('#deleteModalLabel').text(label);
-        modal.find('#text').text(text);
-        modal.find('#action').prop("href", action);
-    })
-
-</script>
+<th:block th:insert="/user/fragments/user-other-foot.html::user-other-foot"></th:block>
 
 </body>
 

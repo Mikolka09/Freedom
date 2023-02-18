@@ -29,10 +29,26 @@ public class PostController {
     private PostService postService;
 
     @Autowired
+    private AlertService alertService;
+
+    @Autowired
     private FileService fileService;
 
     private void CreateModelUser(Model model) {
+        giveMainData(model, userService, alertService);
+    }
+
+    static void giveMainData(Model model, UserService userService, AlertService alertService) {
         User user = userService.getCurrentUsername();
+        List<Alert> alertList = alertService.findAllAlertsUserById(user.getId())
+                .stream().filter(x->x.getInvite().getStatus()== Status.REQUEST).collect(Collectors.toList());
+        String role = "";
+        for (Role r : user.getRoles()) {
+            if (Objects.equals(r.getName(), "ROLE_EDITOR"))
+                role = r.getName();
+        }
+        model.addAttribute("alerts", alertList);
+        model.addAttribute("role", role);
         model.addAttribute("user", user);
     }
 

@@ -1,7 +1,10 @@
 package itstep.social_freedom.controller;
 
+import itstep.social_freedom.entity.Alert;
 import itstep.social_freedom.entity.Role;
+import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
+import itstep.social_freedom.service.AlertService;
 import itstep.social_freedom.service.FileService;
 import itstep.social_freedom.service.PostService;
 import itstep.social_freedom.service.UserService;
@@ -15,7 +18,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static itstep.social_freedom.controller.AdminController.addPassword;
 
@@ -26,19 +31,13 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private AlertService alertService;
+
+    @Autowired
     private FileService fileService;
 
     private void CreateModelUser(Model model) {
-        User user = userService.getCurrentUsername();
-        String role = "";
-        if (user != null) {
-            for (Role r : user.getRoles()) {
-                if (Objects.equals(r.getName(), "ROLE_EDITOR"))
-                    role = r.getName();
-            }
-        }
-        model.addAttribute("role", role);
-        model.addAttribute("user", user);
+        PostController.giveMainData(model, userService, alertService);
     }
 
     //Start index
