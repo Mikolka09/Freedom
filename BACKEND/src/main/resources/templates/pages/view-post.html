@@ -115,6 +115,7 @@
         let posts = button.data('posts');
         let comments = button.data('comments');
         let friends = button.data('friends');
+        let friend = button.data('friend');
         let idFrom = button.data('user');
         let rating = button.data('rating');
         let avatar = "/" + button.data('avatar');
@@ -132,6 +133,8 @@
             modal.find('#follow').attr('disabled', true);
         } else if (parseInt(idFrom) === parseInt(idTo)) {
             modal.find('#message').attr('disabled', true);
+            modal.find('#follow').attr('disabled', true);
+        }else if (friend==="yes") {
             modal.find('#follow').attr('disabled', true);
         }
     });

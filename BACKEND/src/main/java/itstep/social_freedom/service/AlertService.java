@@ -18,7 +18,8 @@ public class AlertService {
     private AlertRepository alertRepository;
 
     public List<Alert> allAlerts(){
-        return alertRepository.findAll();
+        return alertRepository.findAll().stream()
+                .sorted(Comparator.comparing(Alert::getCreatedAt).reversed()).collect(Collectors.toList());
     }
 
     public Alert findAlertById(Long id){
@@ -28,7 +29,7 @@ public class AlertService {
     public List<Alert> findAllAlertsUserById(Long userId){
         return alertRepository.findAll().stream()
                 .filter(x-> Objects.equals(x.getInvite().getUserTo().getId(), userId))
-                .sorted(Comparator.comparing(Alert::getCreatedAt)).collect(Collectors.toList());
+                .sorted(Comparator.comparing(Alert::getCreatedAt).reversed()).collect(Collectors.toList());
     }
 
     public boolean saveAlert(Alert alert) {

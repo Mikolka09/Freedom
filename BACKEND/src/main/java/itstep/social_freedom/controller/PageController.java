@@ -5,12 +5,14 @@ import itstep.social_freedom.service.CategoryService;
 import itstep.social_freedom.service.PostService;
 import itstep.social_freedom.service.TagService;
 import itstep.social_freedom.service.UserService;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -133,12 +135,20 @@ public class PageController {
     @GetMapping("/view-post/{id}")
     public String viewPost(@PathVariable(name = "id") Long post_id, Model model) {
         Post post = postService.findPostById(post_id);
+        Long idRead = post.getUser().getId();
+        String myFriend = "";
+        if(post.getUser().getRequestedFriends().stream()
+                .noneMatch(x -> Objects.equals(x.getFriendRequester().getId(), idRead)))
+            myFriend = "no";
+        else
+            myFriend="yes";
         List<Comment> comments = post.getComments().stream().filter(x -> x.getStatus() == Status.ACTIVE)
                 .sorted(Comparator.comparing(Comment::getCreatedAt)).collect(Collectors.toList());
         String[] bodies = postService.arrayBody(post.getBody());
         model.addAttribute("bodies", bodies);
         model.addAttribute("comments", comments);
         model.addAttribute("post", post);
+        model.addAttribute("myFriend", myFriend);
         CreateModel(model);
         return "/pages/view-post";
     }

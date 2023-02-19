@@ -26,8 +26,10 @@
                     </div>
                 </div>
                 <div class="card-footer border-0 bg-gray-300 p-2 d-flex justify-content-around">
-                  <a class="m-0" href="#" role="button" title="Confirm"><img src="/img/icon/confirm.png" width="30px;"/></a>
-                  <a class="m-0" href="#" role="button" title="Deny"><img src="/img/icon/deny.png" width="30px;"/></a>
+                  <a class="m-0" th:href="@{|/user/alerts/confirm/${alert.getId()}|}" role="button"
+                     title="Confirm"><img src="/img/icon/confirm.png" width="30px;"/></a>
+                  <a class="m-0" th:href="@{|/user/alerts/deny/${alert.getId()}|}" role="button"
+                     title="Deny"><img src="/img/icon/deny.png" width="30px;"/></a>
                 </div>
             </div>
         </div>

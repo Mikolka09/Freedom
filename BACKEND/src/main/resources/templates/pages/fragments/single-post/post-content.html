@@ -21,12 +21,15 @@
         </div>
         <div class="col-sm-6" style="text-align: right;  vertical-align: middle;">
             <a href="#" data-bs-toggle="modal" data-bs-target="#modalAbandonedCart" title="View Profile"
-            th:data-id="${post.getUser().getId()}" th:data-name="${post.getUser().getFullName()}"
-               th:data-posts="${post.getUser().getPosts().size()}" th:data-comments="${post.getUser().getComments().size()}"
-               th:data-friends="${post.getUser().getFriends().size()}" th:data-user="${user==null?null:user.getId()}"
-               th:data-rating="${post.getUser().getRating()}" th:data-avatar="${post.getUser().getAvatarUrl()}">
-            <img class="px-1 rounded-circle" th:src="@{|/${post.getUser().getAvatarUrl()}|}" width="50px">
-            <span style="font-weight: bold" th:text="${post.getUser().getFullName()}"></span>
+               th:data-id="${post.getUser().getId()}" th:data-name="${post.getUser().getFullName()}"
+               th:data-posts="${post.getUser().getPosts().size()}"
+               th:data-comments="${post.getUser().getComments().size()}"
+               th:data-friends="${post.getUser().getReceivedFriends().size()}"
+               th:data-user="${user==null?null:user.getId()}"
+               th:data-rating="${post.getUser().getRating()}" th:data-avatar="${post.getUser().getAvatarUrl()}"
+               th:data-friend="${myFriend}">
+                <img class="px-1 rounded-circle" th:src="@{|/${post.getUser().getAvatarUrl()}|}" width="50px">
+                <span style="font-weight: bold" th:text="${post.getUser().getFullName()}"></span>
             </a>
         </div>
     </div>

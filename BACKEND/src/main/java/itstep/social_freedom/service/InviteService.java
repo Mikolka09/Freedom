@@ -18,7 +18,8 @@ public class InviteService {
 
     public boolean saveInvite(Invite invite){
        List<Invite> inviteBD = inviteRepository.findAll().stream()
-               .filter(x-> Objects.equals(x.getUserFrom().getId(), invite.getUserFrom().getId()))
+               .filter(x-> Objects.equals(x.getUserFrom().getId(), invite.getUserFrom().getId())&&
+                       Objects.equals(x.getUserTo().getId(), invite.getUserTo().getId()))
                .collect(Collectors.toList());
        if(inviteBD.stream().noneMatch(x -> x.getStatus() == Status.REQUEST)){
            inviteRepository.save(invite);

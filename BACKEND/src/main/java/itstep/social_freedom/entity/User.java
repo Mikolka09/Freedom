@@ -2,12 +2,9 @@ package itstep.social_freedom.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,12 +16,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-
-@Entity
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Entity
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
 
@@ -54,8 +50,19 @@ public class User extends BaseEntity implements UserDetails {
             property = "id")
     private Set<Comment> comments = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    private Set<User> friends;
+    @OneToMany(mappedBy = "friendRequester")
+    @ToString.Exclude
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    private Set<Friend> requestedFriends = new HashSet<>();
+
+    @OneToMany(mappedBy = "friendReceiver")
+    @ToString.Exclude
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    private Set<Friend> receivedFriends = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
