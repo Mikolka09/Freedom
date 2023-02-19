@@ -59,9 +59,8 @@ public class ApiPostController {
 
     @GetMapping("/api/posts/category/{id}")
     private List<Post> createPagesPosts(@PathVariable long id) {
-        List<Post> post = postService.posts().stream().filter(x -> x.getCategory().getId() == id)
+        return postService.posts().stream().filter(x -> x.getCategory().getId() == id)
                 .filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
-        return post;
     }
 
 }

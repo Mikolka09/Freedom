@@ -21,6 +21,10 @@ public class AlertService {
         return alertRepository.findAll();
     }
 
+    public Alert findAlertById(Long id){
+        return alertRepository.findAlertById(id);
+    }
+
     public List<Alert> findAllAlertsUserById(Long userId){
         return alertRepository.findAll().stream()
                 .filter(x-> Objects.equals(x.getInvite().getUserTo().getId(), userId))

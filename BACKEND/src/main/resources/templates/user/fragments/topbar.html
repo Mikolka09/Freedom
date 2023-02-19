@@ -57,10 +57,11 @@
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-bell fa-fw"></i>
                     <!-- Counter - Alerts -->
-                    <span class="badge badge-danger badge-counter">3+</span>
+                    <span class="badge badge-danger badge-counter"
+                    th:text="${alerts.size()>3?'3+':(alerts.size()==3?'3':(alerts.size()==2?'2':(alerts.size()==1?'1':'')))}">3+</span>
                 </a>
                 <!-- Dropdown - Alerts -->
-                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                <div id="list-alerts" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                      aria-labelledby="alertsDropdown">
                     <h6 class="dropdown-header">
                         Alerts Center
@@ -77,11 +78,12 @@
                                 <i class="fas fa-exclamation-triangle text-white"></i>
                             </div>
                         </div>
-                        <div>
+                        <div style="font-weight: normal">
                             <div class="small text-gray-500" th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
                                 #dates.month(alert.getCreatedAt()), #dates.day(alert.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">December 12, 2019</div>
-                            <span class="font-weight-bold" th:text="${alert.getText()}">A new monthly report is ready to download!</span>
+                            <span th:style="${alert.getInvite().getStatus()==status[8]}? 'font-weight: normal':'font-weight: bold'"
+                                  id="text-alert" th:text="${alert.getText()}">A new monthly report is ready to download!</span>
                         </div>
                     </a>
                     </th:block>

@@ -31,6 +31,7 @@ public class AlertController {
                     role = r.getName();
             }
         }
+        model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
         model.addAttribute("user", user);
     }
@@ -38,7 +39,8 @@ public class AlertController {
     @GetMapping("/user/alerts")
     public String index(Model model) {
         List<Alert> alerts = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
-                .stream().filter(x->x.getInvite().getStatus()==Status.REQUEST).collect(Collectors.toList());
+                .stream().filter(x->x.getInvite().getStatus()== Status.REQUEST || x.getInvite().getStatus()== Status.VIEWED)
+                .collect(Collectors.toList());
         CreateModelUser(model);
         model.addAttribute("alerts", alerts);
         return "alert/index";

@@ -1,5 +1,7 @@
 package itstep.social_freedom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -26,6 +28,9 @@ public class Invite extends BaseEntity {
     private User userTo;
 
     @OneToMany(mappedBy = "invite")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Set<Alert> alerts = new HashSet<>();
 
     @OneToMany(mappedBy = "invite")

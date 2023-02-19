@@ -41,13 +41,15 @@ public class PostController {
     static void giveMainData(Model model, UserService userService, AlertService alertService) {
         User user = userService.getCurrentUsername();
         List<Alert> alertList = alertService.findAllAlertsUserById(user.getId())
-                .stream().filter(x->x.getInvite().getStatus()== Status.REQUEST).collect(Collectors.toList());
+                .stream().filter(x->x.getInvite().getStatus()== Status.REQUEST || x.getInvite().getStatus()== Status.VIEWED)
+                .collect(Collectors.toList());
         String role = "";
         for (Role r : user.getRoles()) {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
                 role = r.getName();
         }
         model.addAttribute("alerts", alertList);
+        model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
         model.addAttribute("user", user);
     }
