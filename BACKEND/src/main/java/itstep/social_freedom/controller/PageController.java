@@ -135,13 +135,16 @@ public class PageController {
     @GetMapping("/view-post/{id}")
     public String viewPost(@PathVariable(name = "id") Long post_id, Model model) {
         Post post = postService.findPostById(post_id);
-        Long idRead = post.getUser().getId();
+        Long idRead = userService.getCurrentUsername().getId();
         String myFriend = "";
         if(post.getUser().getRequestedFriends().stream()
-                .noneMatch(x -> Objects.equals(x.getFriendRequester().getId(), idRead)))
+                .noneMatch(x -> Objects.equals(x.getFriendRequester().getId(), idRead)) &&
+                post.getUser().getReceivedFriends().stream()
+                        .noneMatch(x -> Objects.equals(x.getFriendRequester().getId(), idRead)))
             myFriend = "no";
         else
-            myFriend="yes";
+            myFriend= "yes";
+        int friends = countFriends(post.getUser().getRequestedFriends(), post.getUser().getReceivedFriends());
         List<Comment> comments = post.getComments().stream().filter(x -> x.getStatus() == Status.ACTIVE)
                 .sorted(Comparator.comparing(Comment::getCreatedAt)).collect(Collectors.toList());
         String[] bodies = postService.arrayBody(post.getBody());
@@ -149,8 +152,20 @@ public class PageController {
         model.addAttribute("comments", comments);
         model.addAttribute("post", post);
         model.addAttribute("myFriend", myFriend);
+        model.addAttribute("friends", friends);
         CreateModel(model);
         return "/pages/view-post";
+    }
+
+    static public int countFriends(Set<Friend> requestedFriends, Set<Friend> receivedFriends){
+        int count = 0;
+        for ( Friend friendFrom: requestedFriends) {
+            for (Friend friendTo: receivedFriends) {
+                if(Objects.equals(friendFrom.getFriendRequester().getId(), friendTo.getFriendReceiver().getId()))
+                    count++;
+            }
+        }
+        return count;
     }
 
 }

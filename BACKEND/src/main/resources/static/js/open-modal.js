@@ -17,13 +17,19 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     let alert = button.data('text');
     let date = button.data('date');
     let actionConfirm = "/user/alerts/confirm/" + id;
+    let actionAccepted = "/user/alerts/accepted/" + id;
     let actionDeny = "/user/alerts/deny/" + id;
     let modal = $(this);
     modal.find('#alertModalLabel').text(name);
     modal.find('#text').text(alert);
     modal.find('#date-alert').text(date);
     modal.find('#actionConfirm').prop("href", actionConfirm);
+    modal.find('#actionAccepted').prop("href", actionAccepted);
     modal.find('#actionDeny').prop("href", actionDeny);
+    if (alert.split(' ')[2] === 'accepted')
+        modal.find('#footer-confirm').hide();
+    else
+        modal.find('#footer-accepted').hide();
     changeStatusAlert(id);
 })
 
@@ -31,7 +37,6 @@ function changeStatusAlert(id) {
     $.get({
         url: 'user/alerts/change/' + id,
         success: (data) => {
-            console.log(data);
             printAlerts(data);
         },
         error: (err) => {
@@ -48,7 +53,8 @@ function printAlerts(data) {
         h1.innerText = "Alerts Center";
         container.innerHTML = "";
         container.appendChild(h1);
-        for (let i = 0; i < 3; i++) {
+        let i = 0;
+        while (i < (data.length > 3 ? 3 : data.length)) {
             let a = document.createElement('a');
             a.className = "dropdown-item d-flex align-items-center";
             a.dataset.id = data[i].id;
@@ -80,6 +86,7 @@ function printAlerts(data) {
             div3.appendChild(span);
             a.appendChild(div3);
             container.appendChild(a);
+            i++;
         }
         let a2 = document.createElement('a');
         a2.className = "dropdown-item text-center small text-gray-500";

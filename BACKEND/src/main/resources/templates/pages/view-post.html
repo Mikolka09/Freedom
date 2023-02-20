@@ -149,7 +149,8 @@
                 userId: userFrom
             },
             success: (data) => {
-                if (data === 200) {
+                console.log(data);
+                if (data === "OK") {
                     let text = "Friend request sent!";
                     answerModal(text);
                 } else {

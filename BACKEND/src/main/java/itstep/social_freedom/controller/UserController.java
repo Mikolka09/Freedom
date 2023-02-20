@@ -96,6 +96,8 @@ public class UserController {
     @GetMapping("/user/data/view/{id}")
     public String viewProfile(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
+        int friends = PageController.countFriends(user.getRequestedFriends(), user.getReceivedFriends());
+        model.addAttribute("friends", friends);
         model.addAttribute("user", user);
         CreateModelUser(model);
         return "user/data/view-user";

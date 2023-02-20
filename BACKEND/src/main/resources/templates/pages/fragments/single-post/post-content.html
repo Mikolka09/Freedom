@@ -24,7 +24,7 @@
                th:data-id="${post.getUser().getId()}" th:data-name="${post.getUser().getFullName()}"
                th:data-posts="${post.getUser().getPosts().size()}"
                th:data-comments="${post.getUser().getComments().size()}"
-               th:data-friends="${post.getUser().getReceivedFriends().size()}"
+               th:data-friends="${friends}"
                th:data-user="${user==null?null:user.getId()}"
                th:data-rating="${post.getUser().getRating()}" th:data-avatar="${post.getUser().getAvatarUrl()}"
                th:data-friend="${myFriend}">

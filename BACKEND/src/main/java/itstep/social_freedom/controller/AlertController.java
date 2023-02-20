@@ -72,12 +72,45 @@ public class AlertController {
                 friendService.saveFriend(friendTo);
                 alert.setInvite(invite);
                 alertService.saveAlert(alert);
+                sendResponse(userFrom, userTo);
                 CreateModelUser(model);
                 return "alert/index";
             }
         }
         CreateModelUser(model);
         return "alert/index";
+    }
+
+    @GetMapping("/user/alerts/accepted/{id}")
+    public String acceptedAlert(@PathVariable(name = "id") Long id, Model model){
+        Alert alert = alertService.findAlertById(id);
+        if (alert != null){
+            Invite invite = alert.getInvite();
+            invite.setStatus(Status.ACCEPTED);
+            if(inviteService.saveInvite(invite)){
+                alert.setInvite(invite);
+                alertService.saveAlert(alert);
+                CreateModelUser(model);
+                return "alert/index";
+            }
+        }
+        CreateModelUser(model);
+        return "alert/index";
+    }
+
+    public void sendResponse(User userFrom, User userTo) {
+        Alert alert = new Alert();
+        Invite invite = new Invite();
+        String text = userTo.getFullName() + " accepted your friend request!";
+        alert.setText(text);
+        invite.setUserFrom(userTo);
+        invite.setUserTo(userFrom);
+        invite.setStatus(Status.REQUEST);
+        alert.setInvite(invite);
+        if (inviteService.saveInvite(invite)) {
+            alert.setStatus(Status.ACTIVE);
+            alertService.saveAlert(alert);
+        }
     }
 
 }

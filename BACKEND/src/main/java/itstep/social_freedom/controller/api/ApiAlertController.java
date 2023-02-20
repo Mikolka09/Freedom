@@ -24,8 +24,8 @@ public class ApiAlertController {
     private InviteService inviteService;
 
     @GetMapping("/user/alerts/follow/{id}")
-    public int sendFollow(@PathVariable(name = "id") Long id,
-                          @RequestParam(value = "userId") Long userId) {
+    public String sendFollow(@PathVariable(name = "id") Long id,
+                             @RequestParam(value = "userId") Long userId) {
         User userFrom = userService.findUserById(userId);
         User userTo = userService.findUserById(id);
         String text = userFrom.getFullName() + " sent you a friend request!";
@@ -39,11 +39,11 @@ public class ApiAlertController {
         if (inviteService.saveInvite(invite)) {
             alert.setStatus(Status.ACTIVE);
             if (alertService.saveAlert(alert))
-                return 200;
+                return "OK";
             else
-                return 400;
+                return "NOT";
         } else
-            return 400;
+            return "NOT";
     }
 
     @GetMapping("/user/alerts/change/{id}")
@@ -56,6 +56,8 @@ public class ApiAlertController {
             inviteService.saveInvite(invite);
             alertService.saveAlert(alert);
         }
-        return alertService.findAllAlertsUserById(alert.getInvite().getUserTo().getId()).toArray(Alert[]::new);
+        return alertService.findAllAlertsUserById(alert.getInvite().getUserTo().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
+                .toArray(Alert[]::new);
     }
 }
