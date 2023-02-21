@@ -161,8 +161,11 @@ public class PageController {
         int count = 0;
         for ( Friend friendFrom: requestedFriends) {
             for (Friend friendTo: receivedFriends) {
-                if(Objects.equals(friendFrom.getFriendRequester().getId(), friendTo.getFriendReceiver().getId()))
+                if(Objects.equals(friendFrom.getFriendRequester().getId(), friendTo.getFriendReceiver().getId())) {
                     count++;
+                    break;
+                }
+
             }
         }
         return count;
