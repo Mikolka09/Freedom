@@ -1,15 +1,16 @@
 package itstep.social_freedom.controller.api;
 
-import itstep.social_freedom.entity.Alert;
-import itstep.social_freedom.entity.Invite;
-import itstep.social_freedom.entity.Status;
-import itstep.social_freedom.entity.User;
+import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.AlertService;
+import itstep.social_freedom.service.FriendService;
 import itstep.social_freedom.service.InviteService;
 import itstep.social_freedom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class ApiAlertController {
@@ -22,6 +23,9 @@ public class ApiAlertController {
 
     @Autowired
     private InviteService inviteService;
+
+    @Autowired
+    private FriendService friendService;
 
     @GetMapping("/user/alerts/follow/{id}")
     public String sendFollow(@PathVariable(name = "id") Long id,
@@ -60,4 +64,76 @@ public class ApiAlertController {
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
                 .toArray(Alert[]::new);
     }
+
+    @GetMapping("/user/alerts/accepted/{id}")
+    public String acceptedAlert(@PathVariable(name = "id") Long id) {
+        Alert alert = alertService.findAlertById(id);
+        if (alert != null) {
+            Invite invite = alert.getInvite();
+            invite.setStatus(Status.ACCEPTED);
+            if (inviteService.saveInvite(invite)) {
+                alert.setInvite(invite);
+                alertService.saveAlert(alert);
+                return "OK";
+            }
+        }
+        return "NOT";
+    }
+
+    @GetMapping("/user/alerts/deny/{id}")
+    public String deniedFriend(@PathVariable(name = "id") Long id) {
+        Alert alert = alertService.findAlertById(id);
+        if (alert != null) {
+            Invite invite = alert.getInvite();
+            invite.setStatus(Status.DENIED);
+            if (inviteService.saveInvite(invite)) {
+                alert.setInvite(invite);
+                alertService.saveAlert(alert);
+                return "OK";
+            }
+        }
+        return "NOT";
+    }
+
+    @GetMapping("/user/alerts/confirm/{id}")
+    public String confirmFriend(@PathVariable(name = "id") Long id) {
+        Alert alert = alertService.findAlertById(id);
+        if (alert != null) {
+            Invite invite = alert.getInvite();
+            invite.setStatus(Status.ACCEPTED);
+            if (inviteService.saveInvite(invite)) {
+                User userFrom = userService.findUserById(invite.getUserFrom().getId());
+                User userTo = userService.findUserById(invite.getUserTo().getId());
+                Friend friendFrom = new Friend();
+                friendFrom.setFriendRequester(userFrom);
+                friendFrom.setFriendReceiver(userTo);
+                friendService.saveFriend(friendFrom);
+                Friend friendTo = new Friend();
+                friendTo.setFriendRequester(userTo);
+                friendTo.setFriendReceiver(userFrom);
+                friendService.saveFriend(friendTo);
+                alert.setInvite(invite);
+                alertService.saveAlert(alert);
+                sendResponse(userFrom, userTo);
+                return "OK";
+            }
+        }
+        return "NOT";
+    }
+
+    public void sendResponse(User userFrom, User userTo) {
+        Alert alert = new Alert();
+        Invite invite = new Invite();
+        String text = userTo.getFullName() + " accepted your friend request!";
+        alert.setText(text);
+        invite.setUserFrom(userTo);
+        invite.setUserTo(userFrom);
+        invite.setStatus(Status.REQUEST);
+        alert.setInvite(invite);
+        if (inviteService.saveInvite(invite)) {
+            alert.setStatus(Status.ACTIVE);
+            alertService.saveAlert(alert);
+        }
+    }
+
 }

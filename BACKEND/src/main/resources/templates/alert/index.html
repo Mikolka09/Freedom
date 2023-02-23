@@ -52,31 +52,8 @@
 <th:block th:insert="/user/fragments/delete-modal.html::delete-modal"></th:block>
 <th:block th:insert="/user/fragments/delete-user-modal.html::delete-user-modal"></th:block>
 <th:block th:insert="/user/fragments/alert-modal.html::alert-modal"></th:block>
-<th:block th:insert="/user/fragments/answer2-modal.html::answer2-modal"></th:block>
 
 <th:block th:insert="/user/fragments/user-other-foot.html::user-other-foot"></th:block>
-
-<script>
-    $('a').on('show.bs.modal', function (e){
-        let id = $(e.relatedTarget).data('id');
-        let text = "";
-        if(id==="actionConfirm"){
-            text ="Friend request accepted!";
-            $('#answer-text').text(text);
-            new bootstrap.Modal(document.getElementById("answerModal")).show();
-        }
-        if(id==="actionDeny"){
-            text ="Friend request denied!";
-            $('#answer-text').text(text);
-            new bootstrap.Modal(document.getElementById("answerModal")).show();
-        }
-        if(id==="actionAccepted"){
-            text ="Notice read!!";
-            $('#answer-text').text(text);
-            new bootstrap.Modal(document.getElementById("answerModal")).show();
-        }
-    })
-</script>
 
 </body>
 

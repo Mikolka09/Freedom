@@ -16,16 +16,13 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     let name = button.data('name');
     let alert = button.data('text');
     let date = button.data('date');
-    let actionConfirm = "/user/alerts/confirm/" + id;
-    let actionAccepted = "/user/alerts/accepted/" + id;
-    let actionDeny = "/user/alerts/deny/" + id;
     let modal = $(this);
+    $('#actionAcceptedModal').attr('data-id', id);
+    $('#actionDenyModal').attr('data-id', id);
+    $('#actionConfirmModal').attr('data-id', id);
     modal.find('#alertModalLabel').text(name);
     modal.find('#text').text(alert);
     modal.find('#date-alert').text(date);
-    modal.find('#actionConfirm').prop("href", actionConfirm);
-    modal.find('#actionAccepted').prop("href", actionAccepted);
-    modal.find('#actionDeny').prop("href", actionDeny);
     if (alert.split(' ')[2] === 'accepted')
         modal.find('#footer-confirm').hide();
     else
@@ -35,7 +32,7 @@ $('#AlertModal').on('show.bs.modal', function (event) {
 
 function changeStatusAlert(id) {
     $.get({
-        url: 'user/alerts/change/' + id,
+        url: '/user/alerts/change/' + id,
         success: (data) => {
             printAlerts(data);
         },
@@ -102,3 +99,55 @@ function correctDate(date) {
         day: 'numeric', month: 'long', year: 'numeric'
     }).replace(/ /g, ' ');
 }
+
+$('button').on('click', function () {
+    let id = $(this).attr("id");
+    let idAlert = $(this).attr('data-id');
+    let text = "";
+    let url = "";
+    if (id === "actionAccepted"|| id === "actionAcceptedModal") {
+        text = "Notice read!";
+        url = "/user/alerts/accepted/" + idAlert;
+    }
+    if (id === "actionDeny" || id === "actionDenyModal") {
+        text = "Friend request denied!";
+        url = "/user/alerts/deny/" + idAlert;
+    }
+    if (id === "actionConfirm" || id === "actionConfirmModal") {
+        text = "Friend request accepted!";
+        url = "/user/alerts/confirm/" + idAlert;
+    }
+    alertInfo(text);
+    setTimeout( function() {
+        sending(url);
+    }, 1000);
+});
+
+function alertInfo(text){
+    Swal.fire({
+        title: text,
+        icon: 'info',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        showConfirmButton: false,
+        showCancelButton: false,
+        timer: 2000
+    });
+}
+
+function sending(url) {
+    $.get({
+        url: url,
+        success: (data) => {
+            console.log(data);
+            if (data === "OK")
+                location.reload();
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
+}
+
+
