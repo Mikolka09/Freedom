@@ -7,10 +7,7 @@ import itstep.social_freedom.service.InviteService;
 import itstep.social_freedom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class ApiAlertController {

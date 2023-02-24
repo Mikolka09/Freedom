@@ -23,7 +23,7 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     modal.find('#alertModalLabel').text(name);
     modal.find('#text').text(alert);
     modal.find('#date-alert').text(date);
-    if (alert.split(' ')[2] === 'accepted' || alert.split(' ')[2] === 'denied')
+    if (alert.split(' ')[2] === 'accepted' || alert.split(' ')[2] === 'denied' || alert.split(' ')[2] === 'read')
         modal.find('#footer-confirm').hide();
     else
         modal.find('#footer-accepted').hide();
@@ -185,6 +185,10 @@ $('button').on('click', function () {
         let idAlert = $(this).attr('data-id');
         let text = "";
         let url = "";
+        if (id === "actionAccepted" || id === "messageAcceptedModal") {
+            text = "Notice read!";
+            url = "/user/messages/accepted/" + idAlert;
+        }
         if (id === "actionAccepted" || id === "actionAcceptedModal") {
             text = "Notice read!";
             url = "/user/alerts/accepted/" + idAlert;

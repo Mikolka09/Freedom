@@ -37,6 +37,9 @@ public class AdminController {
     private PostService postService;
 
     @Autowired
+    private MessageService messageService;
+
+    @Autowired
     private AlertService alertService;
 
     @Autowired
@@ -49,11 +52,15 @@ public class AdminController {
         List<Alert> alertList = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
                 .collect(Collectors.toList());
+        List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
+                .collect(Collectors.toList());
         String role = "";
         for (Role r : user.getRoles()) {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
                 role = r.getName();
         }
+        model.addAttribute("messages", messages);
         model.addAttribute("alerts", alertList);
         model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
