@@ -51,12 +51,12 @@ function changeStatusMessage(id) {
             printMessages(data);
         },
         error: (err) => {
-            console.log("Error: " + err);
+            console.log(err);
         }
     });
 }
 
-function printMessages(data){
+function printMessages(data) {
     if (data != null) {
         let container = document.getElementById('list-messages');
         let h1 = document.createElement('h6');
@@ -82,11 +82,30 @@ function printMessages(data){
             img1.alt = "Avatar";
             img1.src = data[i].invite.userFrom.avatarUrl;
             div1.appendChild(img1);
+            a.appendChild(div1);
             let div2 = document.createElement('div');
             div2.className = "status-indicator bg-success";
             div1.appendChild(div2);
-
+            let div3 = document.createElement('div');
+            div3.style.fontWeight = data[i].invite.status === "VIEWED" ? "normal" : "bold";
+            let div4 = document.createElement('div');
+            div4.className = "text-truncate";
+            div4.id = "text-message";
+            div4.innerText = data[i].message;
+            div3.appendChild(div4);
+            let div5 = document.createElement('div');
+            div5.className = "small text-gray-500";
+            div5.innerText = data[i].invite.userFrom.fullName + ' - ' + correctDate(data[i].createdAt);
+            div3.appendChild(div5);
+            a.appendChild(div3);
+            container.appendChild(a);
+            i++;
         }
+        let a2 = document.createElement('a');
+        a2.className = "dropdown-item text-center small text-gray-500";
+        a2.href = "/user/messages";
+        a2.innerText = "Read More Messages";
+        container.appendChild(a2);
     }
 }
 
@@ -139,7 +158,7 @@ function printAlerts(data) {
             let span = document.createElement('span');
             span.id = "text-alert";
             span.innerText = data[i].text;
-            span.style.fontWeight = data[i].invite.status === "VIEWED" ? "normal" : "bold";
+            span.style.fontWeight = data[i].invite.status === "VIEWED" || data[i].invite.status === "DENIED" ? "normal" : "bold";
             div3.appendChild(span);
             a.appendChild(div3);
             container.appendChild(a);
@@ -162,7 +181,7 @@ function correctDate(date) {
 
 $('button').on('click', function () {
     let id = $(this).attr("id");
-    if(typeof id != "undefined") {
+    if (typeof id != "undefined") {
         let idAlert = $(this).attr('data-id');
         let text = "";
         let url = "";
@@ -185,7 +204,7 @@ $('button').on('click', function () {
     }
 });
 
-function alertInfo(text){
+function alertInfo(text) {
     Swal.fire({
         title: text,
         icon: 'info',

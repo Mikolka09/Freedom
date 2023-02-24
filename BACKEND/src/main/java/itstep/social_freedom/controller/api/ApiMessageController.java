@@ -54,8 +54,8 @@ public class ApiMessageController {
         if (invite.getStatus() != Status.VIEWED) {
             invite.setStatus(Status.VIEWED);
             message.setInvite(invite);
-            inviteService.saveInvite(invite);
-            messageService.saveMessage(message);
+            if (inviteService.saveInvite(invite))
+                messageService.saveMessage(message);
         }
         return messageService.findAllMessagesUserById(message.getInvite().getUserTo().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)

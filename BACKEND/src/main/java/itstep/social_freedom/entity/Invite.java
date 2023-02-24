@@ -34,6 +34,9 @@ public class Invite extends BaseEntity {
     private Set<Alert> alerts = new HashSet<>();
 
     @OneToMany(mappedBy = "invite")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Set<Message> messages = new HashSet<>();
 
     @Enumerated(EnumType.STRING)

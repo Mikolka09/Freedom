@@ -23,7 +23,7 @@ public class MessageService {
     }
 
     public Message findMessageById(Long id) {
-        return messageRepository.findById(id).orElse(new Message());
+        return messageRepository.findMessageById(id);
     }
 
     public List<Message> findAllMessagesUserById(Long userId) {
