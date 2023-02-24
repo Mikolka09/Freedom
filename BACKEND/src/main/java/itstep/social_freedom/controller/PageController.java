@@ -38,7 +38,7 @@ public class PageController {
         List<Category> categoriesAll = categoryService.allCategory().stream()
                 .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         List<Post> trendingPosts = posts.stream()
-                .sorted((x1, x2)->Integer.compare(x2.getComments().size(), x1.getComments().size())).collect(Collectors.toList());
+                .sorted((x1, x2) -> Integer.compare(x2.getComments().size(), x1.getComments().size())).collect(Collectors.toList());
         List<Post> likesPosts = posts.stream()
                 .sorted(Comparator.comparingInt(Post::getLikes).reversed()).collect(Collectors.toList());
         String role = "";
@@ -103,6 +103,7 @@ public class PageController {
         model.addAttribute("tags", tags);
         return "pages/categories";
     }
+
     @GetMapping("/about")
     public String about(Model model) {
         CreateModel(model);
@@ -122,7 +123,7 @@ public class PageController {
         if (categoryPosts.size() == 0)
             return "redirect:/";
         double count = 8.0;
-        int pages = (int)Math.ceil(categoryPosts.size()/count);
+        int pages = (int) Math.ceil(categoryPosts.size() / count);
         List<Tag> tags = tagService.allTag().stream()
                 .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categoryPosts", categoryPosts);
@@ -135,15 +136,17 @@ public class PageController {
     @GetMapping("/view-post/{id}")
     public String viewPost(@PathVariable(name = "id") Long post_id, Model model) {
         Post post = postService.findPostById(post_id);
-        Long idRead = userService.getCurrentUsername().getId();
         String myFriend = "";
-        if(post.getUser().getRequestedFriends().stream()
-                .noneMatch(x -> Objects.equals(x.getFriendRequester().getId(), idRead)) &&
-                post.getUser().getReceivedFriends().stream()
-                        .noneMatch(x -> Objects.equals(x.getFriendRequester().getId(), idRead)))
-            myFriend = "no";
-        else
-            myFriend= "yes";
+        if (userService.getCurrentUsername() != null) {
+            Long idRead = userService.getCurrentUsername().getId();
+            if (post.getUser().getRequestedFriends().stream()
+                    .noneMatch(x -> Objects.equals(x.getFriendRequester().getId(), idRead)) &&
+                    post.getUser().getReceivedFriends().stream()
+                            .noneMatch(x -> Objects.equals(x.getFriendRequester().getId(), idRead)))
+                myFriend = "no";
+            else
+                myFriend = "yes";
+        }
         int friends = countFriends(post.getUser().getRequestedFriends(), post.getUser().getReceivedFriends());
         List<Comment> comments = post.getComments().stream().filter(x -> x.getStatus() == Status.ACTIVE)
                 .sorted(Comparator.comparing(Comment::getCreatedAt)).collect(Collectors.toList());
@@ -157,11 +160,11 @@ public class PageController {
         return "/pages/view-post";
     }
 
-    static public int countFriends(Set<Friend> requestedFriends, Set<Friend> receivedFriends){
+    static public int countFriends(Set<Friend> requestedFriends, Set<Friend> receivedFriends) {
         int count = 0;
-        for ( Friend friendFrom: requestedFriends) {
-            for (Friend friendTo: receivedFriends) {
-                if(Objects.equals(friendFrom.getFriendRequester().getId(), friendTo.getFriendReceiver().getId())) {
+        for (Friend friendFrom : requestedFriends) {
+            for (Friend friendTo : receivedFriends) {
+                if (Objects.equals(friendFrom.getFriendRequester().getId(), friendTo.getFriendReceiver().getId())) {
                     count++;
                     break;
                 }
