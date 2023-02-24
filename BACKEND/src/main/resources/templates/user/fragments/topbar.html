@@ -69,7 +69,7 @@
                     <th:block th:each="alert, state:${alerts}">
                     <a class="dropdown-item d-flex align-items-center" data-target="#AlertModal" data-toggle="modal"
                        th:data-id="${alert.getId()}" th:data-name="${alert.getInvite().getUserFrom().getFullName()}"
-                       th:data-text="${alert.getText()}" th:if="${state.index<3}" href="#"
+                       th:data-text="${alert.getText()}" th:if="${state.index<3}"
                     th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
                                 #dates.month(alert.getCreatedAt()), #dates.day(alert.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
@@ -82,7 +82,8 @@
                             <div class="small text-gray-500" th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
                                 #dates.month(alert.getCreatedAt()), #dates.day(alert.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">December 12, 2019</div>
-                            <span th:style="${alert.getInvite().getStatus()==status[8]}? 'font-weight: normal':'font-weight: bold'"
+                            <span th:style="${alert.getInvite().getStatus()==status[8]||alert.getInvite().getStatus()==status[7]}
+                            ? 'font-weight: normal':'font-weight: bold'"
                                   id="text-alert" th:text="${alert.getText()}">A new monthly report is ready to download!</span>
                         </div>
                     </a>

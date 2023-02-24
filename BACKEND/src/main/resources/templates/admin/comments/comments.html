@@ -108,16 +108,9 @@
 <th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
 <th:block th:insert="/admin/fragments/edit-comment-modal.html::edit-comment-modal"></th:block>
 <th:block th:insert="/admin/fragments/recovery-comment-modal.html::recovery-comment-modal"></th:block>
+<th:block th:insert="/user/fragments/alert-modal.html::alert-modal"></th:block>
 
-<!-- Bootstrap core JavaScript-->
-<script src="/admin/vendor/jquery/jquery.min.js"></script>
-<script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="/admin/js/sb-admin-2.min.js"></script>
+<th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
 
 <script>
     $('#EditCommentModal').on('show.bs.modal', function (event) {

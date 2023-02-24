@@ -23,7 +23,7 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     modal.find('#alertModalLabel').text(name);
     modal.find('#text').text(alert);
     modal.find('#date-alert').text(date);
-    if (alert.split(' ')[2] === 'accepted')
+    if (alert.split(' ')[2] === 'accepted' || alert.split(' ')[2] === 'denied')
         modal.find('#footer-confirm').hide();
     else
         modal.find('#footer-accepted').hide();
@@ -102,25 +102,27 @@ function correctDate(date) {
 
 $('button').on('click', function () {
     let id = $(this).attr("id");
-    let idAlert = $(this).attr('data-id');
-    let text = "";
-    let url = "";
-    if (id === "actionAccepted"|| id === "actionAcceptedModal") {
-        text = "Notice read!";
-        url = "/user/alerts/accepted/" + idAlert;
+    if(typeof id != "undefined") {
+        let idAlert = $(this).attr('data-id');
+        let text = "";
+        let url = "";
+        if (id === "actionAccepted" || id === "actionAcceptedModal") {
+            text = "Notice read!";
+            url = "/user/alerts/accepted/" + idAlert;
+        }
+        if (id === "actionDeny" || id === "actionDenyModal") {
+            text = "Friend request denied!";
+            url = "/user/alerts/deny/" + idAlert;
+        }
+        if (id === "actionConfirm" || id === "actionConfirmModal") {
+            text = "Friend request accepted!";
+            url = "/user/alerts/confirm/" + idAlert;
+        }
+        alertInfo(text);
+        setTimeout(function () {
+            sending(url);
+        }, 1000);
     }
-    if (id === "actionDeny" || id === "actionDenyModal") {
-        text = "Friend request denied!";
-        url = "/user/alerts/deny/" + idAlert;
-    }
-    if (id === "actionConfirm" || id === "actionConfirmModal") {
-        text = "Friend request accepted!";
-        url = "/user/alerts/confirm/" + idAlert;
-    }
-    alertInfo(text);
-    setTimeout( function() {
-        sending(url);
-    }, 1000);
 });
 
 function alertInfo(text){

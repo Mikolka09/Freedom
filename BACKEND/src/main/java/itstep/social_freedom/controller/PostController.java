@@ -40,8 +40,8 @@ public class PostController {
 
     static void giveMainData(Model model, UserService userService, AlertService alertService) {
         User user = userService.getCurrentUsername();
-        List<Alert> alertList = alertService.findAllAlertsUserById(user.getId())
-                .stream().filter(x->x.getInvite().getStatus()== Status.REQUEST || x.getInvite().getStatus()== Status.VIEWED)
+        List<Alert> alertList = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
                 .collect(Collectors.toList());
         String role = "";
         for (Role r : user.getRoles()) {

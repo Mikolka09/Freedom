@@ -87,8 +87,11 @@ public class ApiAlertController {
             Invite invite = alert.getInvite();
             invite.setStatus(Status.DENIED);
             if (inviteService.saveInvite(invite)) {
+                User userFrom = userService.findUserById(invite.getUserFrom().getId());
+                User userTo = userService.findUserById(invite.getUserTo().getId());
                 alert.setInvite(invite);
                 alertService.saveAlert(alert);
+                sendResponse(userFrom, userTo, " denied");
                 return "OK";
             }
         }
@@ -114,17 +117,17 @@ public class ApiAlertController {
                 friendService.saveFriend(friendTo);
                 alert.setInvite(invite);
                 alertService.saveAlert(alert);
-                sendResponse(userFrom, userTo);
+                sendResponse(userFrom, userTo, " accepted");
                 return "OK";
             }
         }
         return "NOT";
     }
 
-    public void sendResponse(User userFrom, User userTo) {
+    public void sendResponse(User userFrom, User userTo, String answer) {
         Alert alert = new Alert();
         Invite invite = new Invite();
-        String text = userTo.getFullName() + " accepted your friend request!";
+        String text = userTo.getFullName() + answer + " your friend request!";
         alert.setText(text);
         invite.setUserFrom(userTo);
         invite.setUserTo(userFrom);

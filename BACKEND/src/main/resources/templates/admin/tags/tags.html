@@ -98,16 +98,9 @@
 <th:block th:insert="/admin/fragments/create-tag-modal.html::create-tag-modal"></th:block>
 <!-- Logout Modal-->
 <th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
+<th:block th:insert="/user/fragments/alert-modal.html::alert-modal"></th:block>
 
-<!-- Bootstrap core JavaScript-->
-<script src="/admin/vendor/jquery/jquery.min.js"></script>
-<script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="/admin/js/sb-admin-2.min.js"></script>
+<th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
 
 <script>
     $('#EditModal').on('show.bs.modal', function (event) {

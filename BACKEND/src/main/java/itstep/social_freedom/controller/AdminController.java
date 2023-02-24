@@ -46,14 +46,16 @@ public class AdminController {
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
-        List<Alert> alertList = alertService.findAllAlertsUserById(user.getId())
-                .stream().filter(x->x.getInvite().getStatus()== Status.REQUEST).collect(Collectors.toList());
+        List<Alert> alertList = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
+                .collect(Collectors.toList());
         String role = "";
         for (Role r : user.getRoles()) {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
                 role = r.getName();
         }
         model.addAttribute("alerts", alertList);
+        model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
         model.addAttribute("admin", user);
     }
@@ -69,6 +71,8 @@ public class AdminController {
     @GetMapping("/admin/users/view/{id}")
     public String viewProfile(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
+        int friends = PageController.countFriends(user.getRequestedFriends(), user.getReceivedFriends());
+        model.addAttribute("friends", friends);
         model.addAttribute("user", user);
         CreateModelUser(model);
         return "admin/users/view-user";
