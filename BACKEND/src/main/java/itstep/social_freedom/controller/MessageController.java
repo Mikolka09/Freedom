@@ -2,6 +2,7 @@ package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.Message;
 import itstep.social_freedom.entity.Role;
+import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.MessageService;
 import itstep.social_freedom.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 public class MessageController {
@@ -24,6 +26,9 @@ public class MessageController {
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
+        List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
+                .collect(Collectors.toList());
         String role = "";
         if (user != null) {
             for (Role r : user.getRoles()) {
@@ -31,15 +36,15 @@ public class MessageController {
                     role = r.getName();
             }
         }
+        model.addAttribute("messages", messages);
+        model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
         model.addAttribute("user", user);
     }
 
     @GetMapping("/user/messages")
     public String index(Model model) {
-        List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId());
         CreateModelUser(model);
-        model.addAttribute("messages", messages);
         return "mail/index";
     }
 }

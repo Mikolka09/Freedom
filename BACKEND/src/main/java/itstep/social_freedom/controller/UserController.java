@@ -4,10 +4,7 @@ import itstep.social_freedom.entity.Alert;
 import itstep.social_freedom.entity.Role;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
-import itstep.social_freedom.service.AlertService;
-import itstep.social_freedom.service.FileService;
-import itstep.social_freedom.service.PostService;
-import itstep.social_freedom.service.UserService;
+import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,10 +31,13 @@ public class UserController {
     private AlertService alertService;
 
     @Autowired
+    private MessageService messageService;
+
+    @Autowired
     private FileService fileService;
 
     private void CreateModelUser(Model model) {
-        PostController.giveMainData(model, userService, alertService);
+        PostController.giveMainData(model, userService, alertService, messageService);
     }
 
     //Start index

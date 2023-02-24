@@ -30,6 +30,66 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     changeStatusAlert(id);
 })
 
+$('#MessageModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let id = button.data('id');
+    let name = button.data('name');
+    let alert = button.data('text');
+    let date = button.data('date');
+    let modal = $(this);
+    $('#messageAcceptedModal').attr('data-id', id);
+    modal.find('#messageModalLabel').text(name);
+    modal.find('#text-mess').text(alert);
+    modal.find('#date-message').text(date);
+    changeStatusMessage(id);
+})
+
+function changeStatusMessage(id) {
+    $.get({
+        url: '/user/messages/change/' + id,
+        success: (data) => {
+            printMessages(data);
+        },
+        error: (err) => {
+            console.log("Error: " + err);
+        }
+    });
+}
+
+function printMessages(data){
+    if (data != null) {
+        let container = document.getElementById('list-messages');
+        let h1 = document.createElement('h6');
+        h1.className = "dropdown-header";
+        h1.innerText = "Message Center";
+        container.innerHTML = "";
+        container.appendChild(h1);
+        let i = 0;
+        while (i < (data.length > 6 ? 6 : data.length)) {
+            let a = document.createElement('a');
+            a.className = "dropdown-item d-flex align-items-center";
+            a.dataset.id = data[i].id;
+            a.dataset.name = data[i].invite.userFrom.fullName;
+            a.dataset.text = data[i].message;
+            a.dataset.target = "#MessageModal";
+            a.dataset.toggle = "modal";
+            a.dataset.date = correctDate(data[i].createdAt);
+            a.href = "#";
+            let div1 = document.createElement('div');
+            div1.className = "dropdown-list-image mr-3";
+            let img1 = document.createElement('img');
+            img1.className = "rounded-circle";
+            img1.alt = "Avatar";
+            img1.src = data[i].invite.userFrom.avatarUrl;
+            div1.appendChild(img1);
+            let div2 = document.createElement('div');
+            div2.className = "status-indicator bg-success";
+            div1.appendChild(div2);
+
+        }
+    }
+}
+
 function changeStatusAlert(id) {
     $.get({
         url: '/user/alerts/change/' + id,

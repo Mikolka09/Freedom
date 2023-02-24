@@ -1,11 +1,13 @@
 package itstep.social_freedom.service;
 
+import itstep.social_freedom.entity.Alert;
 import itstep.social_freedom.entity.Message;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,7 +28,8 @@ public class MessageService {
 
     public List<Message> findAllMessagesUserById(Long userId) {
         return messageRepository.findAll().stream()
-                .filter(x -> Objects.equals(x.getInvite().getUserTo().getId(), userId)).collect(Collectors.toList());
+                .filter(x -> Objects.equals(x.getInvite().getUserTo().getId(), userId))
+                .sorted(Comparator.comparing(Message::getCreatedAt).reversed()).collect(Collectors.toList());
     }
 
     public boolean saveMessage(Message message) {

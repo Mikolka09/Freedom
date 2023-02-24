@@ -1,6 +1,7 @@
 $('#likes-button').on('click', function () {
-    let postId = $('#likes-button').data('id');
-    $('#likes-button').off('click');
+    let likes = $('#likes-button');
+    let postId = likes.data('id');
+    likes.off('click');
     if (postId) {
         $.get({
             url: '/api/posts/likes/' + postId,
@@ -41,13 +42,13 @@ $('#modalAbandonedCart').on('show.bs.modal', function (event) {
     } else if (parseInt(idFrom) === parseInt(idTo)) {
         modal.find('#message').attr('disabled', true);
         modal.find('#follow').attr('disabled', true);
-    }else if (friend==="yes") {
+    } else if (friend === "yes") {
         modal.find('#follow').attr('disabled', true);
         $('#btn-follow').attr('title', 'You are already friends');
     }
 });
 
-$('#follow').on('click', function (e) {
+$('#follow').on('click', function () {
     let userFrom = $('#userFrom').val();
     let userTo = $('#userTo').val();
     $.get({
@@ -72,6 +73,45 @@ $('#follow').on('click', function (e) {
     });
 });
 
+$('#message').on('click', function () {
+    let userFrom = $('#userFrom').val();
+    let userTo = $('#userTo').val();
+    let nameTo = $('#name-user').text();
+    $('#recipient-name').val(nameTo);
+    $('#userRec').val(userTo);
+    $('#userReq').val(userFrom);
+    $('#sendMessageLabel').text('New message to ' + nameTo);
+    new bootstrap.Modal(document.getElementById("sendMessageModal")).show();
+});
+
+$('#send-message').on('click', function () {
+    let idFrom = $('#userReq').val();
+    let idTo = $('#userRec').val();
+    let message = $('#message-text').val();
+    if (message !== "") {
+        $.get({
+            url: '/user/messages/send/' + idTo,
+            data: {
+                userId: idFrom,
+                text: message
+            },
+            success: (data) => {
+                console.log(data);
+                if (data === "OK") {
+                    let text = "Your message has been sent!";
+                    answerModal(text);
+                } else {
+                    let text = "An error occurred, the message was not sent!";
+                    answerModal(text);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+    }
+});
+
 function answerModal(text) {
     $('#answer-text').text(text);
     new bootstrap.Modal(document.getElementById("answerModal")).show();
@@ -81,7 +121,8 @@ $('#comment-button').on('click', function (e) {
     e.preventDefault();
     let userId = $('#userId').val();
     let postId = $('#postId').val();
-    let text = $('#comment-message').val();
+    let commentMess = $('#comment-message');
+    let text = commentMess.val();
     if (text !== "") {
         $.get({
             url: '/api/posts/comment/' + postId,
@@ -98,7 +139,7 @@ $('#comment-button').on('click', function (e) {
         });
         $('#comment-name').val("");
         $('#comment-email').val("");
-        $('#comment-message').val("");
+        commentMess.val("");
     }
 });
 

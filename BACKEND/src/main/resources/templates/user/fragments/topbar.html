@@ -58,7 +58,7 @@
                     <i class="fas fa-bell fa-fw"></i>
                     <!-- Counter - Alerts -->
                     <span class="badge badge-danger badge-counter"
-                    th:text="${alerts.size()>3?'3+':(alerts.size()==3?'3':(alerts.size()==2?'2':(alerts.size()==1?'1':'')))}">3+</span>
+                          th:text="${alerts.size()>3?'3+':(alerts.size()==3?'3':(alerts.size()==2?'2':(alerts.size()==1?'1':'')))}">3+</span>
                 </a>
                 <!-- Dropdown - Alerts -->
                 <div id="list-alerts" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -67,26 +67,27 @@
                         Alerts Center
                     </h6>
                     <th:block th:each="alert, state:${alerts}">
-                    <a class="dropdown-item d-flex align-items-center" data-target="#AlertModal" data-toggle="modal"
-                       th:data-id="${alert.getId()}" th:data-name="${alert.getInvite().getUserFrom().getFullName()}"
-                       th:data-text="${alert.getText()}" th:if="${state.index<3}"
-                    th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
+                        <a class="dropdown-item d-flex align-items-center" data-target="#AlertModal" data-toggle="modal"
+                           th:data-id="${alert.getId()}" th:data-name="${alert.getInvite().getUserFrom().getFullName()}"
+                           th:data-text="${alert.getText()}" th:if="${state.index<3}" href="#"
+                           th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
                                 #dates.month(alert.getCreatedAt()), #dates.day(alert.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
-                        <div class="mr-3">
-                            <div class="icon-circle bg-warning">
-                                <i class="fas fa-exclamation-triangle text-white"></i>
+                            <div class="mr-3">
+                                <div class="icon-circle bg-warning">
+                                    <i class="fas fa-exclamation-triangle text-white"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div style="font-weight: normal">
-                            <div class="small text-gray-500" th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
+                            <div style="font-weight: normal">
+                                <div class="small text-gray-500" th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
                                 #dates.month(alert.getCreatedAt()), #dates.day(alert.getCreatedAt())), 'dd MMM yyyy',
-                                #locale.forLanguageTag('en'))}">December 12, 2019</div>
-                            <span th:style="${alert.getInvite().getStatus()==status[8]||alert.getInvite().getStatus()==status[7]}
+                                #locale.forLanguageTag('en'))}">December 12, 2019
+                                </div>
+                                <span th:style="${alert.getInvite().getStatus()==status[8]||alert.getInvite().getStatus()==status[7]}
                             ? 'font-weight: normal':'font-weight: bold'"
-                                  id="text-alert" th:text="${alert.getText()}">A new monthly report is ready to download!</span>
-                        </div>
-                    </a>
+                                      id="text-alert" th:text="${alert.getText()}">A new monthly report is ready to download!</span>
+                            </div>
+                        </a>
                     </th:block>
                     <a class="dropdown-item text-center small text-gray-500" href="/user/alerts">Show All Alerts</a>
                 </div>
@@ -98,67 +99,41 @@
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-envelope fa-fw"></i>
                     <!-- Counter - Messages -->
-                    <span class="badge badge-danger badge-counter">7</span>
+                    <span class="badge badge-danger badge-counter"
+                          th:text="${messages.size()==0?'':messages.size()}">7</span>
                 </a>
                 <!-- Dropdown - Messages -->
-                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                <div id="list-messages" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                      aria-labelledby="messagesDropdown">
                     <h6 class="dropdown-header">
                         Message Center
                     </h6>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="/user/img/undraw_profile_1.svg"
-                                 alt="...">
-                            <div class="status-indicator bg-success"></div>
-                        </div>
-                        <div class="font-weight-bold">
-                            <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                problem I've been having.
+                    <th:block th:each="message, state:${messages}">
+                        <a class="dropdown-item d-flex align-items-center" data-target="#MessageModal"
+                           data-toggle="modal" href="#"
+                           th:data-id="${message.getId()}"
+                           th:data-name="${message.getInvite().getUserFrom().getFullName()}"
+                           th:data-text="${message.getMessage()}" th:if="${state.index<6}"
+                           th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
+                                #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" th:src="${message.getInvite().getUserFrom().getAvatarUrl()}"
+                                     alt="Avatar">
+                                <div class="status-indicator bg-success"></div>
                             </div>
-                            <div class="small text-gray-500">Emily Fowler · 58m</div>
-                        </div>
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="/user/img/undraw_profile_2.svg"
-                                 alt="...">
-                            <div class="status-indicator"></div>
-                        </div>
-                        <div>
-                            <div class="text-truncate">I have the photos that you ordered last month, how
-                                would you like them sent to you?
+                            <div th:style="${message.getInvite().getStatus()==status[8]||message.getInvite().getStatus()==status[7]}
+                            ? 'font-weight: normal':'font-weight: bold'">
+                                <div class="text-truncate" id="text-message" th:text="${message.getMessage()}"></div>
+                                <div class="small text-gray-500"
+                                     th:text="${message.getInvite().getUserFrom().getFullName() + ' - ' + #temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
+                                #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></div>
                             </div>
-                            <div class="small text-gray-500">Jae Chun · 1d</div>
-                        </div>
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="/user/img/undraw_profile_3.svg"
-                                 alt="...">
-                            <div class="status-indicator bg-warning"></div>
-                        </div>
-                        <div>
-                            <div class="text-truncate">Last month's report looks great, I am very happy with
-                                the progress so far, keep up the good work!
-                            </div>
-                            <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                        </div>
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="#">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                 alt="...">
-                            <div class="status-indicator bg-success"></div>
-                        </div>
-                        <div>
-                            <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                told me that people say this to all dogs, even if they aren't good...
-                            </div>
-                            <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                        </div>
-                    </a>
-                    <a class="dropdown-item text-center small text-gray-500" href="/user/messages">Read More Messages</a>
+                        </a>
+                    </th:block>
+                    <a class="dropdown-item text-center small text-gray-500" href="/user/messages">Read More
+                        Messages</a>
                 </div>
             </li>
 
@@ -168,7 +143,8 @@
             <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${user.getUsername()}">User</span>
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                          th:text="${user.getUsername()}">User</span>
                     <img class="img-profile rounded-circle"
                          th:src="@{|/${user.getAvatarUrl()}|}" alt="Url">
                 </a>

@@ -32,15 +32,21 @@ public class PostController {
     private AlertService alertService;
 
     @Autowired
+    private MessageService messageService;
+
+    @Autowired
     private FileService fileService;
 
     private void CreateModelUser(Model model) {
-        giveMainData(model, userService, alertService);
+        giveMainData(model, userService, alertService, messageService);
     }
 
-    static void giveMainData(Model model, UserService userService, AlertService alertService) {
+    static void giveMainData(Model model, UserService userService, AlertService alertService, MessageService messageService) {
         User user = userService.getCurrentUsername();
         List<Alert> alertList = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
+                .collect(Collectors.toList());
+        List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
                 .collect(Collectors.toList());
         String role = "";
@@ -48,6 +54,7 @@ public class PostController {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
                 role = r.getName();
         }
+        model.addAttribute("messages", messages);
         model.addAttribute("alerts", alertList);
         model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
@@ -70,9 +77,9 @@ public class PostController {
     public String create(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("userId", id);
         List<Category> categories = categoryService.allCategory().stream()
-                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         List<Tag> tags = tagService.allTag().stream()
-                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
         CreateModelUser(model);
@@ -162,7 +169,7 @@ public class PostController {
         User user = userService.getCurrentUsername();
         String[] bodies = postService.arrayBody(post.getBody());
         List<Category> categories = categoryService.allCategory().stream()
-                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categories", categories);
         model.addAttribute("bodies", bodies);
         model.addAttribute("post", post);
