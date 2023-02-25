@@ -265,7 +265,7 @@ $('#messageAnswerModal').on('click', function () {
     new bootstrap.Modal(document.getElementById("sendUserMessageModal")).show();
 });
 
-$('#answerMessage').on('click', function () {
+$('.answerMessage').on('click', function () {
     let id = $(this).attr('data-id');
     let idFrom = $(this).attr('data-id-from');
     let idTo = $(this).attr('data-id-to');

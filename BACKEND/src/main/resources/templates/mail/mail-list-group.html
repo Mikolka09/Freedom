@@ -3,38 +3,71 @@
 
 <div class="container-fluid" th:fragment="mail-list-group">
     <div class="row">
+        <div class="col-4 text-center text-dark">
+            <h3 style="font-weight: bold;">Senders</h3>
+        </div>
+        <div class="col-8 text-dark text-center">
+            <h3 style="font-weight: bold;">Messages - <span
+                    th:text="${messageList.get(0).getInvite().getUserFrom().getFullName()}"
+            id="name-user-from" style="text-decoration-line: underline; color: #293c74;"></span></h3>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-4">
             <ul class="list-group list-group-light" style="max-height: 500px; overflow-y: auto;">
-                <th:block th:each="message:${messageList}">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                <th:block th:each="message, state:${messageList}">
+                    <li class="list-group-item d-flex justify-content-between align-items-center"
+                        th:style="${state.index==0?'background-color: lightgray':''}">
                         <div class="d-flex align-items-center">
-                            <img th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}" alt="avatar"
-                                 width="80px"
-                                 class="rounded-circle px-2"/>
+                            <a href="#" title="Open all messages" th:data-id ="${message.getInvite().getUserFrom().getId()}"
+                               class="open-all-messages">
+                                <img th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}" alt="avatar"
+                                     width="80px"
+                                     class="rounded-circle px-2"/>
+                            </a>
                             <div class="ms-3">
-                                <p class="mb-1"
-                                   style="text-decoration-line: underline; color: #293c74; font-weight: bold;"
-                                   th:text="${message.getInvite().getUserFrom().getFullName()}">
-                                    John Doe</p>
-                                <p class="text-dark mb-0" th:text="${message.getInvite().getUserFrom().getEmail()}">
-                                    john.doe@gmail.com</p>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <p class="mb-1"
+                                               style="text-decoration-line: underline; color: #293c74; font-weight: bold;"
+                                               th:text="${message.getInvite().getUserFrom().getFullName()}">
+                                                John Doe</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <a href="#" class="answerMessage" title="Send Message"
+                                               th:data-id="${message.getId()}"
+                                               th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                                               th:data-name="${message.getInvite().getUserFrom().getFullName()}"
+                                               th:data-id-to="${message.getInvite().getUserTo().getId()}">
+                                                <img src="/img/icon/write-mail.png" width="25px;"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-dark mb-0"
+                                           th:text="${message.getInvite().getUserFrom().getEmail()}">
+                                            john.doe@gmail.com</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <span class="badge rounded-pill badge-primary"
-                              th:text="${message.getInvite().getStatus()!=status[8]? message.getInvite().getMessages().size():''}">Active</span>
+                              th:text="${message.getInvite().getStatus()!=status[8]
+                              ? message.getInvite().getMessages().size():''}">Active</span>
                     </li>
                 </th:block>
             </ul>
         </div>
         <div class="col-8">
-            <ul class="list-group list-group-light mb-3" style="max-height: 500px; overflow-y: auto;">
+            <ul id="container-messages" class="list-group list-group-light mb-3" style="max-height: 500px; overflow-y: auto;">
                 <th:block th:each="message:${messageList.get(0)}">
                     <li class="list-group-item"
                         th:style="${message.getInvite().getStatus()==status[8]?'font-weight: normal':'font-weight: bold'}">
                         <div class="row">
                             <div class="col-11">
                                 <div class="col text-right">
-                            <span class="badge rounded-pill"
+                                   <span class="badge rounded-pill"
                                   th:classappend="${message.getInvite().getStatus()==status[9]||message.getInvite().getStatus()==status[5]
                                    ?'badge-warning':'badge-success'}"
                                   th:text="${message.getInvite().getStatus()==status[5]?status[9]:message.getInvite().getStatus()}"></span>
@@ -51,7 +84,7 @@
                             <div class="col-1 align-self-center">
                                 <div title="Read">
                                     <a href="#" id="readMessage" data-target="#MessageModal" data-toggle="modal"
-                                       th:data-dies = "${message.getInvite().getStatus()==status[8]?true:false}"
+                                       th:data-dies="${message.getInvite().getStatus()==status[8]?true:false}"
                                        th:data-id="${message.getId()}"
                                        th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                        th:data-id-to="${message.getInvite().getUserTo().getId()}"
@@ -63,7 +96,7 @@
                                         <img src="/img/icon/read.png" width="30px"/></a>
                                 </div>
                                 <div style="padding-top: 15px;" title="Answer">
-                                    <a href="#"  id="answerMessage"
+                                    <a href="#" class="answerMessage"
                                        th:data-id="${message.getId()}"
                                        th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                        th:data-name="${message.getInvite().getUserFrom().getFullName()}"
@@ -79,5 +112,4 @@
                 Mark all messages as read</a>
         </div>
     </div>
-
 </div>

@@ -32,6 +32,13 @@ public class MessageService {
                 .sorted(Comparator.comparing(Message::getCreatedAt).reversed()).collect(Collectors.toList());
     }
 
+    public List<Message> findAllMessagesUserFromById(Long idFrom, Long idTo) {
+        return messageRepository.findAll().stream()
+                .filter(x -> Objects.equals(x.getInvite().getUserFrom().getId(), idFrom))
+                .filter(x->Objects.equals(x.getInvite().getUserTo().getId(), idTo))
+                .sorted(Comparator.comparing(Message::getCreatedAt).reversed()).collect(Collectors.toList());
+    }
+
     public boolean saveMessage(Message message) {
         Message messageBD = messageRepository.findMessageById(message.getId());
         if (messageBD != null) {
