@@ -13,6 +13,7 @@ import java.util.Objects;
 @Entity
 public class Message extends BaseEntity {
 
+    @Column(columnDefinition = "TEXT")
     private String message;
 
     @ManyToOne

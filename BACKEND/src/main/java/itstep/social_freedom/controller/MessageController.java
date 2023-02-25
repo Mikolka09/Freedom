@@ -1,9 +1,7 @@
 package itstep.social_freedom.controller;
 
-import itstep.social_freedom.entity.Message;
-import itstep.social_freedom.entity.Role;
-import itstep.social_freedom.entity.Status;
-import itstep.social_freedom.entity.User;
+import itstep.social_freedom.entity.*;
+import itstep.social_freedom.service.AlertService;
 import itstep.social_freedom.service.MessageService;
 import itstep.social_freedom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +20,20 @@ public class MessageController {
     private MessageService messageService;
 
     @Autowired
+    private AlertService alertService;
+
+    @Autowired
     private UserService userService;
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
         List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.NOT_VIEWED)
+                .collect(Collectors.toList());
+        List<Alert> alerts = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
                 .collect(Collectors.toList());
+        List<Message> messageList = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId());
         String role = "";
         if (user != null) {
             for (Role r : user.getRoles()) {
@@ -36,6 +41,8 @@ public class MessageController {
                     role = r.getName();
             }
         }
+        model.addAttribute("alerts", alerts);
+        model.addAttribute("messageList", messageList);
         model.addAttribute("messages", messages);
         model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
@@ -44,6 +51,7 @@ public class MessageController {
 
     @GetMapping("/user/messages")
     public String index(Model model) {
+
         CreateModelUser(model);
         return "mail/index";
     }

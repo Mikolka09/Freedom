@@ -56,14 +56,14 @@ public class ApiMessageController {
     public Message[] changeStatus(@PathVariable(name = "id") Long id) {
         Message message = messageService.findMessageById(id);
         Invite invite = message.getInvite();
-        if (invite.getStatus() != Status.VIEWED) {
-            invite.setStatus(Status.VIEWED);
+        if (invite.getStatus() != Status.NOT_VIEWED) {
+            invite.setStatus(Status.NOT_VIEWED);
             message.setInvite(invite);
             if (inviteService.saveInvite(invite))
                 messageService.saveMessage(message);
         }
         return messageService.findAllMessagesUserById(message.getInvite().getUserTo().getId())
-                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.NOT_VIEWED)
                 .toArray(Message[]::new);
     }
 
@@ -74,7 +74,7 @@ public class ApiMessageController {
                 new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
         if (message != null) {
             Invite invite = message.getInvite();
-            invite.setStatus(Status.ACCEPTED);
+            invite.setStatus(Status.VIEWED);
             if (inviteService.saveInvite(invite)) {
                 User userFrom = userService.findUserById(invite.getUserFrom().getId());
                 User userTo = userService.findUserById(invite.getUserTo().getId());

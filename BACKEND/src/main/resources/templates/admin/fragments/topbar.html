@@ -116,12 +116,11 @@
                                 #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
                         <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" th:src="${message.getInvite().getUserFrom().getAvatarUrl()}"
+                            <img class="rounded-circle" th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"
                                  alt="Avatar">
                             <div class="status-indicator bg-success"></div>
                         </div>
-                        <div th:style="${message.getInvite().getStatus()==status[8]||message.getInvite().getStatus()==status[7]}
-                            ? 'font-weight: normal':'font-weight: bold'">
+                        <div th:style="${message.getInvite().getStatus()==status[9]}? 'font-weight: normal':'font-weight: bold'">
                             <div class="text-truncate" id="text-message" th:text="${message.getMessage()}"></div>
                             <div class="small text-gray-500"
                                  th:text="${message.getInvite().getUserFrom().getFullName() + ' - ' + #temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),

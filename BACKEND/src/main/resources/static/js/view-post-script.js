@@ -96,7 +96,6 @@ $('#send-message').on('click', function () {
                 text: message
             },
             success: (data) => {
-                console.log(data);
                 if (data === "OK") {
                     let text = "Your message has been sent!";
                     answerModal(text);

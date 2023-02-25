@@ -53,7 +53,7 @@ public class AdminController {
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
                 .collect(Collectors.toList());
         List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId())
-                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.NOT_VIEWED)
                 .collect(Collectors.toList());
         String role = "";
         for (Role r : user.getRoles()) {

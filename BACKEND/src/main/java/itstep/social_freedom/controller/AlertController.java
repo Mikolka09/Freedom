@@ -1,10 +1,7 @@
 package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.*;
-import itstep.social_freedom.service.AlertService;
-import itstep.social_freedom.service.FriendService;
-import itstep.social_freedom.service.InviteService;
-import itstep.social_freedom.service.UserService;
+import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,21 +16,23 @@ import java.util.stream.Collectors;
 public class AlertController {
 
     @Autowired
-    private AlertService alertService;
+    private MessageService messageService;
 
     @Autowired
-    private InviteService inviteService;
+    private AlertService alertService;
+
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private FriendService friendService;
 
     private void CreateModelUser(Model model) {
         User user = userService.getCurrentUsername();
         List<Alert> alerts = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
+                .collect(Collectors.toList());
+        List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.NOT_VIEWED)
                 .collect(Collectors.toList());
         String role = "";
         if (user != null) {
@@ -42,6 +41,7 @@ public class AlertController {
                     role = r.getName();
             }
         }
+        model.addAttribute("messages", messages);
         model.addAttribute("alerts", alerts);
         model.addAttribute("status", Status.values());
         model.addAttribute("role", role);

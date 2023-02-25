@@ -16,15 +16,13 @@ public class InviteService {
     @Autowired
     private InviteRepository inviteRepository;
 
-    public boolean saveInvite(Invite invite){
-       List<Invite> inviteBD = inviteRepository.findAll().stream()
-               .filter(x-> Objects.equals(x.getUserFrom().getId(), invite.getUserFrom().getId())&&
-                       Objects.equals(x.getUserTo().getId(), invite.getUserTo().getId()))
-               .collect(Collectors.toList());
-       if(inviteBD.stream().noneMatch(x -> x.getStatus() == Status.REQUEST)){
-           inviteRepository.save(invite);
-           return true;
-       }else
-           return false;
+    public boolean saveInvite(Invite invite) {
+        Invite inviteBD = inviteRepository.findInviteById(invite.getId());
+        if (inviteBD!=null) {
+            if(!Objects.equals(inviteBD.getStatus(), invite.getStatus()))
+                return false;
+        }
+        inviteRepository.save(invite);
+        return true;
     }
 }

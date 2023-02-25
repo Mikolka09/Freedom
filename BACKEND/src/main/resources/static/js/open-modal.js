@@ -23,7 +23,9 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     modal.find('#alertModalLabel').text(name);
     modal.find('#text').text(alert);
     modal.find('#date-alert').text(date);
-    if (alert.split(' ')[2] === 'accepted' || alert.split(' ')[2] === 'denied' || alert.split(' ')[2] === 'read')
+    if (alert.split(' ')[2] === 'accepted' ||
+        alert.split(' ')[2] === 'denied' ||
+        alert.split(' ')[2] === 'read')
         modal.find('#footer-confirm').hide();
     else
         modal.find('#footer-accepted').hide();
@@ -33,11 +35,23 @@ $('#AlertModal').on('show.bs.modal', function (event) {
 $('#MessageModal').on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget);
     let id = button.data('id');
+    let idFrom = button.data('id-from');
+    let idTo = button.data('id-to');
     let name = button.data('name');
     let alert = button.data('text');
     let date = button.data('date');
+    let dies = button.data('dies');
     let modal = $(this);
-    $('#messageAcceptedModal').attr('data-id', id);
+    let accept = $('#messageAcceptedModal');
+    if (typeof dies !== "undefined")
+        if (dies === true)
+            accept.hide();
+    let answer = $('#messageAnswerModal');
+    accept.attr('data-id', id);
+    answer.attr('data-id', id);
+    answer.attr('data-id-from', idFrom);
+    answer.attr('data-id-to', idTo);
+    answer.attr('data-name', name);
     modal.find('#messageModalLabel').text(name);
     modal.find('#text-mess').text(alert);
     modal.find('#date-message').text(date);
@@ -69,6 +83,8 @@ function printMessages(data) {
             let a = document.createElement('a');
             a.className = "dropdown-item d-flex align-items-center";
             a.dataset.id = data[i].id;
+            a.dataset.idFrom = data[i].invite.userFrom.id;
+            a.dataset.idTo = data[i].invite.userTo.id;
             a.dataset.name = data[i].invite.userFrom.fullName;
             a.dataset.text = data[i].message;
             a.dataset.target = "#MessageModal";
@@ -80,14 +96,14 @@ function printMessages(data) {
             let img1 = document.createElement('img');
             img1.className = "rounded-circle";
             img1.alt = "Avatar";
-            img1.src = data[i].invite.userFrom.avatarUrl;
+            img1.src = "/" + data[i].invite.userFrom.avatarUrl;
             div1.appendChild(img1);
             a.appendChild(div1);
             let div2 = document.createElement('div');
             div2.className = "status-indicator bg-success";
             div1.appendChild(div2);
             let div3 = document.createElement('div');
-            div3.style.fontWeight = data[i].invite.status === "VIEWED" ? "normal" : "bold";
+            div3.style.fontWeight = data[i].invite.status === "NOT_VIEWED" ? "normal" : "bold";
             let div4 = document.createElement('div');
             div4.className = "text-truncate";
             div4.id = "text-message";
@@ -185,7 +201,7 @@ $('button').on('click', function () {
         let idAlert = $(this).attr('data-id');
         let text = "";
         let url = "";
-        if (id === "actionAccepted" || id === "messageAcceptedModal") {
+        if (id === "messageAcceptedModal") {
             text = "Notice read!";
             url = "/user/messages/accepted/" + idAlert;
         }
@@ -201,10 +217,12 @@ $('button').on('click', function () {
             text = "Friend request accepted!";
             url = "/user/alerts/confirm/" + idAlert;
         }
-        alertInfo(text);
-        setTimeout(function () {
-            sending(url);
-        }, 1000);
+        if (id !== "messageAnswerModal" || id === "send-user-message") {
+            alertInfo(text);
+            setTimeout(function () {
+                sending(url);
+            }, 1000);
+        }
     }
 });
 
@@ -225,7 +243,6 @@ function sending(url) {
     $.get({
         url: url,
         success: (data) => {
-            console.log(data);
             if (data === "OK")
                 location.reload();
         },
@@ -234,5 +251,62 @@ function sending(url) {
         }
     });
 }
+
+$('#messageAnswerModal').on('click', function () {
+    let id = $(this).attr('data-id');
+    let idFrom = $(this).attr('data-id-from');
+    let idTo = $(this).attr('data-id-to');
+    let name = $(this).attr('data-name');
+    $('#send-user-message').attr("data-id", id);
+    $('#userIdReq').val(idTo);
+    $('#userIdRec').val(idFrom);
+    $('#recipient-user-name').val(name);
+    $('#sendUserMessageLabel').text('New message to ' + name);
+    new bootstrap.Modal(document.getElementById("sendUserMessageModal")).show();
+});
+
+$('#answerMessage').on('click', function () {
+    let id = $(this).attr('data-id');
+    let idFrom = $(this).attr('data-id-from');
+    let idTo = $(this).attr('data-id-to');
+    let name = $(this).attr('data-name');
+    $('#send-user-message').attr("data-id", id);
+    $('#userIdReq').val(idTo);
+    $('#userIdRec').val(idFrom);
+    $('#recipient-user-name').val(name);
+    $('#sendUserMessageLabel').text('New message to ' + name);
+    new bootstrap.Modal(document.getElementById("sendUserMessageModal")).show();
+});
+
+$('#send-user-message').on('click', function () {
+    let idFrom = $('#userIdReq').val();
+    let idTo = $('#userIdRec').val();
+    let id = $(this).attr("data-id");
+    let message = $('#message-user-text').val();
+    if (message !== "") {
+        $.get({
+            url: '/user/messages/send/' + idTo,
+            data: {
+                userId: idFrom,
+                text: message
+            },
+            success: (data) => {
+                if (data === "OK") {
+                    let text = "Your message has been sent!";
+                    let url = "/user/messages/accepted/" + id;
+                    alertInfo(text);
+                    setTimeout(function () {
+                        sending(url);
+                    }, 1000);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+    }
+});
+
+
 
 

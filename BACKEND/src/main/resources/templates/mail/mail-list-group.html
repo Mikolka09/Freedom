@@ -2,85 +2,82 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <div class="container-fluid" th:fragment="mail-list-group">
-  <div class="row">
-    <div class="col-4">
-      <ul class="list-group list-group-light">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div class="d-flex align-items-center">
-            <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" width="80px"
-                 class="rounded-circle px-2" />
-            <div class="ms-3">
-              <p class="fw-bold mb-1">John Doe</p>
-              <p class="text-muted mb-0">john.doe@gmail.com</p>
-            </div>
-          </div>
-          <span class="badge rounded-pill badge-success">Active</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div class="d-flex align-items-center">
-            <img src="https://mdbootstrap.com/img/new/avatars/6.jpg" class="rounded-circle px-2" alt=""
-                 width="80px"/>
-            <div class="ms-3">
-              <p class="fw-bold mb-1">Alex Ray</p>
-              <p class="text-muted mb-0">alex.ray@gmail.com</p>
-            </div>
-          </div>
-          <span class="badge rounded-pill badge-primary">Onboarding</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div class="d-flex align-items-center">
-            <img src="https://mdbootstrap.com/img/new/avatars/7.jpg" class="rounded-circle px-2" alt=""
-                 width="80px"/>
-            <div class="ms-3">
-              <p class="fw-bold mb-1">Kate Hunington</p>
-              <p class="text-muted mb-0">kate.hunington@gmail.com</p>
-            </div>
-          </div>
-          <span class="badge rounded-pill badge-warning">Awaiting</span>
-        </li>
-      </ul>
+    <div class="row">
+        <div class="col-4">
+            <ul class="list-group list-group-light" style="max-height: 500px; overflow-y: auto;">
+                <th:block th:each="message:${messageList}">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}" alt="avatar"
+                                 width="80px"
+                                 class="rounded-circle px-2"/>
+                            <div class="ms-3">
+                                <p class="mb-1"
+                                   style="text-decoration-line: underline; color: #293c74; font-weight: bold;"
+                                   th:text="${message.getInvite().getUserFrom().getFullName()}">
+                                    John Doe</p>
+                                <p class="text-dark mb-0" th:text="${message.getInvite().getUserFrom().getEmail()}">
+                                    john.doe@gmail.com</p>
+                            </div>
+                        </div>
+                        <span class="badge rounded-pill badge-primary"
+                              th:text="${message.getInvite().getStatus()!=status[8]? message.getInvite().getMessages().size():''}">Active</span>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+        <div class="col-8">
+            <ul class="list-group list-group-light mb-3" style="max-height: 500px; overflow-y: auto;">
+                <th:block th:each="message:${messageList.get(0)}">
+                    <li class="list-group-item"
+                        th:style="${message.getInvite().getStatus()==status[8]?'font-weight: normal':'font-weight: bold'}">
+                        <div class="row">
+                            <div class="col-11">
+                                <div class="col text-right">
+                            <span class="badge rounded-pill"
+                                  th:classappend="${message.getInvite().getStatus()==status[9]||message.getInvite().getStatus()==status[5]
+                                   ?'badge-warning':'badge-success'}"
+                                  th:text="${message.getInvite().getStatus()==status[5]?status[9]:message.getInvite().getStatus()}"></span>
+                                </div>
+                                <p class="mb-2" style="color: #6a1a21; text-decoration-line: underline;"
+                                   th:text="${#temporals.format(T(java.time.LocalDate).
+                                of(#dates.year(message.getCreatedAt()),#dates.month(message.getCreatedAt()),
+                                #dates.day(message.getCreatedAt())), 'dd MMM yyyy',#locale.forLanguageTag('en'))}"></p>
+                                <p class="mb-0 text-dark" th:text="${message.getMessage().length()>200
+                                ?(message.getMessage().substring(0, 200)+' ...'):message.getMessage()}">
+                                    Some placeholder content in a paragraph relating to "Our company starts its
+                                </p>
+                            </div>
+                            <div class="col-1 align-self-center">
+                                <div title="Read">
+                                    <a href="#" id="readMessage" data-target="#MessageModal" data-toggle="modal"
+                                       th:data-dies = "${message.getInvite().getStatus()==status[8]?true:false}"
+                                       th:data-id="${message.getId()}"
+                                       th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                                       th:data-id-to="${message.getInvite().getUserTo().getId()}"
+                                       th:data-name="${message.getInvite().getUserFrom().getFullName()}"
+                                       th:data-text="${message.getMessage()}"
+                                       th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
+                                #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">
+                                        <img src="/img/icon/read.png" width="30px"/></a>
+                                </div>
+                                <div style="padding-top: 15px;" title="Answer">
+                                    <a href="#"  id="answerMessage"
+                                       th:data-id="${message.getId()}"
+                                       th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                                       th:data-name="${message.getInvite().getUserFrom().getFullName()}"
+                                       th:data-id-to="${message.getInvite().getUserTo().getId()}">
+                                        <img src="/img/icon/answer.png" width="30px"/></a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+            <a class="btn btn-outline-primary btn-rounded w-100" href="#" role="button">
+                Mark all messages as read</a>
+        </div>
     </div>
-    <div class="col-8">
-      <ul class="list-group list-group-light mb-3" style="max-height: 500px; overflow-y: auto;">
-        <li class="list-group-item">
-          <h5 class="fw-bold">Our company starts its operations</h5>
-          <p class="text-muted mb-2 fw-bold">11 March 2020</p>
-          <p class="text-muted mb-0">
-            Some placeholder content in a paragraph relating to "Our company starts its operations". And some
-            more content, used here just to pad out and fill this tab panel. In production, you would obviously
-            have more real content here. And not just text. It could be anything, really. Text, images, forms.
-          </p>
-        </li>
-        <li class="list-group-item">
-          <h5 class="fw-bold">First customer</h5>
-          <p class="text-muted mb-2 fw-bold">19 March 2020</p>
-          <p class="text-muted mb-0">
-            Some placeholder content in a paragraph relating to "First customer". And some more content,
-            used here just to pad out and fill this tab panel. In production, you would obviously have more real
-            content here. And not just text. It could be anything, really. Text, images, forms.
-          </p>
-        </li>
-        <li class="list-group-item">
-          <h5 class="fw-bold">Our team exceeds 10 people</h5>
-          <p class="text-muted mb-2 fw-bold">24 June 2020</p>
-          <p class="text-muted mb-0">
-            Some placeholder content in a paragraph relating to "Our team exceeds 10 people". And some more
-            content, used here just to pad out and fill this tab panel. In production, you would obviously
-            have more real content here. And not just text. It could be anything, really. Text, images, forms.
-          </p>
-        </li>
-        <li class="list-group-item">
-          <h5 class="fw-bold">Our team exceeds 10 people</h5>
-          <p class="text-muted mb-2 fw-bold">24 June 2020</p>
-          <p class="text-muted mb-0">
-            Some placeholder content in a paragraph relating to "Our team exceeds 10 people". And some more
-            content, used here just to pad out and fill this tab panel. In production, you would obviously
-            have more real content here. And not just text. It could be anything, really. Text, images, forms.
-          </p>
-        </li>
-      </ul>
-      <a class="btn btn-outline-dark btn-rounded w-100" href="#" role="button" data-ripple-color="dark">View all</a>
-    </div>
-  </div>
 
 </div>

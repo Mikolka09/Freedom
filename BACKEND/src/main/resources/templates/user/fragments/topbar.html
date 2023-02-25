@@ -112,18 +112,19 @@
                         <a class="dropdown-item d-flex align-items-center" data-target="#MessageModal"
                            data-toggle="modal" href="#"
                            th:data-id="${message.getId()}"
+                           th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                           th:data-id-to="${message.getInvite().getUserTo().getId()}"
                            th:data-name="${message.getInvite().getUserFrom().getFullName()}"
                            th:data-text="${message.getMessage()}" th:if="${state.index<6}"
                            th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
                                 #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" th:src="${message.getInvite().getUserFrom().getAvatarUrl()}"
+                                <img class="rounded-circle" th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"
                                      alt="Avatar">
                                 <div class="status-indicator bg-success"></div>
                             </div>
-                            <div th:style="${message.getInvite().getStatus()==status[8]||message.getInvite().getStatus()==status[7]}
-                            ? 'font-weight: normal':'font-weight: bold'">
+                            <div th:style="${message.getInvite().getStatus()==status[9]} ? 'font-weight: normal':'font-weight: bold'">
                                 <div class="text-truncate" id="text-message" th:text="${message.getMessage()}"></div>
                                 <div class="small text-gray-500"
                                      th:text="${message.getInvite().getUserFrom().getFullName() + ' - ' + #temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
