@@ -52,10 +52,13 @@ $('#MessageModal').on('show.bs.modal', function (event) {
     answer.attr('data-id-from', idFrom);
     answer.attr('data-id-to', idTo);
     answer.attr('data-name', name);
+    answer.attr('data-date', date);
+    answer.attr('data-text', alert);
     modal.find('#messageModalLabel').text(name);
     modal.find('#text-mess').text(alert);
     modal.find('#date-message').text(date);
-    changeStatusMessage(id);
+    if (typeof dies === "undefined")
+        changeStatusMessage(id);
 })
 
 function changeStatusMessage(id) {
@@ -253,34 +256,43 @@ function sending(url) {
 }
 
 $('#messageAnswerModal').on('click', function () {
-    let id = $(this).attr('data-id');
-    let idFrom = $(this).attr('data-id-from');
-    let idTo = $(this).attr('data-id-to');
-    let name = $(this).attr('data-name');
-    $('#send-user-message').attr("data-id", id);
-    $('#userIdReq').val(idTo);
-    $('#userIdRec').val(idFrom);
-    $('#recipient-user-name').val(name);
-    $('#sendUserMessageLabel').text('New message to ' + name);
-    new bootstrap.Modal(document.getElementById("sendUserMessageModal")).show();
+    answerData($(this));
 });
 
-$('.answerMessage').on('click', function () {
-    let id = $(this).attr('data-id');
-    let idFrom = $(this).attr('data-id-from');
-    let idTo = $(this).attr('data-id-to');
-    let name = $(this).attr('data-name');
+$('ul').on('click', '.answerMessage', function () {
+    answerData($(this));
+});
+
+function answerData(data) {
+    let id = data.attr('data-id');
+    let idFrom = data.attr('data-id-from');
+    let idTo = data.attr('data-id-to');
+    let name = data.attr('data-name');
+    let text = data.attr('data-text');
+    let date = data.attr('data-date');
+    let answer = "";
+    if (text === "false") {
+        answer = text;
+    } else {
+        answer = "[reply to message from " + date + ", text: \"" + (text.substring(0, 80) + " ...") + "\"]";
+    }
     $('#send-user-message').attr("data-id", id);
     $('#userIdReq').val(idTo);
     $('#userIdRec').val(idFrom);
     $('#recipient-user-name').val(name);
-    $('#sendUserMessageLabel').text('New message to ' + name);
+    $('#userAnswerText').val(answer);
+    if (text === "false") {
+        $('#sendUserMessageLabel').text('New message to ' + name);
+    } else {
+        $('#sendUserMessageLabel').text('Answer to ' + name);
+    }
     new bootstrap.Modal(document.getElementById("sendUserMessageModal")).show();
-});
+}
 
 $('#send-user-message').on('click', function () {
     let idFrom = $('#userIdReq').val();
     let idTo = $('#userIdRec').val();
+    let answer = $('#userAnswerText').val();
     let id = $(this).attr("data-id");
     let message = $('#message-user-text').val();
     if (message !== "") {
@@ -288,7 +300,8 @@ $('#send-user-message').on('click', function () {
             url: '/user/messages/send/' + idTo,
             data: {
                 userId: idFrom,
-                text: message
+                text: message,
+                answer: answer
             },
             success: (data) => {
                 if (data === "OK") {

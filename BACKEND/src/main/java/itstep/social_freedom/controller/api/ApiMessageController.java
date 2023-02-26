@@ -1,6 +1,7 @@
 package itstep.social_freedom.controller.api;
 
 import itstep.social_freedom.entity.*;
+import itstep.social_freedom.entity.dto.MessageDto;
 import itstep.social_freedom.service.AlertService;
 import itstep.social_freedom.service.InviteService;
 import itstep.social_freedom.service.MessageService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.util.*;
 
 @RestController
 public class ApiMessageController {
@@ -33,12 +34,18 @@ public class ApiMessageController {
     @GetMapping("/user/messages/send/{id}")
     public String sendMessage(@PathVariable(name = "id") Long id,
                               @RequestParam(value = "userId") Long userId,
-                              @RequestParam(value = "text") String text) {
+                              @RequestParam(value = "text") String text,
+                              @RequestParam(value = "answer") String answer) {
         User userFrom = userService.findUserById(userId);
         User userTo = userService.findUserById(id);
         Message message = new Message();
         Invite invite = new Invite();
-        message.setMessage(text);
+        if (Objects.equals(answer, "false")) {
+            message.setMessage(text);
+        } else {
+            String outText = answer + "\n" + text;
+            message.setMessage(outText);
+        }
         invite.setUserFrom(userFrom);
         invite.setUserTo(userTo);
         invite.setStatus(Status.REQUEST);
@@ -81,7 +88,7 @@ public class ApiMessageController {
                 User userTo = userService.findUserById(invite.getUserTo().getId());
                 message.setInvite(invite);
                 messageService.saveMessage(message);
-                String text = " read your message from "+ simpleDateFormatOut.format(message.getCreatedAt());
+                String text = " read your message from " + simpleDateFormatOut.format(message.getCreatedAt());
                 sendResponse(userFrom, userTo, text);
                 return "OK";
             }
@@ -105,8 +112,21 @@ public class ApiMessageController {
     }
 
     @GetMapping("/user/messages/all-messages/{id}")
-    public Message[] allMessagesUser(@PathVariable(name = "id") Long id) {
-        Long userId = userService.getCurrentUsername().getId();
-        return messageService.findAllMessagesUserFromById(id, userId).toArray(Message[]::new);
+    public Message[] allMessagesUser(@PathVariable(name = "id") Long id,
+                                     @RequestParam(name="idTo") Long idTo) {
+        MessageDto messages = messageService.allUserMessages(idTo);
+        return messages.getInMessages().get(id).toArray(Message[]::new);
+    }
+
+    @GetMapping("/user/messages/all-senders/{id}")
+    public List<List<List<Message>>> allMessagesSenders(@PathVariable(name = "id") Long id) {
+        List<List<List<Message>>> list = new ArrayList<>();
+        HashMap<Long, List<Message>> map = messageService.allUserMessages(id).getInMessages();
+        for(Map.Entry<Long, List<Message>> entry: map.entrySet()){
+            List<List<Message>> trans = new ArrayList<>();
+            trans.add(entry.getValue());
+            list.add(trans);
+        }
+        return list;
     }
 }

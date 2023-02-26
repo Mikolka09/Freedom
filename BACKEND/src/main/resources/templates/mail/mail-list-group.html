@@ -9,17 +9,21 @@
         <div class="col-8 text-dark text-center">
             <h3 style="font-weight: bold;">Messages - <span
                     th:text="${messageList.get(0).getInvite().getUserFrom().getFullName()}"
-            id="name-user-from" style="text-decoration-line: underline; color: #293c74;"></span></h3>
+                    id="name-user-from" style="text-decoration-line: underline; color: #293c74;"></span></h3>
         </div>
     </div>
     <div class="row">
         <div class="col-4">
-            <ul class="list-group list-group-light" style="max-height: 500px; overflow-y: auto;">
-                <th:block th:each="message, state:${messageList}">
+            <ul id="container-senders" class="list-group list-group-light" style="max-height: 500px; overflow-y: auto;">
+                <th:block th:each="pair, state:${list.entrySet()}">
+                    <th:block th:each="count:${counter.entrySet()}">
+                <th:block th:each="message:${pair.getValue().get(0)}">
                     <li class="list-group-item d-flex justify-content-between align-items-center"
                         th:style="${state.index==0?'background-color: lightgray':''}">
                         <div class="d-flex align-items-center">
-                            <a href="#" title="Open all messages" th:data-id ="${message.getInvite().getUserFrom().getId()}"
+                            <a href="#" title="Open all messages"
+                               th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                               th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                class="open-all-messages">
                                 <img th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}" alt="avatar"
                                      width="80px"
@@ -39,8 +43,13 @@
                                                th:data-id="${message.getId()}"
                                                th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                                th:data-name="${message.getInvite().getUserFrom().getFullName()}"
-                                               th:data-id-to="${message.getInvite().getUserTo().getId()}">
-                                                <img src="/img/icon/write-mail.png" width="25px;"/>
+                                               th:data-id-to="${message.getInvite().getUserTo().getId()}"
+                                               th:data-text="false"
+                                               th:data-date="${#temporals.format(T(java.time.LocalDate).
+                                               of(#dates.year(message.getCreatedAt()),#dates.month(message.getCreatedAt()),
+                                               #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
+                                               #locale.forLanguageTag('en'))}">
+                                                <img src="/img/icon/write-mail.png" alt="Mail" width="25px;"/>
                                             </a>
                                         </div>
                                     </div>
@@ -53,14 +62,16 @@
                             </div>
                         </div>
                         <span class="badge rounded-pill badge-primary"
-                              th:text="${message.getInvite().getStatus()!=status[8]
-                              ? message.getInvite().getMessages().size():''}">Active</span>
+                              th:text="${count.getKey()==message.getInvite().getUserFrom().getId()?count.getValue():''}"></span>
                     </li>
+                </th:block>
+                    </th:block>
                 </th:block>
             </ul>
         </div>
         <div class="col-8">
-            <ul id="container-messages" class="list-group list-group-light mb-3" style="max-height: 500px; overflow-y: auto;">
+            <ul id="container-messages" class="list-group list-group-light mb-3"
+                style="max-height: 500px; overflow-y: auto;">
                 <th:block th:each="message:${messageList.get(0)}">
                     <li class="list-group-item"
                         th:style="${message.getInvite().getStatus()==status[8]?'font-weight: normal':'font-weight: bold'}">
@@ -68,9 +79,9 @@
                             <div class="col-11">
                                 <div class="col text-right">
                                    <span class="badge rounded-pill"
-                                  th:classappend="${message.getInvite().getStatus()==status[9]||message.getInvite().getStatus()==status[5]
+                                         th:classappend="${message.getInvite().getStatus()==status[9]||message.getInvite().getStatus()==status[5]
                                    ?'badge-warning':'badge-success'}"
-                                  th:text="${message.getInvite().getStatus()==status[5]?status[9]:message.getInvite().getStatus()}"></span>
+                                         th:text="${message.getInvite().getStatus()==status[5]?status[9]:message.getInvite().getStatus()}"></span>
                                 </div>
                                 <p class="mb-2" style="color: #6a1a21; text-decoration-line: underline;"
                                    th:text="${#temporals.format(T(java.time.LocalDate).
@@ -100,7 +111,11 @@
                                        th:data-id="${message.getId()}"
                                        th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                        th:data-name="${message.getInvite().getUserFrom().getFullName()}"
-                                       th:data-id-to="${message.getInvite().getUserTo().getId()}">
+                                       th:data-id-to="${message.getInvite().getUserTo().getId()}"
+                                       th:data-text="${message.getMessage()}"
+                                       th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
+                                #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">
                                         <img src="/img/icon/answer.png" width="30px"/></a>
                                 </div>
                             </div>
