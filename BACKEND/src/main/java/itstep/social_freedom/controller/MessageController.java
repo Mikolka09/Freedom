@@ -56,12 +56,12 @@ public class MessageController {
         model.addAttribute("user", user);
     }
 
-    public HashMap<Long, Integer> counterMessages(List<Message> messages){
+    public HashMap<Long, Integer> counterMessages(List<Message> messages) {
         HashMap<Long, Integer> counter = new HashMap<>();
-        for(Message mess:messages) {
+        for (Message mess : messages) {
             int count = 0;
             for (Message msg : messages) {
-                if(Objects.equals(msg.getInvite().getUserFrom().getId(), mess.getInvite().getUserFrom().getId()))
+                if (Objects.equals(msg.getInvite().getUserFrom().getId(), mess.getInvite().getUserFrom().getId()))
                     count++;
             }
             counter.put(mess.getInvite().getUserFrom().getId(), count);

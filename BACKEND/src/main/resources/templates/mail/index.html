@@ -160,10 +160,12 @@
                     li.appendChild(div1);
                     let span1 = document.createElement('span');
                     span1.className = "badge rounded-pill badge-primary";
-                    span1.innerText = elem[0].length > 1 ? elem[0].filter(x => x.invite.status !== "VIEWED")
-                        .length : (data[0].invite.status !== "VIEWED" ? "1" : "");
-                    console.log(elem[0].length > 1 ? elem[0].filter(x => x.invite.status !== "VIEWED").length :
-                        (data[0].invite.status !== "VIEWED" ? "1" : ""));
+                    span1.innerText = elem[0].length > 1 ? ((elem[0].filter(x => x.invite.status !== "VIEWED")
+                        .length)===0?"":(elem[0].filter(x => x.invite.status !== "VIEWED")
+                        .length)) : (data[0].invite.status !== "VIEWED" ? "1" : "");
+                    console.log(elem[0].length > 1 ? ((elem[0].filter(x => x.invite.status !== "VIEWED")
+                        .length)===0?"":(elem[0].filter(x => x.invite.status !== "VIEWED")
+                        .length)) : (data[0].invite.status !== "VIEWED" ? "1" : ""));
                     li.appendChild(span1);
                     container.appendChild(li);
                     i++;
