@@ -62,7 +62,8 @@
                                 </div>
                             </div>
                             <th:block th:if="${counter.size()!=0}" th:each="count, prop:${counter.entrySet()}">
-                                <span class="badge rounded-pill badge-primary" th:if="${prop.index==state.index}"
+                                <span class="badge rounded-pill badge-primary"
+                                      th:if="${count.getKey()==message.getInvite().getUserFrom().getId()}"
                                       th:text="${count.getKey()==message.getInvite().getUserFrom().getId()?count.getValue():''}"></span>
                             </th:block>
                         </li>
@@ -73,7 +74,7 @@
         <div class="col-8">
             <ul id="container-messages" class="list-group list-group-light mb-3"
                 style="max-height: 500px; overflow-y: auto;">
-                <th:block th:each="message:${messageList.get(0)}">
+                <th:block th:each="message:${messageList}">
                     <li class="list-group-item"
                         th:style="${message.getInvite().getStatus()==status[8]?'font-weight: normal':'font-weight: bold'}">
                         <div class="row">
@@ -98,6 +99,7 @@
                                     <a href="#" id="readMessage" data-target="#MessageModal" data-toggle="modal"
                                        th:data-dies="${message.getInvite().getStatus()==status[8]?true:false}"
                                        th:data-id="${message.getId()}"
+                                       th:data-button = "mail"
                                        th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                        th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                        th:data-name="${message.getInvite().getUserFrom().getFullName()}"

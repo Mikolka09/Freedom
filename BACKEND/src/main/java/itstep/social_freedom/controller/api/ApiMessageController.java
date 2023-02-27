@@ -75,6 +75,14 @@ public class ApiMessageController {
                 .toArray(Message[]::new);
     }
 
+    @GetMapping("/user/messages/mails/{id}")
+    public Message[] printChangeMails(@PathVariable(name = "id") Long id) {
+        Message message = messageService.findMessageById(id);
+        return messageService.findAllMessagesUserById(message.getInvite().getUserTo().getId())
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.NOT_VIEWED)
+                .toArray(Message[]::new);
+    }
+
     @GetMapping("/user/messages/accepted/{id}")
     public String acceptedMessage(@PathVariable(name = "id") Long id) {
         Message message = messageService.findMessageById(id);
@@ -82,16 +90,19 @@ public class ApiMessageController {
                 new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
         if (message != null) {
             Invite invite = message.getInvite();
-            invite.setStatus(Status.VIEWED);
-            if (inviteService.saveInvite(invite)) {
-                User userFrom = userService.findUserById(invite.getUserFrom().getId());
-                User userTo = userService.findUserById(invite.getUserTo().getId());
-                message.setInvite(invite);
-                messageService.saveMessage(message);
-                String text = " read your message from " + simpleDateFormatOut.format(message.getCreatedAt());
-                sendResponse(userFrom, userTo, text);
+            if(invite.getStatus()!=Status.VIEWED) {
+                invite.setStatus(Status.VIEWED);
+                if (inviteService.saveInvite(invite)) {
+                    User userFrom = userService.findUserById(invite.getUserFrom().getId());
+                    User userTo = userService.findUserById(invite.getUserTo().getId());
+                    message.setInvite(invite);
+                    messageService.saveMessage(message);
+                    String text = " read your message from " + simpleDateFormatOut.format(message.getCreatedAt());
+                    sendResponse(userFrom, userTo, text);
+                    return "OK";
+                }
+            }else
                 return "OK";
-            }
         }
         return "NOT";
     }

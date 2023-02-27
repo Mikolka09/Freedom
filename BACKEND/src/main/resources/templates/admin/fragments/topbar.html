@@ -97,7 +97,7 @@
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
                 <!-- Counter - Messages -->
-                <span class="badge badge-danger badge-counter"
+                <span class="badge badge-danger badge-counter" id="messages-size"
                       th:text="${messages.size()==0?'':messages.size()}">7</span>
             </a>
             <!-- Dropdown - Messages -->
@@ -110,6 +110,9 @@
                     <a class="dropdown-item d-flex align-items-center" data-target="#MessageModal"
                        data-toggle="modal" href="#"
                        th:data-id="${message.getId()}"
+                       th:data-button = "toolbar"
+                       th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                       th:data-id-to="${message.getInvite().getUserTo().getId()}"
                        th:data-name="${message.getInvite().getUserFrom().getFullName()}"
                        th:data-text="${message.getMessage()}" th:if="${state.index<6}"
                        th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),

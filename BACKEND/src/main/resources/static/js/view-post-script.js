@@ -88,12 +88,14 @@ $('#send-message').on('click', function () {
     let idFrom = $('#userReq').val();
     let idTo = $('#userRec').val();
     let message = $('#message-text').val();
+    let answer = "false";
     if (message !== "") {
         $.get({
             url: '/user/messages/send/' + idTo,
             data: {
                 userId: idFrom,
-                text: message
+                text: message,
+                answer: answer
             },
             success: (data) => {
                 if (data === "OK") {

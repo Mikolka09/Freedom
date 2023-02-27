@@ -35,6 +35,7 @@ $('#AlertModal').on('show.bs.modal', function (event) {
 $('#MessageModal').on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget);
     let id = button.data('id');
+    let window = button.data('button');
     let idFrom = button.data('id-from');
     let idTo = button.data('id-to');
     let name = button.data('name');
@@ -48,6 +49,9 @@ $('#MessageModal').on('show.bs.modal', function (event) {
             accept.hide();
     let answer = $('#messageAnswerModal');
     accept.attr('data-id', id);
+    accept.attr('data-button', window);
+    accept.attr('data-id-from', idFrom);
+    accept.attr('data-id-to', idTo);
     answer.attr('data-id', id);
     answer.attr('data-id-from', idFrom);
     answer.attr('data-id-to', idTo);
@@ -76,6 +80,7 @@ function changeStatusMessage(id) {
 function printMessages(data) {
     if (data != null) {
         let container = document.getElementById('list-messages');
+        document.getElementById('messages-size').innerText = data.length === 0 ? '' : data.length;
         let h1 = document.createElement('h6');
         h1.className = "dropdown-header";
         h1.innerText = "Message Center";
@@ -202,11 +207,17 @@ $('button').on('click', function () {
     let id = $(this).attr("id");
     if (typeof id != "undefined") {
         let idAlert = $(this).attr('data-id');
+        let window = "";
         let text = "";
         let url = "";
         if (id === "messageAcceptedModal") {
+            let idFrom = $(this).data('id-from');
+            let idTo = $(this).data('id-to');
+            window = $(this).data('button');
             text = "Notice read!";
             url = "/user/messages/accepted/" + idAlert;
+            if (window === "mail")
+                printEmails(idTo, idFrom, idAlert, url, text);
         }
         if (id === "actionAccepted" || id === "actionAcceptedModal") {
             text = "Notice read!";
@@ -220,14 +231,61 @@ $('button').on('click', function () {
             text = "Friend request accepted!";
             url = "/user/alerts/confirm/" + idAlert;
         }
-        if (id !== "messageAnswerModal" || id === "send-user-message") {
-            alertInfo(text);
-            setTimeout(function () {
-                sending(url);
-            }, 1000);
-        }
+        if (id !== "messageAnswerModal")
+            if (id !== "send-user-message")
+                if (window !== "mail") {
+                    alertInfo(text);
+                    setTimeout(function () {
+                        sending(url);
+                    }, 1000);
+                }
     }
 });
+
+function printEmails(idTo, idFrom, idMail, url, text) {
+    $.get({
+        url: url,
+        success: (base) => {
+            if (base === "OK") {
+                $.get({
+                    url: "/user/messages/all-messages/" + idFrom,
+                    data: {
+                        idTo: idTo
+                    },
+                    success: (data) => {
+                        $.get({
+                            url: "/user/messages/all-senders/" + idTo,
+                            success: (senders) => {
+                                $.get({
+                                    url: '/user/messages/mails/' + idMail,
+                                    success: (mails) => {
+                                        printMessages(mails);
+                                        printAllSenders(senders, data[0].invite.userFrom.fullName);
+                                        printAllUserMessages(data);
+                                        alertInfo(text);
+                                    },
+                                    error: (err) => {
+                                        console.log(err);
+                                    }
+                                });
+                            },
+                            error: (err) => {
+                                console.log(err);
+                            }
+                        });
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
+                });
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
+
+}
 
 function alertInfo(text) {
     Swal.fire({
@@ -307,10 +365,11 @@ $('#send-user-message').on('click', function () {
                 if (data === "OK") {
                     let text = "Your message has been sent!";
                     let url = "/user/messages/accepted/" + id;
-                    alertInfo(text);
+                    printEmails(idFrom,idTo, id, url, text);
+                    /*alertInfo(text);
                     setTimeout(function () {
                         sending(url);
-                    }, 1000);
+                    }, 1000);*/
                 }
             },
             error: (err) => {
