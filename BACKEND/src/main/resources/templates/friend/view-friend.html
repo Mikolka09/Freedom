@@ -50,7 +50,7 @@
                                     <div class="form-group row justify-content-center">
                                         <div class="col-md-1">
                                             <img style="border-radius: 50%; padding-bottom: 5px" width="80px"
-                                                 th:src="@{|/${user.getAvatarUrl()}|}" alt="Url">
+                                                 th:src="@{|/${friend.getAvatarUrl()}|}" alt="Url">
                                         </div>
                                     </div>
                                     <div class="form-group row justify-content-center">
@@ -60,7 +60,7 @@
                                             </div>
                                             <div class="col-6 p-3">
                                                 <div style="color: tomato; font-weight: bold;"
-                                                     th:text="${user.getAge()}"></div>
+                                                     th:text="${friend.getAge()}"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -71,7 +71,7 @@
                                                     <div class="view-user">Username:</div>
                                                 </div>
                                                 <div class="col-6 p-3">
-                                                    <div class="view-user-data" th:text="${user.getUsername()}"></div>
+                                                    <div class="view-user-data" th:text="${friend.getUsername()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -82,7 +82,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div class="view-user-data"
-                                                         th:text="${user.getFullName()==null?'NOT NAME':user.getFullName()}"></div>
+                                                         th:text="${friend.getFullName()==null?'NOT NAME':friend.getFullName()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -95,7 +95,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div class="view-user-data"
-                                                         th:text="${user.getCountry()==null?'NOT COUNTRY':user.getCountry()}"></div>
+                                                         th:text="${friend.getCountry()==null?'NOT COUNTRY':friend.getCountry()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -106,7 +106,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div class="view-user-data"
-                                                         th:text="${user.getCity()==null?'NOT CITY':user.getCity()}"></div>
+                                                         th:text="${friend.getCity()==null?'NOT CITY':friend.getCity()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -119,7 +119,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div class="view-user-data"
-                                                         th:text="${user.getGoogleName()==null?'NOT NAME':user.getGoogleName()}"></div>
+                                                         th:text="${friend.getGoogleName()==null?'NOT NAME':friend.getGoogleName()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -130,7 +130,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div class="view-user-data"
-                                                         th:text="${user.getGoogleUsername()==null?'NOT NAME':user.getGoogleUsername()}"></div>
+                                                         th:text="${friend.getGoogleUsername()==null?'NOT NAME':friend.getGoogleUsername()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -143,7 +143,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div style="font-weight: bold; color: #e9aa0b;"
-                                                         th:text="${user.getEmail()}"></div>
+                                                         th:text="${friend.getEmail()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div class="view-user-numbers"
-                                                         th:text="${user.getPosts().size()}"></div>
+                                                         th:text="${friend.getPosts().size()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -178,7 +178,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div class="view-user-numbers"
-                                                         th:text="${user.getComments().size()}"></div>
+                                                         th:text="${friend.getComments().size()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -191,7 +191,7 @@
                                                 </div>
                                                 <div class="col-6 p-3">
                                                     <div class="view-user-rating"
-                                                         th:text="${user.getRating()}"></div>
+                                                         th:text="${friend.getRating()}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -201,7 +201,7 @@
                                                     <div class="view-user">Offenses:</div>
                                                 </div>
                                                 <div class="col-6 p-3">
-                                                    <div class="view-user-rating" th:text="${user.getOffenses()}"></div>
+                                                    <div class="view-user-rating" th:text="${friend.getOffenses()}"></div>
                                                 </div>
                                             </div>
                                         </div>

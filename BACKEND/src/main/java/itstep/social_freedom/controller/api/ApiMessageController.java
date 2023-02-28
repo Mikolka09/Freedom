@@ -6,7 +6,6 @@ import itstep.social_freedom.service.AlertService;
 import itstep.social_freedom.service.InviteService;
 import itstep.social_freedom.service.MessageService;
 import itstep.social_freedom.service.UserService;
-import jdk.dynalink.linker.LinkerServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

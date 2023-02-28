@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -39,11 +40,9 @@ public class MessageController {
                 .getInMessages().entrySet().iterator().next().getValue();
         HashMap<Long, List<Message>> list = messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages();
         String role = "";
-        if (user != null) {
-            for (Role r : user.getRoles()) {
-                if (Objects.equals(r.getName(), "ROLE_EDITOR"))
-                    role = r.getName();
-            }
+        for (Role r : user.getRoles()) {
+            if (Objects.equals(r.getName(), "ROLE_EDITOR"))
+                role = r.getName();
         }
 
         model.addAttribute("alerts", alerts);
@@ -69,10 +68,14 @@ public class MessageController {
         return counter;
     }
 
+
+
     @GetMapping("/user/messages")
     public String index(Model model) {
 
         CreateModelUser(model);
         return "mail/index";
     }
+
+
 }

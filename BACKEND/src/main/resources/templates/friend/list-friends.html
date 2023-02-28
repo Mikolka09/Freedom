@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="list-friends">
+    <div class="scroll-table">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Avatar</th>
+                <th scope="col">Username</th>
+                <th scope="col">FullName</th>
+                <th scope="col">Age</th>
+                <th scope="col">Email</th>
+                <th scope="col">Status</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Friendship Days</th>
+                <th scope="col">Friendship Start Date</th>
+                <th scope="col">Buttons</th>
+            </tr>
+            </thead>
+        </table>
+        <div class="scroll-table-body">
+            <table>
+                <tbody>
+                <tr th:each="friend:${friends}">
+                    <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
+                             th:src="@{|/${friend.getFriendReceiver().getAvatarUrl()}|}"></td>
+                    <td th:text="${friend.getFriendReceiver().getUsername()}"></td>
+                    <td th:text="${friend.getFriendReceiver().getFullName()==null? 'NULL':
+                    friend.getFriendReceiver().getFullName()}"></td>
+                    <td th:text="${friend.getFriendReceiver().getAge()}"></td>
+                    <td th:text="${friend.getFriendReceiver().getEmail()}"></td>
+                    <td th:text="${friend.getFriendReceiver().getStatus()}"></td>
+                    <td th:text="${friend.getFriendReceiver().getRating()}"></td>
+                    <td class="terming" th:data-date="${friend.getFriendReceiver().getCreatedAt()}"></td>
+                    <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(friend.getFriendReceiver().getCreatedAt()),
+                                #dates.month(friend.getFriendReceiver().getCreatedAt()), #dates.day(friend.getFriendReceiver().getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+                    <td>
+                        <a th:href="@{|/user/friend/view/${friend.getFriendReceiver().getId()}|}" title="View">
+                            <img src="/img/icon/view.png" width="30px"/></a>
+                        <a th:href="@{|/admin/users/edit/${friend.getFriendReceiver().getId()}|}" title="Edit">
+                            <img src="/img/icon/edit.png" width="30px"/></a>
+                        <a th:href="@{|/admin/users/newpass/${friend.getFriendReceiver().getId()}|}" title="Edit Password">
+                            <img src="/img/icon/password.png" width="30px"/></a>
+                        <a th:data-id="${friend.getFriendReceiver().getId()}" href="#" title="Delete"
+                           th:data-name="${friend.getFriendReceiver().getUsername()}"
+                           data-toggle="modal" data-target="#DeleteModal">
+                            <img src="/img/icon/delete.png" width="30px"/></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

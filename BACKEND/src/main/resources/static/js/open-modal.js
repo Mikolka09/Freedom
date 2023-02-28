@@ -80,7 +80,8 @@ function changeStatusMessage(id) {
 function printMessages(data) {
     if (data != null) {
         let container = document.getElementById('list-messages');
-        document.getElementById('messages-size').innerText = data.length === 0 ? '' : data.length;
+        document.getElementById('messages-size').innerText =
+            data.length === 0 ? '' : (data.length > 6 ? '6+' : data.length);
         let h1 = document.createElement('h6');
         h1.className = "dropdown-header";
         h1.innerText = "Message Center";
@@ -93,6 +94,7 @@ function printMessages(data) {
             a.dataset.id = data[i].id;
             a.dataset.idFrom = data[i].invite.userFrom.id;
             a.dataset.idTo = data[i].invite.userTo.id;
+            a.dataset.button = "toolbar";
             a.dataset.name = data[i].invite.userFrom.fullName;
             a.dataset.text = data[i].message;
             a.dataset.target = "#MessageModal";
@@ -148,6 +150,8 @@ function changeStatusAlert(id) {
 function printAlerts(data) {
     if (data != null) {
         let container = document.getElementById('list-alerts');
+        document.getElementById('alerts-size').innerText =
+            data.length === 0 ? '' : (data.length > 3 ? '3+' : data.length);
         let h1 = document.createElement('h6');
         h1.className = "dropdown-header";
         h1.innerText = "Alerts Center";
@@ -365,7 +369,7 @@ $('#send-user-message').on('click', function () {
                 if (data === "OK") {
                     let text = "Your message has been sent!";
                     let url = "/user/messages/accepted/" + id;
-                    printEmails(idFrom,idTo, id, url, text);
+                    printEmails(idFrom, idTo, id, url, text);
                     /*alertInfo(text);
                     setTimeout(function () {
                         sending(url);
