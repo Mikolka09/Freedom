@@ -39,14 +39,22 @@
                     <td>
                         <a th:href="@{|/user/friend/view/${friend.getFriendReceiver().getId()}|}" title="View">
                             <img src="/img/icon/view.png" width="30px"/></a>
-                        <a th:href="@{|/admin/users/edit/${friend.getFriendReceiver().getId()}|}" title="Edit">
-                            <img src="/img/icon/edit.png" width="30px"/></a>
-                        <a th:href="@{|/admin/users/newpass/${friend.getFriendReceiver().getId()}|}" title="Edit Password">
-                            <img src="/img/icon/password.png" width="30px"/></a>
-                        <a th:data-id="${friend.getFriendReceiver().getId()}" href="#" title="Delete"
+                        <a href="#" class="newMessage" title="Send Message"
+                           th:data-id="0"
+                           th:data-id-from="${user.getId()}"
+                           th:data-name="${friend.getFriendReceiver().getFullName()}"
+                           th:data-id-to="${friend.getFriendReceiver().getId()}"
+                           th:data-text="false"
+                           th:data-date="${#temporals.format(T(java.time.LocalDate).
+                           of(#dates.year(friend.getFriendReceiver().getCreatedAt()),
+                           #dates.month(friend.getFriendReceiver().getCreatedAt()),
+                           #dates.day(friend.getFriendReceiver().getCreatedAt())), 'dd MMM yyyy',
+                           #locale.forLanguageTag('en'))}">
+                            <img src="/img/icon/send.png" width="30px"/></a>
+                        <a th:data-id="${friend.getFriendReceiver().getId()}" href="#" title="Break Friendship"
                            th:data-name="${friend.getFriendReceiver().getUsername()}"
                            data-toggle="modal" data-target="#DeleteModal">
-                            <img src="/img/icon/delete.png" width="30px"/></a>
+                            <img src="/img/icon/delete-friend.png" width="30px"/></a>
                     </td>
                 </tr>
                 </tbody>

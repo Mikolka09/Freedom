@@ -247,48 +247,50 @@ $('button').on('click', function () {
 });
 
 function printEmails(idTo, idFrom, idMail, url, text) {
-    $.get({
-        url: url,
-        success: (base) => {
-            if (base === "OK") {
-                $.get({
-                    url: "/user/messages/all-messages/" + idFrom,
-                    data: {
-                        idTo: idTo
-                    },
-                    success: (data) => {
-                        $.get({
-                            url: "/user/messages/all-senders/" + idTo,
-                            success: (senders) => {
-                                $.get({
-                                    url: '/user/messages/mails/' + idMail,
-                                    success: (mails) => {
-                                        printMessages(mails);
-                                        printAllSenders(senders, data[0].invite.userFrom.fullName);
-                                        printAllUserMessages(data);
-                                        alertInfo(text);
-                                    },
-                                    error: (err) => {
-                                        console.log(err);
-                                    }
-                                });
-                            },
-                            error: (err) => {
-                                console.log(err);
-                            }
-                        });
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    }
-                });
+    if (idMail !== "0") {
+        $.get({
+            url: url,
+            success: (base) => {
+                if (base === "OK") {
+                    $.get({
+                        url: "/user/messages/all-messages/" + idFrom,
+                        data: {
+                            idTo: idTo
+                        },
+                        success: (data) => {
+                            $.get({
+                                url: "/user/messages/all-senders/" + idTo,
+                                success: (senders) => {
+                                    $.get({
+                                        url: '/user/messages/mails/' + idMail,
+                                        success: (mails) => {
+                                            printMessages(mails);
+                                            printAllSenders(senders, data[0].invite.userFrom.fullName);
+                                            printAllUserMessages(data);
+                                            alertInfo(text);
+                                        },
+                                        error: (err) => {
+                                            console.log(err);
+                                        }
+                                    });
+                                },
+                                error: (err) => {
+                                    console.log(err);
+                                }
+                            });
+                        },
+                        error: (err) => {
+                            console.log(err);
+                        }
+                    });
+                }
+            },
+            error: (err) => {
+                console.log(err);
             }
-        },
-        error: (err) => {
-            console.log(err);
-        }
-    });
-
+        });
+    } else
+        alertInfo(text);
 }
 
 function alertInfo(text) {
@@ -322,6 +324,10 @@ $('#messageAnswerModal').on('click', function () {
 });
 
 $('ul').on('click', '.answerMessage', function () {
+    answerData($(this));
+});
+
+$('.newMessage').on('click', function () {
     answerData($(this));
 });
 
@@ -370,10 +376,6 @@ $('#send-user-message').on('click', function () {
                     let text = "Your message has been sent!";
                     let url = "/user/messages/accepted/" + id;
                     printEmails(idFrom, idTo, id, url, text);
-                    /*alertInfo(text);
-                    setTimeout(function () {
-                        sending(url);
-                    }, 1000);*/
                 }
             },
             error: (err) => {
