@@ -57,7 +57,7 @@
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
                 <span class="badge badge-danger badge-counter"
-                      th:text="${alerts.size()>3?'3+':(alerts.size()==3?'3':(alerts.size()==2?'2':(alerts.size()==1?'1':'')))}">3+</span>
+                      th:text="${alerts.size()==0?'':(alerts.size()>3?'3+':alerts.size())}">3+</span>
             </a>
             <!-- Dropdown - Alerts -->
             <div id="list-alerts" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -87,7 +87,7 @@
                         </div>
                     </a>
                 </th:block>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                <a class="dropdown-item text-center small text-gray-500" href="/admin/alerts">Show All Alerts</a>
             </div>
         </li>
 
@@ -98,7 +98,7 @@
                 <i class="fas fa-envelope fa-fw"></i>
                 <!-- Counter - Messages -->
                 <span class="badge badge-danger badge-counter" id="messages-size"
-                      th:text="${messages.size()==0?'':messages.size()}">7</span>
+                      th:text="${messages.size()==0?'':(messages.size()>6?'6+':messages.size())}">7</span>
             </a>
             <!-- Dropdown - Messages -->
             <div id="list-messages" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -132,7 +132,7 @@
                         </div>
                     </a>
                 </th:block>
-                <a class="dropdown-item text-center small text-gray-500" href="/user/messages">Read More
+                <a class="dropdown-item text-center small text-gray-500" href="/admin/messages">Read More
                     Messages</a>
             </div>
         </li>

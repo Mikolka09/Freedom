@@ -31,7 +31,7 @@ public class FriendController {
     @Autowired
     private MessageService messageService;
 
-    public List<Friend> giveListFriends(User user){
+    public static List<Friend> giveListFriends(User user){
         List<Friend> friends = new ArrayList<>();
         for (Friend friendFrom : user.getRequestedFriends()) {
             for (Friend friendTo : user.getReceivedFriends()) {

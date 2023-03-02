@@ -87,7 +87,11 @@
             </div>
         </div>
     </li>
-
+    <li class="nav-item" th:if="${role!='ROLE_EDITOR'}">
+        <a class="nav-link" href="/admin/friends">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>List Friends</span></a>
+    </li>
     <!-- Nav Item - Charts -->
     <li class="nav-item" th:if="${role!='ROLE_EDITOR'}">
         <a class="nav-link" href="charts.html">

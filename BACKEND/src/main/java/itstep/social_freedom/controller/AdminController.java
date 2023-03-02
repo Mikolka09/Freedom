@@ -44,6 +44,7 @@ public class AdminController {
 
     @Autowired
     private FileService fileService;
+
     @Autowired
     private CommentRepository commentRepository;
 
@@ -55,11 +56,17 @@ public class AdminController {
         List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.NOT_VIEWED)
                 .collect(Collectors.toList());
+        List<Message> messageList = messageService.allUserMessages(userService.getCurrentUsername().getId())
+                .getInMessages().entrySet().iterator().next().getValue();
+        HashMap<Long, List<Message>> list = messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages();
         String role = "";
         for (Role r : user.getRoles()) {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
                 role = r.getName();
         }
+        model.addAttribute("counter", MessageController.counterMessages(messages));
+        model.addAttribute("messageList", messageList);
+        model.addAttribute("list", list);
         model.addAttribute("messages", messages);
         model.addAttribute("alerts", alertList);
         model.addAttribute("status", Status.values());
@@ -73,16 +80,48 @@ public class AdminController {
         CreateModelUser(model);
         return "admin/index";
     }
+    @GetMapping("/admin/friends")
+    public String friends(Model model){
+        CreateModelUser(model);
+        User user = userService.getCurrentUsername();
+        List<Friend> friends = FriendController.giveListFriends(user);
+        model.addAttribute("friends", friends);
+        return "admin/friend/index";
+    }
+
+
+    //View Profile Friend
+    @GetMapping("/admin/friend/view/{id}")
+    public String viewProfile(@PathVariable(name = "id") Long id, Model model) {
+        User user = userService.findUserById(id);
+        int friends = PageController.countFriends(user.getRequestedFriends(), user.getReceivedFriends());
+        model.addAttribute("friends", friends);
+        model.addAttribute("friend", user);
+        CreateModelUser(model);
+        return "admin/friend/view-friend";
+    }
 
     //View Profile User
     @GetMapping("/admin/users/view/{id}")
-    public String viewProfile(@PathVariable(name = "id") Long id, Model model) {
+    public String viewProfileUser(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
         int friends = PageController.countFriends(user.getRequestedFriends(), user.getReceivedFriends());
         model.addAttribute("friends", friends);
         model.addAttribute("user", user);
         CreateModelUser(model);
         return "admin/users/view-user";
+    }
+
+    @GetMapping("/admin/messages")
+    public String indexMail(Model model) {
+        CreateModelUser(model);
+        return "admin/mail/index";
+    }
+
+    @GetMapping("/admin/alerts")
+    public String indexAlert(Model model) {
+        CreateModelUser(model);
+        return "admin/alert/index";
     }
 
     //Get a list of deleted users

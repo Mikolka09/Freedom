@@ -55,7 +55,7 @@ public class MessageController {
         model.addAttribute("user", user);
     }
 
-    public HashMap<Long, Integer> counterMessages(List<Message> messages) {
+    public static HashMap<Long, Integer> counterMessages(List<Message> messages) {
         HashMap<Long, Integer> counter = new HashMap<>();
         for (Message mess : messages) {
             int count = 0;
@@ -72,7 +72,6 @@ public class MessageController {
 
     @GetMapping("/user/messages")
     public String index(Model model) {
-
         CreateModelUser(model);
         return "mail/index";
     }
