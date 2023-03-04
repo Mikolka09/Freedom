@@ -25,7 +25,8 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     modal.find('#date-alert').text(date);
     if (alert.split(' ')[2] === 'accepted' ||
         alert.split(' ')[2] === 'denied' ||
-        alert.split(' ')[2] === 'read')
+        alert.split(' ')[2] === 'read'||
+        alert.split(' ')[2] === 'broke')
         modal.find('#footer-confirm').hide();
     else
         modal.find('#footer-accepted').hide();

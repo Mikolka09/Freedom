@@ -146,8 +146,8 @@ public class ApiMessageController {
         createAlert(userFrom, userTo, alert, invite, text, inviteService, alertService);
     }
 
-    static void createAlert(User userFrom, User userTo, Alert alert, Invite invite,
-                            String text, InviteService inviteService, AlertService alertService) {
+    public static void createAlert(User userFrom, User userTo, Alert alert, Invite invite,
+                                   String text, InviteService inviteService, AlertService alertService) {
         alert.setText(text);
         invite.setUserFrom(userTo);
         invite.setUserTo(userFrom);

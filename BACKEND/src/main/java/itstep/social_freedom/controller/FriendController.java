@@ -1,21 +1,22 @@
 package itstep.social_freedom.controller;
 
+import itstep.social_freedom.controller.api.ApiMessageController;
+import itstep.social_freedom.entity.Alert;
 import itstep.social_freedom.entity.Friend;
+import itstep.social_freedom.entity.Invite;
 import itstep.social_freedom.entity.User;
-import itstep.social_freedom.service.AlertService;
-import itstep.social_freedom.service.FriendService;
-import itstep.social_freedom.service.MessageService;
-import itstep.social_freedom.service.UserService;
+import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -26,6 +27,9 @@ public class FriendController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private InviteService inviteService;
 
     @Autowired
     private AlertService alertService;
@@ -70,6 +74,14 @@ public class FriendController {
     @GetMapping("/user/friend/break/{id}/{idFriend}")
     public String breakFriend(@PathVariable(name = "id") Long id,
                               @PathVariable(name = "idFriend") Long idFriend) {
+        User userFrom = userService.findUserById(id);
+        User userTo = userService.findUserById(idFriend);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH);
+        String text = userFrom.getFullName() + " broke off friendly relations with swami from "
+                + LocalDateTime.now().format(formatter);
+        Alert alert = new Alert();
+        Invite invite = new Invite();
+        ApiMessageController.createAlert(userTo, userFrom, alert, invite, text, inviteService, alertService);
         friendService.deleteFriend(id, idFriend);
         return "redirect:/user/friends";
     }

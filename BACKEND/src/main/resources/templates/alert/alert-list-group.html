@@ -25,7 +25,8 @@
                             </div>
                         </div>
                     </div>
-                    <th:block th:if="${alert.getText().split(' ')[2]!='accepted'&&alert.getText().split(' ')[2]!='read'}">
+                    <th:block th:if="${alert.getText().split(' ')[2]!='accepted'&&alert.getText().split(' ')[2]!='read'
+                    &&alert.getText().split(' ')[2]!='broke'}">
                         <div class="card-footer border-0 bg-gray-300 p-2 d-flex justify-content-around">
                             <button type="button" class="btn btn-success" data-dismiss="modal" th:data-id="${alert.getId()}"
                                     id="actionConfirm">Confirm</button>
@@ -33,7 +34,8 @@
                                     id="actionDeny">Deny</button>
                         </div>
                     </th:block>
-                    <th:block th:if="${alert.getText().split(' ')[2]=='accepted'||alert.getText().split(' ')[2]=='read'}">
+                    <th:block th:if="${alert.getText().split(' ')[2]=='accepted'||alert.getText().split(' ')[2]=='read'
+                    ||alert.getText().split(' ')[2]=='broke'}">
                         <div class="card-footer border-0 bg-gray-300 p-2 d-flex justify-content-around">
                             <button type="button" class="btn btn-success" data-dismiss="modal" th:data-id="${alert.getId()}"
                                     id="actionAccepted">Accepted</button>
