@@ -126,7 +126,9 @@
                     </li>
                 </th:block>
             </ul>
-            <a class="btn btn-outline-primary btn-rounded w-100" href="#" role="button">
+            <a class="btn btn-outline-primary btn-rounded w-100" id="mark-all"
+               th:data-id-from="${messageList.get(0).getInvite().getUserFrom().getId()}" href="#" role="button"
+               th:data-id-to="${messageList.get(0).getInvite().getUserTo().getId()}">
                 Mark all messages as read</a>
         </div>
     </div>

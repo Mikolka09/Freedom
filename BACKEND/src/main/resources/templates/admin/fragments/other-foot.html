@@ -19,4 +19,35 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"
           integrity="sha256-5WYg3s9NxGKR2MpEBTy0QMT3Gvgxl3yKjbW4l0CfUUY=" crossorigin="anonymous"></script>
 
+  <script>
+    $('#DeleteModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget);
+      let title = button.data('title');
+      let modal = $(this);
+      let id = "";
+      let name = "";
+      let action = "";
+      let label = "";
+      let text = "";
+      let idFriend = "";
+      if (title !== "Break Friendship") {
+        id = button.data('id');
+        action = "/user/delete/" + id;
+        label = "Are you sure you want to delete your account?";
+        text = "Select \"Delete\" below if you are ready to remove your account"
+      } else {
+        id = button.data('id');
+        name = button.data('name');
+        idFriend = button.data('id-friend');
+        action = "/admin/friend/break/" + id + "/" + idFriend;
+        label = "You definitely want to end the friendship with the user - " + name.toUpperCase() + "?";
+        text = "Select \"Break\" below if you are ready to to break the friendship";
+        modal.find('#action').text('Break');
+      }
+      modal.find('#deleteModalLabel').text(label);
+      modal.find('#text').text(text);
+      modal.find('#action').prop("href", action);
+    })
+  </script>
+
 </div>

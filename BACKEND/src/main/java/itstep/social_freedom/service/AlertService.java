@@ -26,6 +26,13 @@ public class AlertService {
         return alertRepository.findAlertById(id);
     }
 
+    public Alert findAlertByName(String text, String name){
+        return allAlerts().stream()
+                .filter(x-> Objects.equals(x.getText(), text)&& x.getInvite().getStatus()==Status.REQUEST&&
+                        Objects.equals(x.getInvite().getUserTo().getFullName(), name))
+                .findFirst().orElse(new Alert());
+    }
+
     public List<Alert> findAllAlertsUserById(Long userId){
         return alertRepository.findAll().stream()
                 .filter(x-> Objects.equals(x.getInvite().getUserTo().getId(), userId))

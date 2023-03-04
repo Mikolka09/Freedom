@@ -43,6 +43,9 @@ public class AdminController {
     private AlertService alertService;
 
     @Autowired
+    private FriendService friendService;
+
+    @Autowired
     private FileService fileService;
 
     @Autowired
@@ -87,6 +90,13 @@ public class AdminController {
         List<Friend> friends = FriendController.giveListFriends(user);
         model.addAttribute("friends", friends);
         return "admin/friend/index";
+    }
+
+    @GetMapping("/admin/friend/break/{id}/{idFriend}")
+    public String breakFriend(@PathVariable(name = "id") Long id,
+                              @PathVariable(name = "idFriend") Long idFriend) {
+        friendService.deleteFriend(id, idFriend);
+        return "redirect:/admin/friends";
     }
 
 

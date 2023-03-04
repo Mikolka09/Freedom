@@ -82,6 +82,13 @@ public class ApiMessageController {
                 .toArray(Message[]::new);
     }
 
+    @GetMapping("/user/messages/all-mails/{id}")
+    public Message[] printChangeAllMails(@PathVariable(name = "id") Long id) {
+        return messageService.findAllMessagesUserById(id)
+                .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.NOT_VIEWED)
+                .toArray(Message[]::new);
+    }
+
     @GetMapping("/user/messages/accepted/{id}")
     public String acceptedMessage(@PathVariable(name = "id") Long id) {
         Message message = messageService.findMessageById(id);
@@ -89,27 +96,58 @@ public class ApiMessageController {
                 new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
         if (message != null) {
             Invite invite = message.getInvite();
-            if(invite.getStatus()!=Status.VIEWED) {
+            if (invite.getStatus() != Status.VIEWED) {
                 invite.setStatus(Status.VIEWED);
                 if (inviteService.saveInvite(invite)) {
-                    User userFrom = userService.findUserById(invite.getUserFrom().getId());
-                    User userTo = userService.findUserById(invite.getUserTo().getId());
-                    message.setInvite(invite);
-                    messageService.saveMessage(message);
-                    String text = " read your message from " + simpleDateFormatOut.format(message.getCreatedAt());
-                    sendResponse(userFrom, userTo, text);
+                    createSendMessage(simpleDateFormatOut, message, invite);
                     return "OK";
                 }
-            }else
+            } else
                 return "OK";
         }
         return "NOT";
     }
 
-    public void sendResponse(User userFrom, User userTo, String answer) {
-        Alert alert = new Alert();
-        Invite invite = new Invite();
-        String text = userTo.getFullName() + answer;
+    @GetMapping("/user/messages/accepted-all/{id-to}/{id-from}")
+    public String acceptedAllMessages(@PathVariable(name = "id-to") Long idTo,
+                                      @PathVariable(name = "id-from") Long idFrom) {
+        MessageDto messages = messageService.allUserMessages(idTo);
+        List<Message> messageList = messages.getInMessages().get(idFrom);
+        SimpleDateFormat simpleDateFormatOut =
+                new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        if (messageList != null) {
+            for (Message mess : messageList) {
+                Invite invite = mess.getInvite();
+                if (invite.getStatus() != Status.VIEWED) {
+                    invite.setStatus(Status.VIEWED);
+                    if (inviteService.saveInvite(invite)) {
+                        createSendMessage(simpleDateFormatOut, mess, invite);
+                    }
+                }
+
+            }
+        }
+        return "OK";
+    }
+
+    private void createSendMessage(SimpleDateFormat simpleDateFormatOut, Message mess, Invite invite) {
+        User userFrom = userService.findUserById(invite.getUserFrom().getId());
+        User userTo = userService.findUserById(invite.getUserTo().getId());
+        mess.setInvite(invite);
+        messageService.saveMessage(mess);
+        String text = " read your message from " + simpleDateFormatOut.format(mess.getCreatedAt());
+        sendResponse(userFrom, userTo, text);
+    }
+
+    public void sendResponse (User userFrom, User userTo, String answer){
+            Alert alert = new Alert();
+            Invite invite = new Invite();
+            String text = userTo.getFullName() + answer;
+        createAlert(userFrom, userTo, alert, invite, text, inviteService, alertService);
+    }
+
+    static void createAlert(User userFrom, User userTo, Alert alert, Invite invite,
+                            String text, InviteService inviteService, AlertService alertService) {
         alert.setText(text);
         invite.setUserFrom(userTo);
         invite.setUserTo(userFrom);
@@ -122,21 +160,21 @@ public class ApiMessageController {
     }
 
     @GetMapping("/user/messages/all-messages/{id}")
-    public Message[] allMessagesUser(@PathVariable(name = "id") Long id,
-                                     @RequestParam(name="idTo") Long idTo) {
-        MessageDto messages = messageService.allUserMessages(idTo);
-        return messages.getInMessages().get(id).toArray(Message[]::new);
-    }
-
-    @GetMapping("/user/messages/all-senders/{id}")
-    public List<List<List<Message>>> allMessagesSenders(@PathVariable(name = "id") Long id) {
-        List<List<List<Message>>> list = new ArrayList<>();
-        HashMap<Long, List<Message>> map = messageService.allUserMessages(id).getInMessages();
-        for(Map.Entry<Long, List<Message>> entry: map.entrySet()){
-            List<List<Message>> trans = new ArrayList<>();
-            trans.add(entry.getValue());
-            list.add(trans);
+        public Message[] allMessagesUser (@PathVariable(name = "id") Long id,
+                @RequestParam(name = "idTo") Long idTo){
+            MessageDto messages = messageService.allUserMessages(idTo);
+            return messages.getInMessages().get(id).toArray(Message[]::new);
         }
-        return list;
+
+        @GetMapping("/user/messages/all-senders/{id}")
+        public List<List<List<Message>>> allMessagesSenders (@PathVariable(name = "id") Long id){
+            List<List<List<Message>>> list = new ArrayList<>();
+            HashMap<Long, List<Message>> map = messageService.allUserMessages(id).getInMessages();
+            for (Map.Entry<Long, List<Message>> entry : map.entrySet()) {
+                List<List<Message>> trans = new ArrayList<>();
+                trans.add(entry.getValue());
+                list.add(trans);
+            }
+            return list;
+        }
     }
-}

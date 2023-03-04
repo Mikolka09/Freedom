@@ -30,18 +30,22 @@ public class ApiAlertController {
         User userFrom = userService.findUserById(userId);
         User userTo = userService.findUserById(id);
         String text = userFrom.getFullName() + " sent you a friend request!";
-        Alert alert = new Alert();
-        Invite invite = new Invite();
-        alert.setText(text);
-        invite.setUserFrom(userFrom);
-        invite.setUserTo(userTo);
-        invite.setStatus(Status.REQUEST);
-        alert.setInvite(invite);
-        if (inviteService.saveInvite(invite)) {
-            alert.setStatus(Status.ACTIVE);
-            if (alertService.saveAlert(alert))
-                return "OK";
-            else
+        Alert alertBD = alertService.findAlertByName(text, userTo.getFullName());
+        if (alertBD.getInvite() == null) {
+            Alert alert = new Alert();
+            Invite invite = new Invite();
+            alert.setText(text);
+            invite.setUserFrom(userFrom);
+            invite.setUserTo(userTo);
+            invite.setStatus(Status.REQUEST);
+            alert.setInvite(invite);
+            if (inviteService.saveInvite(invite)) {
+                alert.setStatus(Status.ACTIVE);
+                if (alertService.saveAlert(alert))
+                    return "OK";
+                else
+                    return "NOT";
+            } else
                 return "NOT";
         } else
             return "NOT";
@@ -125,15 +129,7 @@ public class ApiAlertController {
         Alert alert = new Alert();
         Invite invite = new Invite();
         String text = userTo.getFullName() + answer + " your friend request!";
-        alert.setText(text);
-        invite.setUserFrom(userTo);
-        invite.setUserTo(userFrom);
-        invite.setStatus(Status.REQUEST);
-        alert.setInvite(invite);
-        if (inviteService.saveInvite(invite)) {
-            alert.setStatus(Status.ACTIVE);
-            alertService.saveAlert(alert);
-        }
+        ApiMessageController.createAlert(userFrom, userTo, alert, invite, text, inviteService, alertService);
     }
 
 }

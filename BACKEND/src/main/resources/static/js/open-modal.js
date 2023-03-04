@@ -246,20 +246,20 @@ $('button').on('click', function () {
     }
 });
 
-function printEmails(idTo, idFrom, idMail, url, text) {
+function printEmails(idFrom, idTo, idMail, url, text) {
     if (idMail !== "0") {
         $.get({
             url: url,
             success: (base) => {
                 if (base === "OK") {
                     $.get({
-                        url: "/user/messages/all-messages/" + idFrom,
+                        url: "/user/messages/all-messages/" + idTo,
                         data: {
-                            idTo: idTo
+                            idTo: idFrom
                         },
                         success: (data) => {
                             $.get({
-                                url: "/user/messages/all-senders/" + idTo,
+                                url: "/user/messages/all-senders/" + idFrom,
                                 success: (senders) => {
                                     $.get({
                                         url: '/user/messages/mails/' + idMail,
@@ -291,6 +291,50 @@ function printEmails(idTo, idFrom, idMail, url, text) {
         });
     } else
         alertInfo(text);
+}
+
+function printAllEmails(idFrom, idTo, url, text) {
+        $.get({
+            url: url,
+            success: (base) => {
+                if (base === "OK") {
+                    $.get({
+                        url: "/user/messages/all-messages/" + idFrom,
+                        data: {
+                            idTo: idTo
+                        },
+                        success: (data) => {
+                            $.get({
+                                url: "/user/messages/all-senders/" + idTo,
+                                success: (senders) => {
+                                    $.get({
+                                        url: '/user/messages/all-mails/' + idTo,
+                                        success: (mails) => {
+                                            printMessages(mails);
+                                            printAllSenders(senders, data[0].invite.userFrom.fullName);
+                                            printAllUserMessages(data);
+                                            alertInfo(text);
+                                        },
+                                        error: (err) => {
+                                            console.log(err);
+                                        }
+                                    });
+                                },
+                                error: (err) => {
+                                    console.log(err);
+                                }
+                            });
+                        },
+                        error: (err) => {
+                            console.log(err);
+                        }
+                    });
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
 }
 
 function alertInfo(text) {
@@ -329,6 +373,15 @@ $('ul').on('click', '.answerMessage', function () {
 
 $('.newMessage').on('click', function () {
     answerData($(this));
+});
+
+$('#mark-all').on('click', function () {
+    let data = $(this);
+    let idFrom = data.attr('data-id-from');
+    let idTo = data.attr('data-id-to');
+    let text = "All messages have been read!";
+    let url = "/user/messages/accepted-all/" + idTo + "/" + idFrom;
+    printAllEmails(idFrom, idTo, url, text);
 });
 
 function answerData(data) {

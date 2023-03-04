@@ -186,6 +186,9 @@ function printAllUserMessages(data) {
             li.appendChild(div1);
             container.appendChild(li);
         }
+        let markAll = document.getElementById('mark-all');
+        markAll.dataset.idFrom = data[0].invite.userFrom.id;
+        markAll.dataset.idTo = data[0].invite.userTo.id;
     }
 }
 

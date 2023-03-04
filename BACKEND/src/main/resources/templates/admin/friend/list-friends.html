@@ -32,27 +32,29 @@
                     <td th:text="${friend.getFriendReceiver().getEmail()}"></td>
                     <td th:text="${friend.getFriendReceiver().getStatus()}"></td>
                     <td th:text="${friend.getFriendReceiver().getRating()}"></td>
-                    <td class="terming" th:data-date="${friend.getFriendReceiver().getCreatedAt()}"></td>
-                    <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(friend.getFriendReceiver().getCreatedAt()),
-                                #dates.month(friend.getFriendReceiver().getCreatedAt()), #dates.day(friend.getFriendReceiver().getCreatedAt())), 'dd MMM yyyy',
+                    <td class="terming" th:data-date="${friend.getCreatedAt()}"></td>
+                    <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(friend.getCreatedAt()),
+                                #dates.month(friend.getCreatedAt()), #dates.day(friend.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}"></td>
                     <td>
                         <a th:href="@{|/admin/friend/view/${friend.getFriendReceiver().getId()}|}" title="View">
                             <img src="/img/icon/view.png" width="30px"/></a>
                         <a href="#" class="newMessage" title="Send Message"
                            th:data-id="0"
-                           th:data-id-from="${admin.getId()}"
+                           th:data-id-to="${admin.getId()}"
                            th:data-name="${friend.getFriendReceiver().getFullName()}"
-                           th:data-id-to="${friend.getFriendReceiver().getId()}"
+                           th:data-id-from="${friend.getFriendReceiver().getId()}"
                            th:data-text="false"
                            th:data-date="${#temporals.format(T(java.time.LocalDate).
-                           of(#dates.year(friend.getFriendReceiver().getCreatedAt()),
-                           #dates.month(friend.getFriendReceiver().getCreatedAt()),
-                           #dates.day(friend.getFriendReceiver().getCreatedAt())), 'dd MMM yyyy',
+                           of(#dates.year(friend.getCreatedAt()),
+                           #dates.month(friend.getCreatedAt()),
+                           #dates.day(friend.getCreatedAt())), 'dd MMM yyyy',
                            #locale.forLanguageTag('en'))}">
                             <img src="/img/icon/send.png" width="30px"/></a>
-                        <a th:data-id="${friend.getFriendReceiver().getId()}" href="#" title="Break Friendship"
+                        <a th:data-id-friend="${friend.getFriendReceiver().getId()}" href="#" title="Break Friendship"
                            th:data-name="${friend.getFriendReceiver().getUsername()}"
+                           th:data-id="${admin.getId()}"
+                           data-title = "Break Friendship";
                            data-toggle="modal" data-target="#DeleteModal">
                             <img src="/img/icon/delete-friend.png" width="30px"/></a>
                     </td>

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 public class FriendController {
@@ -31,7 +33,7 @@ public class FriendController {
     @Autowired
     private MessageService messageService;
 
-    public static List<Friend> giveListFriends(User user){
+    public static List<Friend> giveListFriends(User user) {
         List<Friend> friends = new ArrayList<>();
         for (Friend friendFrom : user.getRequestedFriends()) {
             for (Friend friendTo : user.getReceivedFriends()) {
@@ -42,11 +44,12 @@ public class FriendController {
 
             }
         }
-        return friends;
+        return friends.stream().sorted(Comparator.comparing(x -> x.getFriendReceiver().getUsername()))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/user/friends")
-    public String friends(Model model){
+    public String friends(Model model) {
         PostController.giveMainData(model, userService, alertService, messageService);
         User user = userService.getCurrentUsername();
         List<Friend> friends = giveListFriends(user);
@@ -62,5 +65,12 @@ public class FriendController {
         model.addAttribute("friend", user);
         PostController.giveMainData(model, userService, alertService, messageService);
         return "friend/view-friend";
+    }
+
+    @GetMapping("/user/friend/break/{id}/{idFriend}")
+    public String breakFriend(@PathVariable(name = "id") Long id,
+                              @PathVariable(name = "idFriend") Long idFriend) {
+        friendService.deleteFriend(id, idFriend);
+        return "redirect:/user/friends";
     }
 }
