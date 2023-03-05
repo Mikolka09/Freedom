@@ -87,16 +87,46 @@
             </div>
         </div>
     </li>
-    <li class="nav-item" th:if="${role!='ROLE_EDITOR'}">
-        <a class="nav-link" href="/admin/friends">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>List Friends</span></a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Other My Data
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#friendUtilities"
+           aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>My Friends</span>
+        </a>
+        <div id="friendUtilities" class="collapse" aria-labelledby="headingUtilities"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Friends:</h6>
+                <a class="collapse-item" href="/admin/friends">List Friends</a>
+                <a class="collapse-item" href="/admin/friends/all-posts">Friends Posts</a>
+            </div>
+        </div>
     </li>
     <!-- Nav Item - Charts -->
-    <li class="nav-item" th:if="${role!='ROLE_EDITOR'}">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Mail</span></a>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#emailUtilities"
+           aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>My Emails</span>
+        </a>
+        <div id="emailUtilities" class="collapse" aria-labelledby="headingUtilities"
+             data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Emails:</h6>
+                <a class="collapse-item" href="/admin/messages">Inbox</a>
+                <a class="collapse-item" href="/admin/out-messages">Outbox</a>
+                <a class="collapse-item" href="/admin/deleted-messages">Deleted</a>
+            </div>
+        </div>
     </li>
 
     <!-- Nav Item - Tables -->

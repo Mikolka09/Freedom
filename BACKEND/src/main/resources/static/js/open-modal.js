@@ -47,12 +47,29 @@ $('#MessageModal').on('show.bs.modal', function (event) {
         let idTo = button.data('id-to');
         let name = button.data('name');
         let alert = button.data('text');
+        let arrText = "";
+        if (alert.indexOf(']') !== -1) {
+            arrText = alert.split(']\n');
+        }
+        let alertAnswer = "";
+        let text = "";
+        if (arrText.length > 0) {
+            alertAnswer = arrText[0] + ']';
+            text = arrText[1];
+            modal.find('#text-mess-answer').text(alertAnswer);
+            modal.find('#text-mess').text(text);
+        } else {
+            modal.find('#text-mess').text(alert);
+            modal.find('#text-mess-answer').text('');
+        }
         let date = button.data('date');
         let dies = button.data('dies');
         let accept = $('#messageAcceptedModal');
         if (typeof dies !== "undefined")
             if (dies === true)
                 accept.hide();
+            else
+                accept.show();
         let answer = $('#messageAnswerModal');
         accept.attr('data-id', id);
         accept.attr('data-button', window);
@@ -65,7 +82,6 @@ $('#MessageModal').on('show.bs.modal', function (event) {
         answer.attr('data-date', date);
         answer.attr('data-text', alert);
         modal.find('#messageModalLabel').text(name);
-        modal.find('#text-mess').text(alert);
         modal.find('#date-message').text(date);
         if (typeof dies === "undefined")
             changeStatusMessage(id);
@@ -396,15 +412,15 @@ $('.recoveryMessage').on('click', function () {
     let id = $(this).attr('data-id');
     $.get({
         url: "/user/messages/recovery/" + id,
-        success:(data)=>{
-            if(data==="OK"){
+        success: (data) => {
+            if (data === "OK") {
                 alertInfo('The message has been recovered!');
                 setTimeout(function () {
                     location.reload();
                 }, 1000);
             }
         },
-        error:(err)=>{
+        error: (err) => {
             console.log(err);
         }
     });
@@ -480,7 +496,7 @@ $('#send-user-message').on('click', function () {
                     let url = "/user/messages/accepted/" + id;
                     if (typeof out === 'undefined')
                         printEmails(idFrom, idTo, id, url, text);
-                    else{
+                    else {
                         alertInfo('Your message has been sent!');
                         setTimeout(function () {
                             location.reload();

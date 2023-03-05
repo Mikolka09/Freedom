@@ -64,7 +64,6 @@
                     <h6 class="collapse-header">Custom Posts:</h6>
                     <a class="collapse-item" th:href="@{|/user/posts/${user.getId()}|}">My Posts</a>
                     <a class="collapse-item" th:href="@{|/user/comments/${user.getId()}|}">My Comments</a>
-                    <a class="collapse-item" href="login.html">Friends Posts</a>
                 </div>
             </div>
         </li>
@@ -72,12 +71,22 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="/user/friends">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>List Friends</span></a>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#friendUtilities"
+               aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>My Friends</span>
+            </a>
+            <div id="friendUtilities" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Custom Friends:</h6>
+                    <a class="collapse-item" href="/user/friends">List Friends</a>
+                    <a class="collapse-item" href="/user/friends/all-posts">Friends Posts</a>
+                </div>
+            </div>
         </li>
+        <!-- Nav Item - Charts -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#emailUtilities"
                aria-expanded="true" aria-controls="collapseUtilities">

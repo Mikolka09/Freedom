@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:insert="/user/fragments/head.html::head"></th:block>
+<th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
 <body id="page-top">
 
@@ -9,7 +9,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <th:block th:insert="/user/fragments/sidebar.html::sidebar"></th:block>
+    <th:block th:insert="/admin/fragments/sidebar.html::sidebar"></th:block>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -17,16 +17,12 @@
 
         <!-- Main Content -->
         <div id="content">
-            <th:block th:insert="/user/fragments/topbar.html::topbar"></th:block>
+            <th:block th:insert="/admin/fragments/topbar.html::topbar"></th:block>
 
 
             <!-- Begin Page Content -->
             <div class="col-md-12 col-md-offset-1">
-                <h1 class="text-center">List Posts</h1>
-                <p>
-                    <a class="btn btn-success btn-sm" th:href="@{|/user/posts/create/${user.getId()}|}"
-                       style="border-radius:6px;">Create new post</a>
-                </p>
+                <h1 class="text-center">List Friends Posts</h1>
                 <div class="scroll-table">
                     <table>
                         <thead>
@@ -38,7 +34,7 @@
                             <th scope="col">Category</th>
                             <th scope="col">Tags</th>
                             <th scope="col">Likes</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Comments</th>
                             <th scope="col">CreateAt</th>
                             <th scope="col">UpdateAt</th>
                             <th scope="col">Buttons</th>
@@ -48,7 +44,7 @@
                     <div class="scroll-table-body">
                         <table>
                             <tbody>
-                            <tr th:each="post:${posts}">
+                            <tr th:each="post:${friendPosts}">
                                 <td th:text="${post.getUser().getUsername()}"></td>
                                 <td><img width="100px"
                                          th:src="@{|/${post.getImgUrl()}|}"></td>
@@ -63,7 +59,7 @@
                                     </select>
                                 </td>
                                 <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
-                                <td th:text="${post.getStatus()}"></td>
+                                <td th:text="${post.getComments().size()}"></td>
                                 <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
                                 #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}"></td>
@@ -71,14 +67,8 @@
                                 #dates.month(post.getUpdatedAt()), #dates.day(post.getUpdatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}"></td>
                                 <td>
-                                    <a th:href="@{|/user/posts/edit/${post.getId()}|}" title="Edit">
-                                        <img src="/img/icon/edit.png" width="30px"/></a>
-                                    <a th:href="@{|/user/posts/preview/${post.getId()}|}" title="Preview">
-                                        <img src="/img/icon/preview.png" width="30px"/></a>
-                                    <a th:data-id="${post.getId()}" href="#" title="Delete"
-                                       th:data-name="${post.getTitle()}"
-                                       data-toggle="modal" data-target="#DeleteModal">
-                                        <img src="/img/icon/delete.png" width="30px"/></a>
+                                    <a th:href="@{|/view-post/${post.getId()}|}" title="Go to Post">
+                                        <img src="/img/icon/hyperlink.png" width="30px"/></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -92,7 +82,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <th:block th:insert="/user/fragments/footer.html::footer"></th:block>
+        <th:block th:insert="/admin/fragments/footer.html::footer"></th:block>
         <!-- End of Footer -->
 
     </div>
@@ -107,14 +97,12 @@
 </a>
 
 <!-- Logout Modal-->
-<th:block th:insert="/user/fragments/logout-modal.html::logout-modal"></th:block>
-<th:block th:insert="/user/fragments/delete-modal.html::delete-modal"></th:block>
-<th:block th:insert="/user/fragments/delete-user-modal.html::delete-user-modal"></th:block>
+<th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
+<th:block th:insert="/admin/fragments/delete-modal.html::delete-modal"></th:block>
 <th:block th:insert="/user/fragments/alert-modal.html::alert-modal"></th:block>
 <th:block th:insert="/user/fragments/message-modal.html::message-modal"></th:block>
 
-
-<th:block th:insert="/user/fragments/user-other-foot.html::user-other-foot"></th:block>
+<th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
 
 <script>
 
@@ -122,7 +110,7 @@
         let button = $(event.relatedTarget);
         let id = button.data('id');
         let name = button.data('name');
-        let action = "/user/posts/delete/" + id;
+        let action = "/admin/post/delete/" + id;
         let label = "Are you sure you're ready to delete Post - \"" + name.toUpperCase() + "\"?";
         let text = "Select \"Delete\" below if you are ready to remove this Post."
         let modal = $(this);

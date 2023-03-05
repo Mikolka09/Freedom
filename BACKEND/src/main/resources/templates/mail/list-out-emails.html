@@ -3,7 +3,7 @@
 
 <div th:fragment="list-out-emails">
     <h1 class="text-center">List Outbox Messages</h1>
-    <div >
+    <div>
         <div class="scroll-table">
             <table>
                 <thead>
@@ -53,7 +53,7 @@
                             <a href="#" class="newMessage" title="Send Message"
                                th:data-id="0"
                                th:data-out="true"
-                               th:data-id-to="${user.getId()}"
+                               th:data-id-to="${user==null?admin.getId():user.getId()}"
                                th:data-name="${message.getInvite().getUserTo().getFullName()}"
                                th:data-id-from="${message.getInvite().getUserTo().getId()}"
                                th:data-text="false"

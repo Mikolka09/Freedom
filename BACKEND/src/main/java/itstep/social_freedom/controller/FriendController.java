@@ -1,10 +1,7 @@
 package itstep.social_freedom.controller;
 
 import itstep.social_freedom.controller.api.ApiMessageController;
-import itstep.social_freedom.entity.Alert;
-import itstep.social_freedom.entity.Friend;
-import itstep.social_freedom.entity.Invite;
-import itstep.social_freedom.entity.User;
+import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +24,9 @@ public class FriendController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PostService postService;
 
     @Autowired
     private InviteService inviteService;
@@ -84,5 +84,14 @@ public class FriendController {
         ApiMessageController.createAlert(userTo, userFrom, alert, invite, text, inviteService, alertService);
         friendService.deleteFriend(id, idFriend);
         return "redirect:/user/friends";
+    }
+
+    @GetMapping("/user/friends/all-posts")
+    private String giveAllFriendsPosts(Model model){
+        PostController.giveMainData(model, userService, alertService, messageService);
+        User user = userService.getCurrentUsername();
+        List<Friend> friends = giveListFriends(user);
+        AdminController.getAllFriendsPosts(model, friends, postService);
+        return "friend/friends-posts";
     }
 }

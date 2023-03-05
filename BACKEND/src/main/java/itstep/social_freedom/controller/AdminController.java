@@ -111,6 +111,27 @@ public class AdminController {
         return "admin/friend/view-friend";
     }
 
+    @GetMapping("/admin/friends/all-posts")
+    private String giveAllFriendsPosts(Model model){
+        CreateModelUser(model);
+        User user = userService.getCurrentUsername();
+        List<Friend> friends = FriendController.giveListFriends(user);
+        getAllFriendsPosts(model, friends, postService);
+        return "admin/friend/friends-posts";
+    }
+
+    static void getAllFriendsPosts(Model model, List<Friend> friends, PostService postService) {
+        List<Post> friendPosts = new ArrayList<>();
+        List<Post> posts = postService.posts();
+        for(Friend friend:friends) {
+            for (Post post : posts) {
+                if(Objects.equals(post.getUser().getId(), friend.getFriendReceiver().getId()))
+                    friendPosts.add(post);
+            }
+        }
+        model.addAttribute("friendPosts", friendPosts);
+    }
+
     //View Profile User
     @GetMapping("/admin/users/view/{id}")
     public String viewProfileUser(@PathVariable(name = "id") Long id, Model model) {
@@ -124,6 +145,22 @@ public class AdminController {
 
     @GetMapping("/admin/messages")
     public String indexMail(Model model) {
+        CreateModelUser(model);
+        return "admin/mail/index";
+    }
+
+    @GetMapping("/admin/out-messages")
+    public String outMessages(Model model){
+        List<Message> outMessages = messageService.findAllMessagesOutUserById(userService.getCurrentUsername().getId());
+        model.addAttribute("outMessages", outMessages);
+        CreateModelUser(model);
+        return "admin/mail/index";
+    }
+
+    @GetMapping("/admin/deleted-messages")
+    public String deletedMessages(Model model){
+        List<Message> deleteMessages = messageService.findAllDeletedMessagesUserById(userService.getCurrentUsername().getId());
+        model.addAttribute("deleteMessages", deleteMessages);
         CreateModelUser(model);
         return "admin/mail/index";
     }
