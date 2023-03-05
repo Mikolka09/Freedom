@@ -198,4 +198,16 @@ public class ApiMessageController {
         }
         return "NOT";
     }
+
+    @GetMapping("/admin/messages/edit-message/{id}")
+    private String editMessage(@PathVariable(name="id") Long id,
+                               @RequestParam(name = "text") String text) {
+        Message message = messageService.findMessageById(id);
+        if(message!=null){
+            message.setMessage(text);
+            messageService.saveMessage(message);
+            return "OK";
+        }
+        return "NOT";
+    }
 }

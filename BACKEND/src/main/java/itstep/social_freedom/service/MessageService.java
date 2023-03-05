@@ -62,6 +62,11 @@ public class MessageService {
                 .sorted(Comparator.comparing(Message::getCreatedAt).reversed()).collect(Collectors.toList());
     }
 
+    public List<Message> findAllUsersMessages(){
+        return messageRepository.findAll().stream()
+                .sorted(Comparator.comparing(x -> x.getInvite().getUserFrom().getUsername())).collect(Collectors.toList());
+    }
+
     public List<Message> findAllMessagesOutUserById(Long userId) {
         return messageRepository.findAll().stream()
                 .filter(x -> Objects.equals(x.getInvite().getUserFrom().getId(), userId) && x.getStatus() != Status.DELETED)

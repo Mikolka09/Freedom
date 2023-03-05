@@ -46,22 +46,7 @@ $('#MessageModal').on('show.bs.modal', function (event) {
         let idFrom = button.data('id-from');
         let idTo = button.data('id-to');
         let name = button.data('name');
-        let alert = button.data('text');
-        let arrText = "";
-        if (alert.indexOf(']') !== -1) {
-            arrText = alert.split(']\n');
-        }
-        let alertAnswer = "";
-        let text = "";
-        if (arrText.length > 0) {
-            alertAnswer = arrText[0] + ']';
-            text = arrText[1];
-            modal.find('#text-mess-answer').text(alertAnswer);
-            modal.find('#text-mess').text(text);
-        } else {
-            modal.find('#text-mess').text(alert);
-            modal.find('#text-mess-answer').text('');
-        }
+        changeTextMessage(modal, alert);
         let date = button.data('date');
         let dies = button.data('dies');
         let accept = $('#messageAcceptedModal');
@@ -86,13 +71,31 @@ $('#MessageModal').on('show.bs.modal', function (event) {
         if (typeof dies === "undefined")
             changeStatusMessage(id);
     } else {
+        changeTextMessage(modal, alert);
         modal.find('#messageModalLabel').text(name);
-        modal.find('#text-mess').text(alert);
         modal.find('#date-message').text(date);
         $('#messageAcceptedModal').hide();
         $('#messageAnswerModal').hide();
     }
 })
+
+function changeTextMessage(modal, alert) {
+    let arrText = "";
+    if (alert.indexOf(']') !== -1) {
+        arrText = alert.split(']\n');
+    }
+    let alertAnswer = "";
+    let text = "";
+    if (arrText.length > 0) {
+        alertAnswer = arrText[0] + ']';
+        text = arrText[1];
+        modal.find('#text-mess-answer').text(alertAnswer);
+        modal.find('#text-mess').text(text);
+    } else {
+        modal.find('#text-mess').text(alert);
+        modal.find('#text-mess-answer').text('');
+    }
+}
 
 function changeStatusMessage(id) {
     $.get({
@@ -441,9 +444,27 @@ $('#action').on('click', function () {
     if (href === "#") {
         let idFrom = data.attr('data-id-from');
         let idTo = data.attr('data-id-to');
+        let admin = data.attr('data-admin');
         let text = "Message deleted!";
         let url = data.attr('data-url');
-        printAllEmails(idFrom, idTo, url, text);
+        if (typeof admin === "undefined")
+            printAllEmails(idFrom, idTo, url, text);
+        else {
+            $.get({
+                url: url,
+                success:(data)=>{
+                    if(data==="OK"){
+                        alertInfo(text);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                },
+                error:(err)=>{
+                    console.log(err);
+                }
+            });
+        }
     }
 });
 
@@ -461,8 +482,9 @@ function answerData(data) {
     } else {
         answer = "[reply to message from " + date + ", text: \"" + (text.substring(0, 80) + " ...") + "\"]";
     }
-    $('#send-user-message').attr("data-id", id);
-    $('#send-user-message').attr("data-out", out);
+    let send = $('#send-user-message');
+    send.attr("data-id", id);
+    send.attr("data-out", out);
     $('#userIdReq').val(idTo);
     $('#userIdRec').val(idFrom);
     $('#recipient-user-name').val(name);
@@ -476,40 +498,79 @@ function answerData(data) {
 }
 
 $('#send-user-message').on('click', function () {
-    let idFrom = $('#userIdReq').val();
-    let idTo = $('#userIdRec').val();
-    let answer = $('#userAnswerText').val();
-    let id = $(this).attr("data-id");
-    let out = $(this).attr("data-out");
-    let message = $('#message-user-text').val();
-    if (message !== "") {
-        $.get({
-            url: '/user/messages/send/' + idTo,
-            data: {
-                userId: idFrom,
-                text: message,
-                answer: answer
-            },
-            success: (data) => {
-                if (data === "OK") {
-                    let text = "Your message has been sent!";
-                    let url = "/user/messages/accepted/" + id;
-                    if (typeof out === 'undefined')
-                        printEmails(idFrom, idTo, id, url, text);
-                    else {
-                        alertInfo('Your message has been sent!');
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
+    let button = $(this);
+    let nameButton = button.text();
+    if(nameButton!=="Save") {
+        let idFrom = $('#userIdReq').val();
+        let idTo = $('#userIdRec').val();
+        let answer = $('#userAnswerText').val();
+        let id = button.attr("data-id");
+        let out = button.attr("data-out");
+        let message = $('#message-user-text').val();
+        if (message !== "") {
+            $.get({
+                url: '/user/messages/send/' + idTo,
+                data: {
+                    userId: idFrom,
+                    text: message,
+                    answer: answer
+                },
+                success: (data) => {
+                    if (data === "OK") {
+                        let text = "Your message has been sent!";
+                        let url = "/user/messages/accepted/" + id;
+                        if (typeof out === 'undefined')
+                            printEmails(idFrom, idTo, id, url, text);
+                        else {
+                            alertInfo('Your message has been sent!');
+                            setTimeout(function () {
+                                location.reload();
+                            }, 1000);
+                        }
                     }
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+        }
+    }else {
+        let id = button.attr("data-id");
+        let text = $('#message-user-text').val();
+        let url = "/admin/messages/edit-message/"+id;
+        $.get({
+            url:url,
+            data:{
+                text:text
+            },
+            success:(data)=>{
+                if(data==="OK"){
+                    alertInfo('Message edited!!');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
                 }
             },
-            error: (err) => {
+            error:(err)=>{
                 console.log(err);
             }
         });
     }
 });
+
+$('.editMessage').on('click', function (){
+    let data = $(this);
+    let button = $('#send-user-message');
+    let id = data.attr('data-id');
+    let name = data.attr('data-name');
+    let text = data.attr('data-text');
+    button.attr('data-id', id);
+    button.text('Save');
+    $('#recipient-user-name').val(name);
+    $('#sendUserMessageLabel').text('Edit message to ' + name);
+    $('#message-user-text').val(text);
+    new bootstrap.Modal(document.getElementById("sendUserMessageModal")).show();
+})
 
 
 

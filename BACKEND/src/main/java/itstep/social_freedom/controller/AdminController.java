@@ -143,6 +143,14 @@ public class AdminController {
         return "admin/users/view-user";
     }
 
+    @GetMapping("/admin/messages-all-users")
+    public String indexAllMessages(Model model) {
+        List<Message> messageAllList = messageService.findAllUsersMessages();
+        model.addAttribute("messageAllList", messageAllList);
+        CreateModelUser(model);
+        return "admin/mail/all-messages";
+    }
+
     @GetMapping("/admin/messages")
     public String indexMail(Model model) {
         CreateModelUser(model);
