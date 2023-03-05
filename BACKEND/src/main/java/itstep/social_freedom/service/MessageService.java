@@ -22,8 +22,8 @@ public class MessageService {
     public MessageDto allUserMessages(Long idTo) {
         MessageDto messageDto = new MessageDto();
         messageDto.setId(idTo);
-        HashMap<Long,List<Message>> inMessages = new HashMap<>();
-        HashMap<Long,List<Message>> outMessages = new HashMap<>();
+        HashMap<Long, List<Message>> inMessages = new HashMap<>();
+        HashMap<Long, List<Message>> outMessages = new HashMap<>();
         List<Message> messages = findAllMessagesUserById(idTo);
         giveHashMapMessages(inMessages, messages);
         messages = findAllMessagesOutUserById(idTo);
@@ -35,7 +35,7 @@ public class MessageService {
     }
 
     private void giveHashMapMessages(HashMap<Long, List<Message>> outMessages, List<Message> messages) {
-        for (Message msgOne:messages) {
+        for (Message msgOne : messages) {
             List<Message> messagesOut = new ArrayList<>();
             for (Message msg : messages) {
                 if (Objects.equals(msg.getInvite().getUserFrom().getId(), msgOne.getInvite().getUserFrom().getId()))
@@ -46,19 +46,25 @@ public class MessageService {
         }
     }
 
+    public List<Message> findAllDeletedMessagesUserById(Long userId) {
+        return messageRepository.findAll().stream()
+                .filter(x -> Objects.equals(x.getInvite().getUserTo().getId(), userId) && x.getStatus() == Status.DELETED)
+                .sorted(Comparator.comparing(Message::getCreatedAt).reversed()).collect(Collectors.toList());
+    }
+
     public Message findMessageById(Long id) {
         return messageRepository.findMessageById(id);
     }
 
     public List<Message> findAllMessagesUserById(Long userId) {
         return messageRepository.findAll().stream()
-                .filter(x -> Objects.equals(x.getInvite().getUserTo().getId(), userId))
+                .filter(x -> Objects.equals(x.getInvite().getUserTo().getId(), userId) && x.getStatus() != Status.DELETED)
                 .sorted(Comparator.comparing(Message::getCreatedAt).reversed()).collect(Collectors.toList());
     }
 
     public List<Message> findAllMessagesOutUserById(Long userId) {
         return messageRepository.findAll().stream()
-                .filter(x -> Objects.equals(x.getInvite().getUserFrom().getId(), userId))
+                .filter(x -> Objects.equals(x.getInvite().getUserFrom().getId(), userId) && x.getStatus() != Status.DELETED)
                 .sorted(Comparator.comparing(Message::getCreatedAt).reversed()).collect(Collectors.toList());
     }
 

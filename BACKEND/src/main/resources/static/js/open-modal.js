@@ -25,7 +25,7 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     modal.find('#date-alert').text(date);
     if (alert.split(' ')[2] === 'accepted' ||
         alert.split(' ')[2] === 'denied' ||
-        alert.split(' ')[2] === 'read'||
+        alert.split(' ')[2] === 'read' ||
         alert.split(' ')[2] === 'broke')
         modal.find('#footer-confirm').hide();
     else
@@ -35,35 +35,47 @@ $('#AlertModal').on('show.bs.modal', function (event) {
 
 $('#MessageModal').on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget);
-    let id = button.data('id');
-    let window = button.data('button');
-    let idFrom = button.data('id-from');
-    let idTo = button.data('id-to');
+    let classButton = button.data('class');
+    let modal = $(this);
     let name = button.data('name');
     let alert = button.data('text');
     let date = button.data('date');
-    let dies = button.data('dies');
-    let modal = $(this);
-    let accept = $('#messageAcceptedModal');
-    if (typeof dies !== "undefined")
-        if (dies === true)
-            accept.hide();
-    let answer = $('#messageAnswerModal');
-    accept.attr('data-id', id);
-    accept.attr('data-button', window);
-    accept.attr('data-id-from', idFrom);
-    accept.attr('data-id-to', idTo);
-    answer.attr('data-id', id);
-    answer.attr('data-id-from', idFrom);
-    answer.attr('data-id-to', idTo);
-    answer.attr('data-name', name);
-    answer.attr('data-date', date);
-    answer.attr('data-text', alert);
-    modal.find('#messageModalLabel').text(name);
-    modal.find('#text-mess').text(alert);
-    modal.find('#date-message').text(date);
-    if (typeof dies === "undefined")
-        changeStatusMessage(id);
+    if (classButton !== "viewMessage") {
+        let id = button.data('id');
+        let window = button.data('button');
+        let idFrom = button.data('id-from');
+        let idTo = button.data('id-to');
+        let name = button.data('name');
+        let alert = button.data('text');
+        let date = button.data('date');
+        let dies = button.data('dies');
+        let accept = $('#messageAcceptedModal');
+        if (typeof dies !== "undefined")
+            if (dies === true)
+                accept.hide();
+        let answer = $('#messageAnswerModal');
+        accept.attr('data-id', id);
+        accept.attr('data-button', window);
+        accept.attr('data-id-from', idFrom);
+        accept.attr('data-id-to', idTo);
+        answer.attr('data-id', id);
+        answer.attr('data-id-from', idFrom);
+        answer.attr('data-id-to', idTo);
+        answer.attr('data-name', name);
+        answer.attr('data-date', date);
+        answer.attr('data-text', alert);
+        modal.find('#messageModalLabel').text(name);
+        modal.find('#text-mess').text(alert);
+        modal.find('#date-message').text(date);
+        if (typeof dies === "undefined")
+            changeStatusMessage(id);
+    } else {
+        modal.find('#messageModalLabel').text(name);
+        modal.find('#text-mess').text(alert);
+        modal.find('#date-message').text(date);
+        $('#messageAcceptedModal').hide();
+        $('#messageAnswerModal').hide();
+    }
 })
 
 function changeStatusMessage(id) {
@@ -236,14 +248,18 @@ $('button').on('click', function () {
             text = "Friend request accepted!";
             url = "/user/alerts/confirm/" + idAlert;
         }
-        if (id !== "messageAnswerModal")
-            if (id !== "send-user-message")
-                if (window !== "mail") {
-                    alertInfo(text);
-                    setTimeout(function () {
-                        sending(url);
-                    }, 1000);
+        if (id !== "messageAnswerModal") {
+            if (id !== "cancelModal") {
+                if (id !== "send-user-message") {
+                    if (window !== "mail") {
+                        alertInfo(text);
+                        setTimeout(function () {
+                            sending(url);
+                        }, 1000);
+                    }
                 }
+            }
+        }
     }
 });
 
@@ -295,47 +311,47 @@ function printEmails(idFrom, idTo, idMail, url, text) {
 }
 
 function printAllEmails(idFrom, idTo, url, text) {
-        $.get({
-            url: url,
-            success: (base) => {
-                if (base === "OK") {
-                    $.get({
-                        url: "/user/messages/all-messages/" + idFrom,
-                        data: {
-                            idTo: idTo
-                        },
-                        success: (data) => {
-                            $.get({
-                                url: "/user/messages/all-senders/" + idTo,
-                                success: (senders) => {
-                                    $.get({
-                                        url: '/user/messages/all-mails/' + idTo,
-                                        success: (mails) => {
-                                            printMessages(mails);
-                                            printAllSenders(senders, data[0].invite.userFrom.fullName);
-                                            printAllUserMessages(data);
-                                            alertInfo(text);
-                                        },
-                                        error: (err) => {
-                                            console.log(err);
-                                        }
-                                    });
-                                },
-                                error: (err) => {
-                                    console.log(err);
-                                }
-                            });
-                        },
-                        error: (err) => {
-                            console.log(err);
-                        }
-                    });
-                }
-            },
-            error: (err) => {
-                console.log(err);
+    $.get({
+        url: url,
+        success: (base) => {
+            if (base === "OK") {
+                $.get({
+                    url: "/user/messages/all-messages/" + idFrom,
+                    data: {
+                        idTo: idTo
+                    },
+                    success: (data) => {
+                        $.get({
+                            url: "/user/messages/all-senders/" + idTo,
+                            success: (senders) => {
+                                $.get({
+                                    url: '/user/messages/all-mails/' + idTo,
+                                    success: (mails) => {
+                                        printMessages(mails);
+                                        printAllSenders(senders, data[0].invite.userFrom.fullName);
+                                        printAllUserMessages(data);
+                                        alertInfo(text);
+                                    },
+                                    error: (err) => {
+                                        console.log(err);
+                                    }
+                                });
+                            },
+                            error: (err) => {
+                                console.log(err);
+                            }
+                        });
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    }
+                });
             }
-        });
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
 }
 
 function alertInfo(text) {
@@ -376,6 +392,24 @@ $('.newMessage').on('click', function () {
     answerData($(this));
 });
 
+$('.recoveryMessage').on('click', function () {
+    let id = $(this).attr('data-id');
+    $.get({
+        url: "/user/messages/recovery/" + id,
+        success:(data)=>{
+            if(data==="OK"){
+                alertInfo('The message has been recovered!');
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            }
+        },
+        error:(err)=>{
+            console.log(err);
+        }
+    });
+});
+
 $('#mark-all').on('click', function () {
     let data = $(this);
     let idFrom = data.attr('data-id-from');
@@ -385,10 +419,23 @@ $('#mark-all').on('click', function () {
     printAllEmails(idFrom, idTo, url, text);
 });
 
+$('#action').on('click', function () {
+    let data = $(this);
+    let href = data.attr('href');
+    if (href === "#") {
+        let idFrom = data.attr('data-id-from');
+        let idTo = data.attr('data-id-to');
+        let text = "Message deleted!";
+        let url = data.attr('data-url');
+        printAllEmails(idFrom, idTo, url, text);
+    }
+});
+
 function answerData(data) {
     let id = data.attr('data-id');
     let idFrom = data.attr('data-id-from');
     let idTo = data.attr('data-id-to');
+    let out = data.attr("data-out");
     let name = data.attr('data-name');
     let text = data.attr('data-text');
     let date = data.attr('data-date');
@@ -399,6 +446,7 @@ function answerData(data) {
         answer = "[reply to message from " + date + ", text: \"" + (text.substring(0, 80) + " ...") + "\"]";
     }
     $('#send-user-message').attr("data-id", id);
+    $('#send-user-message').attr("data-out", out);
     $('#userIdReq').val(idTo);
     $('#userIdRec').val(idFrom);
     $('#recipient-user-name').val(name);
@@ -416,6 +464,7 @@ $('#send-user-message').on('click', function () {
     let idTo = $('#userIdRec').val();
     let answer = $('#userAnswerText').val();
     let id = $(this).attr("data-id");
+    let out = $(this).attr("data-out");
     let message = $('#message-user-text').val();
     if (message !== "") {
         $.get({
@@ -429,7 +478,14 @@ $('#send-user-message').on('click', function () {
                 if (data === "OK") {
                     let text = "Your message has been sent!";
                     let url = "/user/messages/accepted/" + id;
-                    printEmails(idFrom, idTo, id, url, text);
+                    if (typeof out === 'undefined')
+                        printEmails(idFrom, idTo, id, url, text);
+                    else{
+                        alertInfo('Your message has been sent!');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
                 }
             },
             error: (err) => {

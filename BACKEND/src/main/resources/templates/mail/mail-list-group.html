@@ -1,135 +1,147 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<div class="container-fluid" th:fragment="mail-list-group">
-    <div class="row">
-        <div class="col-4 text-center text-dark">
-            <h3 style="font-weight: bold;">Senders</h3>
+<div th:fragment="mail-list-group">
+    <h1 class="text-center">List Inbox Messages</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4 text-center text-dark">
+                <h3 style="font-weight: bold;">Senders</h3>
+            </div>
+            <div class="col-8 text-dark text-center">
+                <h3 style="font-weight: bold;">Messages - <span
+                        th:text="${messageList.get(0).getInvite().getUserFrom().getFullName()}"
+                        id="name-user-from" style="text-decoration-line: underline; color: #293c74;"></span></h3>
+            </div>
         </div>
-        <div class="col-8 text-dark text-center">
-            <h3 style="font-weight: bold;">Messages - <span
-                    th:text="${messageList.get(0).getInvite().getUserFrom().getFullName()}"
-                    id="name-user-from" style="text-decoration-line: underline; color: #293c74;"></span></h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4">
-            <ul id="container-senders" class="list-group list-group-light" style="max-height: 500px; overflow-y: auto;">
-                <th:block th:each="pair, state:${list.entrySet()}">
-                    <th:block th:each="message:${pair.getValue().get(0)}">
-                        <li class="list-group-item d-flex justify-content-between align-items-center"
-                            th:style="${state.index==0?'background-color: lightgray':''}">
-                            <div class="d-flex align-items-center">
-                                <a href="#" title="Open all messages"
-                                   th:data-id-from="${message.getInvite().getUserFrom().getId()}"
-                                   th:data-id-to="${message.getInvite().getUserTo().getId()}"
-                                   class="open-all-messages">
-                                    <img th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"
-                                         alt="avatar"
-                                         width="80px"
-                                         class="rounded-circle px-2"/>
-                                </a>
-                                <div class="ms-3">
-                                    <div>
-                                        <div class="row">
-                                            <div class="col-10">
-                                                <p class="mb-1"
-                                                   style="text-decoration-line: underline; color: #293c74; font-weight: bold;"
-                                                   th:text="${message.getInvite().getUserFrom().getFullName()}">
-                                                    John Doe</p>
-                                            </div>
-                                            <div class="col-2">
-                                                <a href="#" class="answerMessage" title="Send Message"
-                                                   th:data-id="${message.getId()}"
-                                                   th:data-id-from="${message.getInvite().getUserFrom().getId()}"
-                                                   th:data-name="${message.getInvite().getUserFrom().getFullName()}"
-                                                   th:data-id-to="${message.getInvite().getUserTo().getId()}"
-                                                   th:data-text="false"
-                                                   th:data-date="${#temporals.format(T(java.time.LocalDate).
+        <div class="row">
+            <div class="col-4">
+                <ul id="container-senders" class="list-group list-group-light"
+                    style="max-height: 500px; overflow-y: auto;">
+                    <th:block th:each="pair, state:${list.entrySet()}">
+                        <th:block th:each="message:${pair.getValue().get(0)}">
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                th:style="${state.index==0?'background-color: lightgray':''}">
+                                <div class="d-flex align-items-center">
+                                    <a href="#" title="Open all messages"
+                                       th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                                       th:data-id-to="${message.getInvite().getUserTo().getId()}"
+                                       class="open-all-messages">
+                                        <img th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"
+                                             alt="avatar"
+                                             width="80px"
+                                             class="rounded-circle px-2"/>
+                                    </a>
+                                    <div class="ms-3">
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-10">
+                                                    <p class="mb-1"
+                                                       style="text-decoration-line: underline; color: #293c74; font-weight: bold;"
+                                                       th:text="${message.getInvite().getUserFrom().getFullName()}">
+                                                        John Doe</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <a href="#" class="answerMessage" title="Send Message"
+                                                       th:data-id="${message.getId()}"
+                                                       th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                                                       th:data-name="${message.getInvite().getUserFrom().getFullName()}"
+                                                       th:data-id-to="${message.getInvite().getUserTo().getId()}"
+                                                       th:data-text="false"
+                                                       th:data-date="${#temporals.format(T(java.time.LocalDate).
                                                of(#dates.year(message.getCreatedAt()),#dates.month(message.getCreatedAt()),
                                                #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                                #locale.forLanguageTag('en'))}">
-                                                    <img src="/img/icon/write-mail.png" alt="Mail" width="25px;"/>
-                                                </a>
+                                                        <img src="/img/icon/write-mail.png" alt="Mail" width="25px;"/>
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div>
-                                            <p class="text-dark mb-0"
-                                               th:text="${message.getInvite().getUserFrom().getEmail()}">
-                                                john.doe@gmail.com</p>
+                                            <div>
+                                                <p class="text-dark mb-0"
+                                                   th:text="${message.getInvite().getUserFrom().getEmail()}">
+                                                    john.doe@gmail.com</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <th:block th:if="${counter.size()!=0}" th:each="count, prop:${counter.entrySet()}">
+                                <th:block th:if="${counter.size()!=0}" th:each="count, prop:${counter.entrySet()}">
                                 <span class="badge rounded-pill badge-primary"
                                       th:if="${count.getKey()==message.getInvite().getUserFrom().getId()}"
                                       th:text="${count.getKey()==message.getInvite().getUserFrom().getId()?count.getValue():''}"></span>
-                            </th:block>
-                        </li>
+                                </th:block>
+                            </li>
+                        </th:block>
                     </th:block>
-                </th:block>
-            </ul>
-        </div>
-        <div class="col-8">
-            <ul id="container-messages" class="list-group list-group-light mb-3"
-                style="max-height: 500px; overflow-y: auto;">
-                <th:block th:each="message:${messageList}">
-                    <li class="list-group-item"
-                        th:style="${message.getInvite().getStatus()==status[8]?'font-weight: normal':'font-weight: bold'}">
-                        <div class="row">
-                            <div class="col-11">
-                                <div class="col text-right">
+                </ul>
+            </div>
+            <div class="col-8">
+                <ul id="container-messages" class="list-group list-group-light mb-3"
+                    style="max-height: 500px; overflow-y: auto;">
+                    <th:block th:each="message:${messageList}">
+                        <li class="list-group-item"
+                            th:style="${message.getInvite().getStatus()==status[8]?'font-weight: normal':'font-weight: bold'}">
+                            <div class="row">
+                                <div class="col-11">
+                                    <div class="col text-right">
                                    <span class="badge rounded-pill"
                                          th:classappend="${message.getInvite().getStatus()==status[9]||message.getInvite().getStatus()==status[5]
                                    ?'badge-warning':'badge-success'}"
                                          th:text="${message.getInvite().getStatus()==status[5]?status[9]:message.getInvite().getStatus()}"></span>
-                                </div>
-                                <p class="mb-2" style="color: #6a1a21; text-decoration-line: underline;"
-                                   th:text="${#temporals.format(T(java.time.LocalDate).
+                                    </div>
+                                    <p class="mb-2" style="color: #6a1a21; text-decoration-line: underline;"
+                                       th:text="${#temporals.format(T(java.time.LocalDate).
                                 of(#dates.year(message.getCreatedAt()),#dates.month(message.getCreatedAt()),
                                 #dates.day(message.getCreatedAt())), 'dd MMM yyyy',#locale.forLanguageTag('en'))}"></p>
-                                <p class="mb-0 text-dark" th:text="${message.getMessage().length()>200
+                                    <p class="mb-0 text-dark" th:text="${message.getMessage().length()>200
                                 ?(message.getMessage().substring(0, 200)+' ...'):message.getMessage()}">
-                                    Some placeholder content in a paragraph relating to "Our company starts its
-                                </p>
-                            </div>
-                            <div class="col-1 align-self-center">
-                                <div title="Read">
-                                    <a href="#" id="readMessage" data-target="#MessageModal" data-toggle="modal"
-                                       th:data-dies="${message.getInvite().getStatus()==status[8]?true:false}"
-                                       th:data-id="${message.getId()}"
-                                       th:data-button = "mail"
-                                       th:data-id-from="${message.getInvite().getUserFrom().getId()}"
-                                       th:data-id-to="${message.getInvite().getUserTo().getId()}"
-                                       th:data-name="${message.getInvite().getUserFrom().getFullName()}"
-                                       th:data-text="${message.getMessage()}"
-                                       th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
+                                        Some placeholder content in a paragraph relating to "Our company starts its
+                                    </p>
+                                </div>
+                                <div class="col-1 align-self-center">
+                                    <div title="Read">
+                                        <a href="#" id="readMessage" data-target="#MessageModal" data-toggle="modal"
+                                           th:data-dies="${message.getInvite().getStatus()==status[8]?true:false}"
+                                           th:data-id="${message.getId()}"
+                                           th:data-button="mail"
+                                           th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                                           th:data-id-to="${message.getInvite().getUserTo().getId()}"
+                                           th:data-name="${message.getInvite().getUserFrom().getFullName()}"
+                                           th:data-text="${message.getMessage()}"
+                                           th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
                                 #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
-                                        <img src="/img/icon/read.png" width="30px"/></a>
-                                </div>
-                                <div style="padding-top: 15px;" title="Answer">
-                                    <a href="#" class="answerMessage"
-                                       th:data-id="${message.getId()}"
-                                       th:data-id-from="${message.getInvite().getUserFrom().getId()}"
-                                       th:data-name="${message.getInvite().getUserFrom().getFullName()}"
-                                       th:data-id-to="${message.getInvite().getUserTo().getId()}"
-                                       th:data-text="${message.getMessage()}"
-                                       th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
+                                            <img src="/img/icon/read.png" width="30px"/></a>
+                                    </div>
+                                    <div style="padding-top: 10px;" title="Answer">
+                                        <a href="#" class="answerMessage"
+                                           th:data-id="${message.getId()}"
+                                           th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                                           th:data-name="${message.getInvite().getUserFrom().getFullName()}"
+                                           th:data-id-to="${message.getInvite().getUserTo().getId()}"
+                                           th:data-text="${message.getMessage()}"
+                                           th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
                                 #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
-                                        <img src="/img/icon/answer.png" width="30px"/></a>
+                                            <img src="/img/icon/answer.png" width="30px"/></a>
+                                    </div>
+                                    <div style="padding-top: 10px;" title="Delete">
+                                        <a href="#" data-title="deleteMessage" data-toggle="modal"
+                                           data-target="#DeleteModal"
+                                           th:data-id="${message.getId()}"
+                                           th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                                           th:data-id-to="${message.getInvite().getUserTo().getId()}">
+                                            <img src="/img/icon/delete-message.png" width="30px"/></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                </th:block>
-            </ul>
-            <a class="btn btn-outline-primary btn-rounded w-100" id="mark-all"
-               th:data-id-from="${messageList.get(0).getInvite().getUserFrom().getId()}" href="#" role="button"
-               th:data-id-to="${messageList.get(0).getInvite().getUserTo().getId()}">
-                Mark all messages as read</a>
+                        </li>
+                    </th:block>
+                </ul>
+                <a class="btn btn-outline-primary btn-rounded w-100" id="mark-all"
+                   th:data-id-from="${messageList.get(0).getInvite().getUserFrom().getId()}" href="#" role="button"
+                   th:data-id-to="${messageList.get(0).getInvite().getUserTo().getId()}">
+                    Mark all messages as read</a>
+            </div>
         </div>
     </div>
 </div>

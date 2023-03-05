@@ -139,10 +139,10 @@ public class ApiMessageController {
         sendResponse(userFrom, userTo, text);
     }
 
-    public void sendResponse (User userFrom, User userTo, String answer){
-            Alert alert = new Alert();
-            Invite invite = new Invite();
-            String text = userTo.getFullName() + answer;
+    public void sendResponse(User userFrom, User userTo, String answer) {
+        Alert alert = new Alert();
+        Invite invite = new Invite();
+        String text = userTo.getFullName() + answer;
         createAlert(userFrom, userTo, alert, invite, text, inviteService, alertService);
     }
 
@@ -160,21 +160,42 @@ public class ApiMessageController {
     }
 
     @GetMapping("/user/messages/all-messages/{id}")
-        public Message[] allMessagesUser (@PathVariable(name = "id") Long id,
-                @RequestParam(name = "idTo") Long idTo){
-            MessageDto messages = messageService.allUserMessages(idTo);
-            return messages.getInMessages().get(id).toArray(Message[]::new);
-        }
-
-        @GetMapping("/user/messages/all-senders/{id}")
-        public List<List<List<Message>>> allMessagesSenders (@PathVariable(name = "id") Long id){
-            List<List<List<Message>>> list = new ArrayList<>();
-            HashMap<Long, List<Message>> map = messageService.allUserMessages(id).getInMessages();
-            for (Map.Entry<Long, List<Message>> entry : map.entrySet()) {
-                List<List<Message>> trans = new ArrayList<>();
-                trans.add(entry.getValue());
-                list.add(trans);
-            }
-            return list;
-        }
+    public Message[] allMessagesUser(@PathVariable(name = "id") Long id,
+                                     @RequestParam(name = "idTo") Long idTo) {
+        MessageDto messages = messageService.allUserMessages(idTo);
+        return messages.getInMessages().get(id).toArray(Message[]::new);
     }
+
+    @GetMapping("/user/messages/all-senders/{id}")
+    public List<List<List<Message>>> allMessagesSenders(@PathVariable(name = "id") Long id) {
+        List<List<List<Message>>> list = new ArrayList<>();
+        HashMap<Long, List<Message>> map = messageService.allUserMessages(id).getInMessages();
+        for (Map.Entry<Long, List<Message>> entry : map.entrySet()) {
+            List<List<Message>> trans = new ArrayList<>();
+            trans.add(entry.getValue());
+            list.add(trans);
+        }
+        return list;
+    }
+
+    @GetMapping("/user/messages/recovery/{id}")
+    private String recoveryMessage(@PathVariable(name="id") Long id) {
+        Message message = messageService.findMessageById(id);
+        if(message!=null){
+            message.setStatus(Status.ACTIVE);
+            messageService.saveMessage(message);
+            return "OK";
+        }
+        return "NOT";
+    }
+
+    @GetMapping("/user/messages/deleted/{id}")
+    private String deleteMessage(@PathVariable(name="id") Long id) {
+        Message message = messageService.findMessageById(id);
+        if(message!=null){
+            messageService.deleteMessage(id);
+            return "OK";
+        }
+        return "NOT";
+    }
+}

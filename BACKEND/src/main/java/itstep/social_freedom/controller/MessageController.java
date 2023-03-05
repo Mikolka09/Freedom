@@ -76,5 +76,19 @@ public class MessageController {
         return "mail/index";
     }
 
+    @GetMapping("/user/out-messages")
+    public String outMessages(Model model){
+        List<Message> outMessages = messageService.findAllMessagesOutUserById(userService.getCurrentUsername().getId());
+        model.addAttribute("outMessages", outMessages);
+        CreateModelUser(model);
+        return "mail/index";
+    }
 
+    @GetMapping("/user/deleted-messages")
+    public String deletedMessages(Model model){
+        List<Message> deleteMessages = messageService.findAllDeletedMessagesUserById(userService.getCurrentUsername().getId());
+        model.addAttribute("deleteMessages", deleteMessages);
+        CreateModelUser(model);
+        return "mail/index";
+    }
 }

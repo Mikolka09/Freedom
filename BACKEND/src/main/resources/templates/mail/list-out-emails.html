@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="list-out-emails">
+    <h1 class="text-center">List Outbox Messages</h1>
+    <div >
+        <div class="scroll-table">
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Avatar</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">FullName</th>
+                    <th scope="col">Message</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Date viewed</th>
+                    <th scope="col">Date sent</th>
+                    <th scope="col">Buttons</th>
+                </tr>
+                </thead>
+            </table>
+            <div class="scroll-table-body">
+                <table>
+                    <tbody>
+                    <tr th:each="message:${outMessages}">
+                        <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
+                                 th:src="@{|/${message.getInvite().getUserTo().getAvatarUrl()}|}"></td>
+                        <td th:text="${message.getInvite().getUserTo().getUsername()}"></td>
+                        <td th:text="${message.getInvite().getUserTo().getFullName()==null? 'NULL':
+                    message.getInvite().getUserTo().getFullName()}"></td>
+                        <td th:text="${message.getMessage().length()>70
+                                ?(message.getMessage().substring(0, 70)+' ...'):message.getMessage()}"></td>
+                        <td th:text="${message.getStatus()}"></td>
+                        <td th:text="${message.getInvite().getStatus()!=status[8]?status[9]:(#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getInvite().getUpdatedAt()),
+                                #dates.month(message.getInvite().getUpdatedAt()), #dates.day(message.getInvite().getUpdatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en')))}"></td>
+                        <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
+                                #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+                        <td>
+                            <a href="#" data-class="viewMessage" data-target="#MessageModal" data-toggle="modal"
+                               th:data-dies="${message.getInvite().getStatus()==status[8]?true:false}"
+                               th:data-id="${message.getId()}"
+                               th:data-button="mail" title="View Message"
+                               th:data-id-from="${message.getInvite().getUserFrom().getId()}"
+                               th:data-id-to="${message.getInvite().getUserTo().getId()}"
+                               th:data-name="${message.getInvite().getUserFrom().getFullName()}"
+                               th:data-text="${message.getMessage()}"
+                               th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
+                                #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">
+                                <img src="/img/icon/read.png" width="30px"/></a>
+                            <a href="#" class="newMessage" title="Send Message"
+                               th:data-id="0"
+                               th:data-out="true"
+                               th:data-id-to="${user.getId()}"
+                               th:data-name="${message.getInvite().getUserTo().getFullName()}"
+                               th:data-id-from="${message.getInvite().getUserTo().getId()}"
+                               th:data-text="false"
+                               th:data-date="${#temporals.format(T(java.time.LocalDate).
+                           of(#dates.year(message.getCreatedAt()),
+                           #dates.month(message.getCreatedAt()),
+                           #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
+                           #locale.forLanguageTag('en'))}">
+                                <img src="/img/icon/send.png" width="30px"/></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
