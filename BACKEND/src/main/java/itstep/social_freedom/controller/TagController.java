@@ -3,6 +3,8 @@ package itstep.social_freedom.controller;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.Tag;
 import itstep.social_freedom.entity.User;
+import itstep.social_freedom.service.AlertService;
+import itstep.social_freedom.service.MessageService;
 import itstep.social_freedom.service.TagService;
 import itstep.social_freedom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,17 @@ public class TagController {
     private UserService userService;
 
     @Autowired
+    private MessageService messageService;
+
+    @Autowired
+    private AlertService alertService;
+
+    @Autowired
     private TagService tagService;
 
     @GetMapping("/admin/tags")
     public String tags(Model model) {
+        AdminController.CreateModelUser(model, userService, alertService, messageService);
         List<Tag> tagList = tagService.allTag();
         model.addAttribute("tags", tagList);
         User user = userService.getCurrentUsername();
@@ -37,6 +46,7 @@ public class TagController {
 
     @GetMapping("/admin/tags/edit/{id}")
     public String editTag(Model model, @PathVariable(name = "id") Long id) {
+        AdminController.CreateModelUser(model, userService, alertService, messageService);
         Tag tag = tagService.findTagById(id);
         model.addAttribute("tag", tag);
         return "/admin/tags/tag-edit";

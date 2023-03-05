@@ -65,6 +65,7 @@ public class PostController {
     public String index(@PathVariable(name = "id") Long id, Model model) {
         List<Post> posts = postService.allPosts(id).stream()
                 .filter(post -> (post.getStatus() == Status.VERIFIED || post.getStatus() == Status.NOT_VERIFIED))
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
                 .collect(Collectors.toList());
         CreateModelUser(model);
         model.addAttribute("user_id", id);

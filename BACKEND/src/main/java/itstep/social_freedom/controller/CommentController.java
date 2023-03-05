@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -40,7 +41,8 @@ public class CommentController {
     @GetMapping("/user/comments/{id}")
     public String commentsList(@PathVariable(name = "id") Long id, Model model) {
         List<Comment> comments = commentService.allCommentsUser(id).stream()
-                .filter(x->x.getStatus()==Status.ACTIVE).collect(Collectors.toList());
+                .filter(x->x.getStatus()==Status.ACTIVE)
+                .sorted(Comparator.comparing(x->x.getPost().getUser().getUsername())).collect(Collectors.toList());
         model.addAttribute("comments", comments);
         model.addAttribute("status", Status.values());
         CreateModelUser(model);

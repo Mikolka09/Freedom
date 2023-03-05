@@ -7,6 +7,7 @@ import itstep.social_freedom.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -18,7 +19,9 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     public List<Comment> allComments() {
-        return commentRepository.findAll();
+        return commentRepository.findAll()
+                .stream().sorted(Comparator.comparing(x->x.getPost().getUser().getUsername()))
+                .collect(Collectors.toList());
     }
 
     public List<Comment> allCommentsUser(Long id){

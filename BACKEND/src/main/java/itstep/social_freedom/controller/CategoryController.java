@@ -4,9 +4,7 @@ import itstep.social_freedom.entity.Category;
 import itstep.social_freedom.entity.Post;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
-import itstep.social_freedom.service.CategoryService;
-import itstep.social_freedom.service.FileService;
-import itstep.social_freedom.service.UserService;
+import itstep.social_freedom.service.*;
 import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +25,12 @@ public class CategoryController {
     private UserService userService;
 
     @Autowired
+    private MessageService messageService;
+
+    @Autowired
+    private AlertService alertService;
+
+    @Autowired
     private CategoryService categoryService;
 
     @Autowired
@@ -34,6 +38,7 @@ public class CategoryController {
 
     @GetMapping("/admin/categories")
     public String categories(Model model) {
+        AdminController.CreateModelUser(model, userService, alertService, messageService);
         List<Category> categoryList = categoryService.allCategory();
         model.addAttribute("categories", categoryList);
         User user = userService.getCurrentUsername();
@@ -44,6 +49,7 @@ public class CategoryController {
 
     @GetMapping("/admin/categories/edit/{id}")
     public String editCategory(Model model, @PathVariable(name = "id") Long id) {
+        AdminController.CreateModelUser(model, userService, alertService, messageService);
         Category category = categoryService.findCategoryById(id);
         model.addAttribute("category", category);
         return "/admin/categories/category-edit";

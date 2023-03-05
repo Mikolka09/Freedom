@@ -1,7 +1,6 @@
 package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.*;
-import itstep.social_freedom.repository.CommentRepository;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,10 +47,8 @@ public class AdminController {
     @Autowired
     private FileService fileService;
 
-    @Autowired
-    private CommentRepository commentRepository;
 
-    private void CreateModelUser(Model model) {
+    public static void CreateModelUser(Model model, UserService userService, AlertService alertService, MessageService messageService) {
         User user = userService.getCurrentUsername();
         List<Alert> alertList = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
@@ -80,12 +77,12 @@ public class AdminController {
     //Main page AdminDashboard
     @GetMapping("/admin")
     public String index(Model model) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/index";
     }
     @GetMapping("/admin/friends")
     public String friends(Model model){
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         User user = userService.getCurrentUsername();
         List<Friend> friends = FriendController.giveListFriends(user);
         model.addAttribute("friends", friends);
@@ -107,13 +104,13 @@ public class AdminController {
         int friends = PageController.countFriends(user.getRequestedFriends(), user.getReceivedFriends());
         model.addAttribute("friends", friends);
         model.addAttribute("friend", user);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/friend/view-friend";
     }
 
     @GetMapping("/admin/friends/all-posts")
     private String giveAllFriendsPosts(Model model){
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         User user = userService.getCurrentUsername();
         List<Friend> friends = FriendController.giveListFriends(user);
         getAllFriendsPosts(model, friends, postService);
@@ -139,7 +136,7 @@ public class AdminController {
         int friends = PageController.countFriends(user.getRequestedFriends(), user.getReceivedFriends());
         model.addAttribute("friends", friends);
         model.addAttribute("user", user);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/view-user";
     }
 
@@ -147,13 +144,13 @@ public class AdminController {
     public String indexAllMessages(Model model) {
         List<Message> messageAllList = messageService.findAllUsersMessages();
         model.addAttribute("messageAllList", messageAllList);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/mail/all-messages";
     }
 
     @GetMapping("/admin/messages")
     public String indexMail(Model model) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/mail/index";
     }
 
@@ -161,7 +158,7 @@ public class AdminController {
     public String outMessages(Model model){
         List<Message> outMessages = messageService.findAllMessagesOutUserById(userService.getCurrentUsername().getId());
         model.addAttribute("outMessages", outMessages);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/mail/index";
     }
 
@@ -169,13 +166,13 @@ public class AdminController {
     public String deletedMessages(Model model){
         List<Message> deleteMessages = messageService.findAllDeletedMessagesUserById(userService.getCurrentUsername().getId());
         model.addAttribute("deleteMessages", deleteMessages);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/mail/index";
     }
 
     @GetMapping("/admin/alerts")
     public String indexAlert(Model model) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/alert/index";
     }
 
@@ -186,7 +183,7 @@ public class AdminController {
                 .filter(user -> (user.getStatus() == Status.DELETED || user.getStatus() == Status.NOT_ACTIVE))
                 .collect(Collectors.toList());
         model.addAttribute("users", users);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/deleted-users";
     }
 
@@ -195,10 +192,11 @@ public class AdminController {
     public String posts(Model model) {
         List<Post> posts = postService.posts().stream()
                 .filter(post -> post.getStatus() == Status.VERIFIED)
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
                 .collect(Collectors.toList());
         model.addAttribute("posts", posts);
         model.addAttribute("status", Status.values());
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/posts/posts";
     }
 
@@ -212,7 +210,7 @@ public class AdminController {
                 .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/posts/create-admin-post";
     }
 
@@ -228,7 +226,7 @@ public class AdminController {
         Post post = new Post();
         post.setStatus(Status.NOT_VERIFIED);
         post.setLikes(0);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post))
             return "redirect:/admin/posts";
         return "redirect:/admin/create-post/" + user_id;
@@ -238,7 +236,7 @@ public class AdminController {
     @GetMapping("/admin/users/create-user")
     public String createUser(Model model) {
         model.addAttribute("userForm", new User());
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/create-user";
     }
 
@@ -246,7 +244,7 @@ public class AdminController {
     @PostMapping("/register/new-user")
     public String addNewUser(@ModelAttribute("userForm") @Valid User userForm,
                              BindingResult bindingResult, Model model) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", "Not all fields are filled!");
             return "admin/users/create-user";
@@ -267,7 +265,7 @@ public class AdminController {
     @GetMapping("/admin/post/edit/{id}")
     public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
         gettingPost(post_id, model, postService, categoryService, tagService);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/posts/posts-edit";
     }
 
@@ -292,7 +290,7 @@ public class AdminController {
     //Post Verification
     @GetMapping("/admin/post/verify/{id}")
     public String verifyPost(@PathVariable(name = "id") Long post_id, Model model) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         gettingPost(post_id, model, postService, categoryService, tagService);
         return "admin/posts/post-verify";
     }
@@ -301,20 +299,24 @@ public class AdminController {
     @GetMapping("/admin/posts-verified")
     public String postsVerified(Model model) {
         List<Post> posts = postService.posts().stream().filter(x ->
-                (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED)).collect(Collectors.toList());
+                (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED))
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                .collect(Collectors.toList());
         model.addAttribute("posts", posts);
         model.addAttribute("status", Status.values());
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/posts/posts-verified";
     }
 
     //Getting a list of users
     @GetMapping("/admin/users")
     public String usersList(Model model) {
-        List<User> users = userService.allUsers().stream().
-                filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
+        List<User> users = userService.allUsers().stream()
+                .filter(x -> x.getStatus() == Status.ACTIVE)
+                .sorted(Comparator.comparing(User::getUsername))
+                .collect(Collectors.toList());
         model.addAttribute("allUsers", users);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/users";
     }
 
@@ -324,7 +326,7 @@ public class AdminController {
         List<Comment> comments = commentService.allComments();
         model.addAttribute("comments", comments);
         model.addAttribute("status", Status.values());
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/comments/comments";
     }
 
@@ -377,7 +379,7 @@ public class AdminController {
         List<Role> roles = roleService.allRoles();
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/user-edit";
     }
 
@@ -390,7 +392,7 @@ public class AdminController {
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
         model.addAttribute("status", enums);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/user-recovery";
     }
 
@@ -399,7 +401,7 @@ public class AdminController {
     public String newpassUser(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/user-newpass";
     }
 
@@ -414,7 +416,7 @@ public class AdminController {
                             @RequestParam(value = "description") String description,
                             @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
         Post post = postService.findPostById(post_id);
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post))
             return "redirect:/admin/posts";
         return "redirect:/admin/post/edit/" + user_id;
@@ -432,7 +434,7 @@ public class AdminController {
                               @RequestParam(value = "description") String description,
                               @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id,
                               @RequestParam(value = "status") String status) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         Post post = postService.findPostById(post_id);
         String path = "/admin/post/verify/" + post_id;
         if (!status.isEmpty()) {
@@ -466,7 +468,7 @@ public class AdminController {
                        @RequestParam(value = "age") String age,
                        @RequestParam(value = "email") String email,
                        @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         String path = "/admin/users/edit/" + user_id;
         User user = userService.findUserById(user_id);
         boolean edit = true;
@@ -499,7 +501,7 @@ public class AdminController {
                            @RequestParam(value = "passwordConfirm") String passwordConfirm,
                            @RequestParam(value = "password") String password,
                            @RequestParam(value = "status") String status) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         String path = "/admin/users/recovery/" + user_id;
         User user = userService.findUserById(user_id);
         boolean edit = true;
@@ -551,7 +553,7 @@ public class AdminController {
                               @RequestParam(value = "user_id") Long user_id,
                               @RequestParam(value = "passwordConfirm") String passwordConfirm,
                               @RequestParam(value = "password") String password) {
-        CreateModelUser(model);
+        CreateModelUser(model, userService, alertService, messageService);
         String path = "/admin/users/newpass/" + user_id;
         User user = userService.findUserById(user_id);
         if (bindingResult.hasErrors()) {

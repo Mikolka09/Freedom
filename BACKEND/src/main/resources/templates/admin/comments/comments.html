@@ -44,8 +44,8 @@
                             <tbody>
                             <tr th:each="comment:${comments}">
                                 <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
-                                         th:src="@{|/${comment.getUser().getAvatarUrl()}|}"></td>
-                                <td th:text="${comment.getUser().getUsername()}"></td>
+                                         th:src="@{|/${comment.getPost().getUser().getAvatarUrl()}|}"></td>
+                                <td th:text="${comment.getPost().getUser().getUsername()}"></td>
                                 <td th:text="${comment.getPost().getTitle()}"></td>
                                 <td th:text="${comment.getBody()}"></td>
                                 <td th:text="${comment.getPost().getCategory().getStatus()!=status[2]?comment.getPost().getCategory().getName():'NULL'}"></td>
