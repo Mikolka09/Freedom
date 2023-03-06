@@ -151,7 +151,7 @@ section {
 
 .search-form-wrap {
   position: absolute;
-  right: 0;
+  right: 70px;
   top: 0;
   z-index: 9;
   transition: 0.3s all ease;
@@ -164,7 +164,7 @@ section {
 }
 
 .search-form-wrap .search-form .form-control {
-  width: 300px;
+  width: 250px;
   border: none;
   box-shadow: 0 15px 20px -10px rgba(var(--color-black-rgb), 0.1);
   padding-left: 40px;

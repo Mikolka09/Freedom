@@ -28,6 +28,20 @@
 
         <div class="position-relative">
             <div class="d-flex justify-content-end">
+                <div class="align-self-center" title="Search">
+                    <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+                </div>
+                <!-- ======= Search Form ======= -->
+                <div class="search-form-wrap js-search-form-wrap">
+                    <form action="/search-post" class="search-form" method="post">
+                        <span class="icon bi-search"></span>
+                        <label>
+                            <input type="text" name="text" placeholder="Search" class="form-control"/>
+                        </label>
+                        <button type="submit" class="btn js-search-close"></button>
+                    </form>
+                </div><!-- End Search Form -->
                 <div>
                     <nav th:if="${user != null and user.getStatus()==status[0]}" id="navbar1" class="navbar">
                         <ul>
@@ -51,21 +65,9 @@
                        class="mx-2"><span
                             class="bi-person-circle"></span></a>
                 </div>
-                <div class="align-self-center">
-                    <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
-                    <i class="bi bi-list mobile-nav-toggle"></i>
-                </div>
+
             </div>
-            <!-- ======= Search Form ======= -->
-            <div class="search-form-wrap js-search-form-wrap">
-                <form action="search-result.html" class="search-form">
-                    <span class="icon bi-search"></span>
-                    <label>
-                        <input type="text" placeholder="Search" class="form-control"/>
-                    </label>
-                    <button class="btn js-search-close"><span class="bi-x"></span></button>
-                </form>
-            </div><!-- End Search Form -->
+
 
         </div>
 

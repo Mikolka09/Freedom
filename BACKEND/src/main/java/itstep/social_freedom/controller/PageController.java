@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.*;
@@ -41,6 +43,8 @@ public class PageController {
                 .sorted((x1, x2) -> Integer.compare(x2.getComments().size(), x1.getComments().size())).collect(Collectors.toList());
         List<Post> likesPosts = posts.stream()
                 .sorted(Comparator.comparingInt(Post::getLikes).reversed()).collect(Collectors.toList());
+        List<Tag> tags = tagService.allTag().stream()
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         String role = "";
         if (user != null) {
             for (Role r : user.getRoles()) {
@@ -53,6 +57,7 @@ public class PageController {
         model.addAttribute("trendingPosts", trendingPosts);
         model.addAttribute("likesPosts", likesPosts);
         model.addAttribute("posts", posts);
+        model.addAttribute("tags", tags);
         model.addAttribute("user", user);
         model.addAttribute("categoriesAll", categoriesAll);
         model.addAttribute("status", Status.values());
@@ -124,10 +129,7 @@ public class PageController {
             return "redirect:/";
         double count = 8.0;
         int pages = (int) Math.ceil(categoryPosts.size() / count);
-        List<Tag> tags = tagService.allTag().stream()
-                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
         model.addAttribute("categoryPosts", categoryPosts);
-        model.addAttribute("tags", tags);
         model.addAttribute("pages", new int[pages]);
         CreateModel(model);
         return "pages/category";
@@ -172,6 +174,49 @@ public class PageController {
             }
         }
         return count;
+    }
+
+    @PostMapping("/search-post")
+    public String searchPost(Model model, @RequestParam(value = "text") String text) {
+        List<Post> postList = postService.posts().stream()
+                .filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
+        String[] arrText = text.split(" ");
+        List<Post> result = new ArrayList<>();
+        result = searchSuitablePosts(postList, arrText, result);
+        double count = 8.0;
+        int pages = 0;
+        String error = "";
+        if (result.size() != 0)
+            pages = (int) Math.ceil(result.size() / count);
+        else
+            error = "No results were found for your query - \""
+                    + text.toUpperCase() + "\". Try changing your search terms!";
+        model.addAttribute("result", result);
+        model.addAttribute("pages", new int[pages]);
+        model.addAttribute("error", error);
+        model.addAttribute("text", text);
+        CreateModel(model);
+        return "/pages/search-result-posts";
+    }
+
+    public static List<Post> searchSuitablePosts(List<Post> posts, String[] arrText, List<Post> result) {
+        if (arrText != null) {
+            if (arrText.length > 0) {
+                for (String s : arrText) {
+                    for (Post post : posts) {
+                        if (post.getTitle().contains(s) || post.getShortDescription().contains(s)) {
+                            if (result.size() == 0) {
+                                result.add(post);
+                            } else {
+                                if (result.stream().noneMatch(x -> Objects.equals(x.getId(), post.getId())))
+                                    result.add(post);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 
 }

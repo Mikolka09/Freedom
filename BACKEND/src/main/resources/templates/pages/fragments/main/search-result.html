@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:each="post, state:${result}" th:fragment="search-result">
+    <div th:if="${state.index<8}" class="d-md-flex post-entry-2 small-img">
+        <a th:href="@{|/view-post/${post.getId()}|}" class="me-4 thumbnail">
+            <img th:src="@{|/${post.getImgUrl()}|}" alt="Img" class="img-fluid">
+        </a>
+        <div>
+            <div class="post-meta">
+                <span class="date" th:text="${post.getCategory().getName()}">Culture</span> <span
+                    class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
+                                #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}">Jul 5th '22</span>
+            </div>
+            <h3><a th:href="@{|/view-post/${post.getId()}|}" th:text="${post.getTitle()}">What is
+                the son of Football Coach John Gruden, Deuce
+                Gruden doing Now?</a></h3>
+            <p th:text="${post.getShortDescription()}">Lorem ipsum dolor sit amet consectetur
+                adipisicing elit. Distinctio placeat
+                exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas, nobis error
+                deserunt aliquam temporibus sapiente, laudantium dolorum itaque libero eos
+                deleniti?</p>
+            <div class="d-flex align-items-center author">
+                <div class="photo"><img th:src="@{|/${post.getUser().getAvatarUrl()}|}" alt="avatar"
+                                        class="img-fluid"></div>
+                <div class="name">
+                    <h3 class="m-0 p-0" th:text="${post.getUser().getFullName()}">Wade Warren</h3>
+                </div>
+                <div class="row mx-2">
+                    <div class="col-sm-6">
+                        <img id="img-like" src="/img/icon/like.png" width="25px">
+                        <span id="likes" style="font-weight: bold; color: blueviolet" class="px-1"
+                              th:text="${post.getLikes()==null?0:post.getLikes()}"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <img id="img-comment" src="/img/icon/comment.png" width="25px">
+                        <span id="comments-post" style="font-weight: bold; color: blueviolet" class="px-1"
+                              th:text="${post.getComments().size()==null?0:post.getComments().size()}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
