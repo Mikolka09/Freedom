@@ -64,6 +64,7 @@ public class AdminController {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
                 role = r.getName();
         }
+        userService.saveRatingUser();
         model.addAttribute("counter", MessageController.counterMessages(messages));
         model.addAttribute("messageList", messageList);
         model.addAttribute("list", list);

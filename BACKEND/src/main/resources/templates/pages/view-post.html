@@ -70,7 +70,7 @@
                         <h3 class="aside-title">Tags</h3>
                         <ul class="aside-tags list-unstyled">
                             <th:block th:each="tag : ${post.getTags()}">
-                                <li><a href="#" th:text="${tag.getName()}"></a></li>
+                                <li><a th:href="@{|/search-post-tags/${tag.getName()}|}" th:text="${tag.getName()}"></a></li>
                             </th:block>
 
                         </ul>

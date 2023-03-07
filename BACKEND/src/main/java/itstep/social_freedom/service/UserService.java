@@ -1,5 +1,6 @@
 package itstep.social_freedom.service;
 
+import itstep.social_freedom.controller.FriendController;
 import itstep.social_freedom.entity.Role;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
@@ -39,6 +40,29 @@ public class UserService implements UserDetailsService {
         }
 
         return user;
+    }
+
+    public int countRating(User user) {
+        int posts = (int) user.getPosts().stream().filter(x -> x.getStatus() == Status.VERIFIED).count();
+        int comments = (int) user.getComments().stream().filter(x -> x.getStatus() == Status.ACTIVE).count();
+        int friends = FriendController.giveListFriends(user).size();
+        int offenses = user.getOffenses();
+        int summa = posts + comments + friends;
+        double users = allUsers().size();
+        if (summa == 0 || (int) users == 0) {
+            return 0;
+        } else {
+            return Math.max(((int) ((summa / users) * 100) - offenses), 0);
+        }
+
+    }
+
+    public void saveRatingUser() {
+        List<User> users = allUsers();
+        for (User user : users) {
+            user.setRating(countRating(user));
+            userRepository.save(user);
+        }
     }
 
     public User getCurrentUsername() {

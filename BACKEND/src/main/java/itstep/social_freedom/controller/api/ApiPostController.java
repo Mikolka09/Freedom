@@ -71,7 +71,7 @@ public class ApiPostController {
                 .filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
         String[] arrText = text.split(" ");
         List<Post> result = new ArrayList<>();
-        result = PageController.searchSuitablePosts(postList, arrText, result);
+        result = PageController.searchPostsResult(postList, arrText, result);
         return result;
     }
 

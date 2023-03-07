@@ -54,6 +54,7 @@ public class PostController {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
                 role = r.getName();
         }
+        userService.saveRatingUser();
         model.addAttribute("messages", messages);
         model.addAttribute("alerts", alertList);
         model.addAttribute("status", Status.values());

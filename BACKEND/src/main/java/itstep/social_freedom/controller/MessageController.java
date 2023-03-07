@@ -44,7 +44,6 @@ public class MessageController {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
                 role = r.getName();
         }
-
         model.addAttribute("alerts", alerts);
         model.addAttribute("counter", counterMessages(messages));
         model.addAttribute("messageList", messageList);

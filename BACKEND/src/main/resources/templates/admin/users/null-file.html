@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<tr th:each="user:${allUsers}" id="body-table">
+  <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
+           th:src="@{|/${user.getAvatarUrl()}|}"></td>
+  <td th:text="${user.getUsername()}"></td>
+  <td th:text="${user.getFullName()==null? 'NULL':user.getFullName()}"></td>
+  <td th:text="${user.getAge()}"></td>
+  <td th:text="${user.getEmail()}"></td>
+  <td th:text="${user.getStatus()}"></td>
+  <td th:text="${user.getRating()}"></td>
+  <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(user.getCreatedAt()),
+                                #dates.month(user.getCreatedAt()), #dates.day(user.getCreatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+  <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(user.getUpdatedAt()),
+                                #dates.month(user.getUpdatedAt()), #dates.day(user.getUpdatedAt())), 'dd MMM yyyy',
+                                #locale.forLanguageTag('en'))}"></td>
+  <td>
+    <a th:href="@{|/admin/users/view/${user.getId()}|}" title="View">
+      <img src="/img/icon/view.png" width="30px"/></a>
+    <a th:href="@{|/admin/users/edit/${user.getId()}|}" title="Edit">
+      <img src="/img/icon/edit.png" width="30px"/></a>
+    <a th:href="@{|/admin/users/newpass/${user.getId()}|}" title="Edit Password">
+      <img src="/img/icon/password.png" width="30px"/></a>
+    <a th:data-id="${user.getId()}" href="#" title="Delete"
+       th:data-name="${user.getUsername()}"
+       data-toggle="modal" data-target="#DeleteModal">
+      <img src="/img/icon/delete.png" width="30px"/></a>
+  </td>
+</tr>
+
+</body>
+</html>

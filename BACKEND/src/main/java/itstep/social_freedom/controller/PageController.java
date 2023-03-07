@@ -54,6 +54,7 @@ public class PageController {
                     role = r.getName();
             }
         }
+        userService.saveRatingUser();
         model.addAttribute("trendingPosts", trendingPosts);
         model.addAttribute("likesPosts", likesPosts);
         model.addAttribute("posts", posts);
@@ -176,35 +177,46 @@ public class PageController {
         return count;
     }
 
-    @PostMapping("/search-post")
-    public String searchPost(Model model, @RequestParam(value = "text") String text) {
+    @GetMapping("/search-post-tags/{text}")
+    public String searchPostForTag(Model model, @PathVariable(value = "text") String text) {
+        return getStringSearch(model, text);
+    }
+
+    private String getStringSearch(Model model, @PathVariable("text") String text) {
         List<Post> postList = postService.posts().stream()
                 .filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
         String[] arrText = text.split(" ");
         List<Post> result = new ArrayList<>();
-        result = searchSuitablePosts(postList, arrText, result);
+        result = searchPostsResult(postList, arrText, result);
         double count = 8.0;
         int pages = 0;
-        String error = "";
-        if (result.size() != 0)
+        String answer = "";
+        if (result.size() != 0) {
             pages = (int) Math.ceil(result.size() / count);
-        else
-            error = "No results were found for your query - \""
+            answer = "Search Results - \"" + text + "\"";
+        } else
+            answer = "No results were found for your query - \""
                     + text.toUpperCase() + "\". Try changing your search terms!";
         model.addAttribute("result", result);
         model.addAttribute("pages", new int[pages]);
-        model.addAttribute("error", error);
+        model.addAttribute("answer", answer);
         model.addAttribute("text", text);
         CreateModel(model);
         return "/pages/search-result-posts";
     }
 
-    public static List<Post> searchSuitablePosts(List<Post> posts, String[] arrText, List<Post> result) {
+    @PostMapping("/search-post")
+    public String searchPost(Model model, @RequestParam(value = "text") String text) {
+        return getStringSearch(model, text);
+    }
+
+    public static List<Post> searchPostsResult(List<Post> posts, String[] arrText, List<Post> result) {
         if (arrText != null) {
             if (arrText.length > 0) {
                 for (String s : arrText) {
                     for (Post post : posts) {
-                        if (post.getTitle().contains(s) || post.getShortDescription().contains(s)) {
+                        if (post.getTitle().contains(s) || post.getShortDescription().contains(s) ||
+                                searchPostsTags(post, s)) {
                             if (result.size() == 0) {
                                 result.add(post);
                             } else {
@@ -217,6 +229,15 @@ public class PageController {
             }
         }
         return result;
+    }
+
+    public static boolean searchPostsTags(Post post, String text){
+        Tag[] tags = post.getTags().toArray(Tag[]::new);
+        for(Tag t:tags){
+            if(t.getName().equalsIgnoreCase(text))
+                    return true;
+        }
+        return false;
     }
 
 }

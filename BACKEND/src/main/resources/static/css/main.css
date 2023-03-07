@@ -151,7 +151,7 @@ section {
 
 .search-form-wrap {
   position: absolute;
-  right: 70px;
+  right: 140px;
   top: 0;
   z-index: 9;
   transition: 0.3s all ease;

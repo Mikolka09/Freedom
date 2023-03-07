@@ -3,6 +3,13 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
+<style>
+    a:hover{
+        text-decoration: none;
+        color: #d62516;
+    }
+</style>
+
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -32,21 +39,28 @@
                         <thead>
                         <tr>
                             <th scope="col">Avatar</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">FullName</th>
-                            <th scope="col">Age</th>
-                            <th scope="col">Email</th>
+                            <th scope="col">
+                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "Username">Username</a></th>
+                            <th scope="col">
+                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "FullName">FullName</a></th>
+                            <th scope="col">
+                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "Age">Age</a></th>
+                            <th scope="col">
+                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "Email">Email</a></th>
                             <th scope="col">Status</th>
-                            <th scope="col">Rating</th>
-                            <th scope="col">CreateAt</th>
-                            <th scope="col">UpdateAt</th>
+                            <th scope="col">
+                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "Rating">Rating</a></th>
+                            <th scope="col">
+                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "CreatedAt">CreatedAt</a></th>
+                            <th scope="col">
+                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "UpdatedAt">UpdatedAt</a></th>
                             <th scope="col">Buttons</th>
                         </tr>
                         </thead>
                     </table>
                     <div class="scroll-table-body">
                         <table>
-                            <tbody>
+                            <tbody id="body-table">
                             <tr th:each="user:${allUsers}">
                                 <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
                                          th:src="@{|/${user.getAvatarUrl()}|}"></td>
@@ -108,20 +122,11 @@
 
 <th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
 
-<script>
-    $('#DeleteModal').on('show.bs.modal', function (event) {
-        let button = $(event.relatedTarget);
-        let id = button.data('id');
-        let name = button.data('name');
-        let action = "/admin/users/delete/" + id;
-        let label = "Are you sure you're ready to delete User - \"" + name.toUpperCase() + "\"?";
-        let text = "Select \"Delete\" below if you are ready to remove this User."
-        let modal = $(this);
-        modal.find('#deleteModalLabel').text(label);
-        modal.find('#text').text(text);
-        modal.find('#action').prop("href", action);
-    })
+<script th:inline="javascript">
+    let data = [[${allUsers}]];
 </script>
+
+<script src="/admin/js/sort-table-users.js"></script>
 
 </body>
 
