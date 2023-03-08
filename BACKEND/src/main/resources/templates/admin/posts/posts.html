@@ -3,6 +3,16 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+    th img{
+        margin-left: 3px;
+    }
+</style>
+
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -28,30 +38,36 @@
                        style="border-radius:6px;">Create new post</a>
                 </p>
                 <div class="scroll-table">
-                    <table>
-                        <thead>
+                    <table id="table-list" data-table="posts-list">
+                        <thead >
                         <tr>
-                            <th scope="col">Username</th>
                             <th scope="col">Image</th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up" data-name="Username">Username<img
+                                    id="user" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Title</th>
                             <th scope="col">Short Description</th>
-                            <th scope="col">Category</th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up" data-name="Category">Category<img
+                                    id="cat" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Tags</th>
-                            <th scope="col">Likes</th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up"
+                                               data-name="Likes">Likes<img id="like" src="/img/icon/up-arrow.png"
+                                                                           width="15px" alt="image"></a></th>
                             <th scope="col">Status</th>
-                            <th scope="col">CreateAt</th>
-                            <th scope="col">UpdateAt</th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up" data-name="CreatedAt">CreatedAt<img
+                                    id="crt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up" data-name="UpdatedAt">UpdatedAt<img
+                                    id="urt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Buttons</th>
                         </tr>
                         </thead>
                     </table>
                     <div class="scroll-table-body">
                         <table>
-                            <tbody>
+                            <tbody id="body-table">
                             <tr th:each="post:${posts}">
-                                <td th:text="${post.getUser().getUsername()}"></td>
                                 <td><img width="100px"
                                          th:src="@{|/${post.getImgUrl()}|}"></td>
+                                <td th:text="${post.getUser().getUsername()}"></td>
                                 <td th:text="${post.getTitle()}"></td>
                                 <td th:text="${post.getShortDescription()}"></td>
                                 <td th:text="${post.getCategory().getStatus()!=status[2]?post.getCategory().getName():'NULL'}"></td>
@@ -113,6 +129,12 @@
 <th:block th:insert="/user/fragments/message-modal.html::message-modal"></th:block>
 
 <th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
+
+<script th:inline="javascript">
+    let data = [[${posts}]];
+</script>
+
+<script src="/admin/js/sort-table-posts.js"></script>
 
 <script>
 

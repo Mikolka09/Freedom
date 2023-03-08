@@ -2,72 +2,73 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <div th:fragment="other-foot">
-  <!-- Bootstrap core JavaScript-->
-  <script src="/admin/vendor/jquery/jquery.min.js"></script>
-  <script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="/admin/js/sb-admin-2.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="/admin/js/sb-admin-2.min.js"></script>
 
-  <script src="/js/open-modal.js"></script>
+    <script src="/js/open-modal.js"></script>
 
-  <script src="/js/mail-script.js"></script>
+    <script src="/js/mail-script.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"
-          integrity="sha256-5WYg3s9NxGKR2MpEBTy0QMT3Gvgxl3yKjbW4l0CfUUY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"
+            integrity="sha256-5WYg3s9NxGKR2MpEBTy0QMT3Gvgxl3yKjbW4l0CfUUY=" crossorigin="anonymous"></script>
 
-  <script>
-    $('#DeleteModal').on('show.bs.modal', function (event) {
-      let button = $(event.relatedTarget);
-      let title = button.data('title');
-      let modal = $(this);
-      let id = "";
-      let name = "";
-      let action = "";
-      let label = "";
-      let text = "";
-      let idFriend = "";
-      let idTo = "";
-      let idFrom = "";
-      let url = "";
-      if (typeof title === "undefined") {
-        id = button.data('id');
-        action = "/user/delete/" + id;
-        label = "Are you sure you want to delete your account?";
-        text = "Select \"Delete\" below if you are ready to remove your account"
-        modal.find('#action').prop("href", action);
-      }
-      if(title === "Break Friendship") {
-        id = button.data('id');
-        name = button.data('name');
-        idFriend = button.data('id-friend');
-        action = "/user/friend/break/" + id + "/" + idFriend;
-        label = "You definitely want to end the friendship with the user - " + name.toUpperCase() + "?";
-        text = "Select \"Break\" below if you are ready to to break the friendship";
-        modal.find('#action').text('Break');
-        modal.find('#action').prop("href", action);
-      }
-      if(title === "deleteMessage") {
-        let act = modal.find('#action');
-        id = button.data('id');
-        idTo = button.data('id-to');
-        idFrom = button.data('id-from');
-        let admin = button.data('admin');
-        url = "/user/messages/deleted/" + id;
-        label = "Are you sure you want to delete this message?";
-        text = "Select \"Delete\" below if you are ready to remove this message";
-        act.attr('data-id-to', idTo);
-        act.attr('data-id-from', idFrom);
-        act.attr('data-admin', admin);
-        act.attr('data-url', url);
-        act.attr('data-dismiss', 'modal');
-      }
-      modal.find('#deleteModalLabel').text(label);
-      modal.find('#text').text(text);
-    })
-  </script>
+    <script>
+        $('#DeleteModal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget);
+            let title = button.data('title');
+            let modal = $(this);
+            let id = "";
+            let name = "";
+            let action = "";
+            let label = "";
+            let text = "";
+            let idFriend = "";
+            let idTo = "";
+            let idFrom = "";
+            let url = "";
+            if (typeof title === "undefined") {
+                id = button.data('id');
+                name = button.data('name');
+                action = "/admin/users/delete/" + id;
+                label = "Are you sure you want to delete this account - \"" + name.toUpperCase() + "\"?";
+                text = "Select \"Delete\" below if you are ready to remove this account"
+                modal.find('#action').prop("href", action);
+            }
+            if (title === "Break Friendship") {
+                id = button.data('id');
+                name = button.data('name');
+                idFriend = button.data('id-friend');
+                action = "/user/friend/break/" + id + "/" + idFriend;
+                label = "You definitely want to end the friendship with the user - " + name.toUpperCase() + "?";
+                text = "Select \"Break\" below if you are ready to to break the friendship";
+                modal.find('#action').text('Break');
+                modal.find('#action').prop("href", action);
+            }
+            if (title === "deleteMessage") {
+                let act = modal.find('#action');
+                id = button.data('id');
+                idTo = button.data('id-to');
+                idFrom = button.data('id-from');
+                let admin = button.data('admin');
+                url = "/user/messages/deleted/" + id;
+                label = "Are you sure you want to delete this message?";
+                text = "Select \"Delete\" below if you are ready to remove this message";
+                act.attr('data-id-to', idTo);
+                act.attr('data-id-from', idFrom);
+                act.attr('data-admin', admin);
+                act.attr('data-url', url);
+                act.attr('data-dismiss', 'modal');
+            }
+            modal.find('#deleteModalLabel').text(label);
+            modal.find('#text').text(text);
+        })
+    </script>
 
 </div>

@@ -19,14 +19,7 @@ import java.util.Set;
 @Table(name = "tags")
 public class Tag extends BaseEntity {
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
+    @ManyToMany(fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Post> posts = new HashSet<>();
 

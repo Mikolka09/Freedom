@@ -4,7 +4,7 @@
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
 <style>
-    a:hover{
+    a:hover {
         text-decoration: none;
         color: #d62516;
     }
@@ -35,25 +35,32 @@
                         User</a>
                 </p>
                 <div class="scroll-table">
-                    <table>
+                    <table id="table-list" data-table="users-list">
                         <thead>
                         <tr>
                             <th scope="col">Avatar</th>
                             <th scope="col">
-                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "Username">Username</a></th>
+                                <a href="#" class="sort-table-user" data-tag="up" data-name="Username">Username
+                                    <img id="user" src="/img/icon/up-arrow.png" width="15px"></a></th>
                             <th scope="col">
-                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "FullName">FullName</a></th>
+                                <a href="#" class="sort-table-user" data-tag="up" data-name="FullName">FullName
+                                    <img id="full" src="/img/icon/up-arrow.png" width="15px"></a></th>
                             <th scope="col">
-                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "Age">Age</a></th>
+                                <a href="#" class="sort-table-user" data-tag="up" data-name="Age">Age
+                                    <img id="age" src="/img/icon/up-arrow.png" width="15px"></a></th>
                             <th scope="col">
-                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "Email">Email</a></th>
+                                <a href="#" class="sort-table-user" data-tag="up" data-name="Email">Email
+                                    <img id="eml" src="/img/icon/up-arrow.png" width="15px"></a></th>
                             <th scope="col">Status</th>
                             <th scope="col">
-                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "Rating">Rating</a></th>
+                                <a href="#" class="sort-table-user" data-tag="up" data-name="Rating">Rating
+                                    <img id="rat" src="/img/icon/up-arrow.png" width="15px"></a></th>
                             <th scope="col">
-                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "CreatedAt">CreatedAt</a></th>
+                                <a href="#" class="sort-table-user" data-tag="up" data-name="CreatedAt">CreatedAt
+                                    <img id="crt" src="/img/icon/up-arrow.png" width="15px"></a></th>
                             <th scope="col">
-                                <a href="#" class="sort-table-user" data-tag = "up" data-name = "UpdatedAt">UpdatedAt</a></th>
+                                <a href="#" class="sort-table-user" data-tag="up" data-name="UpdatedAt">UpdatedAt
+                                    <img id="urt" src="/img/icon/up-arrow.png" width="15px"></a></th>
                             <th scope="col">Buttons</th>
                         </tr>
                         </thead>
