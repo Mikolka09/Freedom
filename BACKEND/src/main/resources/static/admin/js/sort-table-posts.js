@@ -107,7 +107,7 @@ function printTablePosts(data, list) {
             select1.name = "tag_id";
             select1.id = "tag_id";
             let tags = data[i].tags;
-            for (let j = 0; j <tags.length; j++) {
+            for (let j = 0; j < tags.length; j++) {
                 let opt = document.createElement("option");
                 opt.value = tags[j].id;
                 opt.text = tags[j].status !== "DELETED" ? tags[j].name : "NULL";
@@ -180,4 +180,73 @@ function correctDate(date) {
     return data.toLocaleDateString('en-GB', {
         day: 'numeric', month: 'long', year: 'numeric'
     }).replace(/ /g, ' ');
+}
+
+$("#input-search-admin").keydown(function(event){
+    if(event.keyCode === 13){
+        $("#button-search").click();
+        $(this).val('');
+    }
+});
+
+$('#button-search').on('click', function () {
+    let input = $('#input-search-admin');
+    let text = input.val();
+    let list = $("#table-list").attr("data-table");
+    if (text !== "") {
+        input.val('');
+        searchPosts(text, list);
+    }
+})
+
+function searchPosts(text, list) {
+    let posts = data;
+    let arrText = text.split(' ');
+    let result = [];
+    let answer = "";
+    for (let txt of arrText) {
+        for (let i = 0; i < posts.length; i++) {
+            if (posts[i].user.username.toLowerCase().includes(txt.toLowerCase()) ||
+                posts[i].user.fullName.toLowerCase().includes(txt.toLowerCase()) ||
+                searchPostForTags(posts[i], txt)) {
+                if (result.length === 0)
+                    result.push(posts[i]);
+                else {
+                    if (result.filter(x => x.id === posts[i].id).length === 0)
+                        result.push(posts[i]);
+                }
+            } else {
+                if (posts[i].title.toLowerCase().includes(txt.toLowerCase()) ||
+                    posts[i].shortDescription.toLowerCase().includes(txt.toLowerCase()) ||
+                    posts[i].category.name.toLowerCase() === txt.toLowerCase()) {
+                    if (result.length === 0)
+                        result.push(posts[i]);
+                    else {
+                        if (result.filter(x => x.id === posts[i].id).length === 0)
+                            result.push(posts[i]);
+                    }
+                }
+            }
+        }
+    }
+    if (result.length !== 0) {
+        answer = "Search result - \"" + text.toUpperCase() + "\"";
+        alertInfo(answer);
+        printTablePosts(result, list);
+    }else {
+        answer = "Search result - \"" + text.toUpperCase() + "\" returned nothing!";
+        alertInfo(answer);
+    }
+}
+
+function searchPostForTags(posts, txt) {
+    for (let i=0; i< posts.length; i++) {
+        let tags = posts[i].tags;
+        for (let tag of tags) {
+            if (tag.name.toLowerCase() === txt.toLowerCase()) {
+                return true;
+            }
+        }
+    }
+    return false
 }

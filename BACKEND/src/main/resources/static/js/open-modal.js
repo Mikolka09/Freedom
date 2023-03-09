@@ -268,13 +268,15 @@ $('button').on('click', function () {
             url = "/user/alerts/confirm/" + idAlert;
         }
         if (id !== "messageAnswerModal") {
-            if (id !== "cancelModal") {
-                if (id !== "send-user-message") {
-                    if (window !== "mail") {
-                        alertInfo(text);
-                        setTimeout(function () {
-                            sending(url);
-                        }, 1000);
+            if(id !== "button-search") {
+                if (id !== "cancelModal") {
+                    if (id !== "send-user-message") {
+                        if (window !== "mail") {
+                            alertInfo(text);
+                            setTimeout(function () {
+                                sending(url);
+                            }, 1000);
+                        }
                     }
                 }
             }
