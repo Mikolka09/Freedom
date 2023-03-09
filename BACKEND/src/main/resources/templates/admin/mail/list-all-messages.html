@@ -8,20 +8,26 @@
             <table>
                 <thead>
                 <tr>
-                    <th scope="col">Username Sender</th>
-                    <th scope="col">FullName Sender</th>
-                    <th scope="col">Username Recipient</th>
+                    <th scope="col"><a href="#" class="sort-table-message" data-tag="up" data-name="UsernameSender">Sender<img
+                            id="userSend" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                    <th scope="col"><a href="#" class="sort-table-message" data-tag="up" data-name="FullNameSender">Name Sender<img
+                            id="fullSend" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                    <th scope="col"><a href="#" class="sort-table-message" data-tag="up" data-name="UsernameRecipient">Recipient<img
+                            id="userRec" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                     <th scope="col">Message</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Date viewed</th>
-                    <th scope="col">Date sent</th>
+                    <th scope="col"><a href="#" class="sort-table-message" data-tag="up" data-name="Status">Status<img
+                            id="stat" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                    <th scope="col"><a href="#" class="sort-table-message" data-tag="up" data-name="DateViewed">Date Viewed<img
+                            id="dataV" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                    <th scope="col"><a href="#" class="sort-table-message" data-tag="up" data-name="DateSent">Date Sent<img
+                            id="dataS" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                     <th scope="col">Buttons</th>
                 </tr>
                 </thead>
             </table>
             <div class="scroll-table-body">
                 <table>
-                    <tbody>
+                    <tbody id="body-table">
                     <tr th:each="message:${messageAllList}">
                         <td th:text="${message.getInvite().getUserFrom().getUsername()}"></td>
                         <td th:text="${message.getInvite().getUserFrom().getFullName()}"></td>

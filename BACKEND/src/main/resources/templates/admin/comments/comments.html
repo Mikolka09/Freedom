@@ -3,7 +3,17 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
-<body id="page-top">
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+    th img{
+        margin-left: 3px;
+    }
+</style>
+
+<body id="page-top" style="overflow: hidden">
 
 <!-- Page Wrapper -->
 <div id="wrapper">
@@ -28,20 +38,24 @@
                         <thead>
                         <tr>
                             <th scope="col">Avatar</th>
-                            <th scope="col">Username</th>
+                            <th scope="col"><a href="#" class="sort-table-comment" data-tag="up" data-name="Username">Username<img
+                                    id="user" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Title Post</th>
                             <th scope="col">Comment</th>
-                            <th scope="col">Category</th>
+                            <th scope="col"><a href="#" class="sort-table-comment" data-tag="up" data-name="Category">Category<img
+                                    id="cat" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Status</th>
-                            <th scope="col">CreateAt</th>
-                            <th scope="col">UpdateAt</th>
+                            <th scope="col"><a href="#" class="sort-table-comment" data-tag="up" data-name="CreatedAt">CreatedAt<img
+                                    id="crt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>CreatedAt</th>
+                            <th scope="col"><a href="#" class="sort-table-comment" data-tag="up" data-name="UpdatedAt">UpdatedAt<img
+                                    id="urt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Buttons</th>
                         </tr>
                         </thead>
                     </table>
                     <div class="scroll-table-body">
                         <table>
-                            <tbody>
+                            <tbody id="body-table">
                             <tr th:each="comment:${comments}">
                                 <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
                                          th:src="@{|/${comment.getPost().getUser().getAvatarUrl()}|}"></td>
@@ -113,6 +127,12 @@
 <th:block th:insert="/user/fragments/message-modal.html::message-modal"></th:block>
 
 <th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
+
+<script th:inline="javascript">
+    let data = [[${comments}]];
+</script>
+
+<script src="/admin/js/sort-table-comments.js"></script>
 
 <script>
     $('#EditCommentModal').on('show.bs.modal', function (event) {

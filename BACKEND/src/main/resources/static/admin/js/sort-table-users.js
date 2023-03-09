@@ -1,107 +1,107 @@
-$('.sort-table-user').on('click', function (e) {
+$('.sort-table-user').on('click', function (e){
     let users = data;
     let column = $(this);
     let list = $("#table-list").attr("data-table");
     let img;
     let name = column.attr("data-name");
     let tag = column.attr("data-tag");
-    switch (name) {
+    switch (name){
         case "Username":
             img = $('#user');
-            if (tag === "down") {
+            if(tag==="down") {
                 let data = users.sort((x, y) => x.username.localeCompare(y.username));
                 printTableUsers(data, list);
                 column.attr("data-tag", "up");
-                img.attr("src", "/img/icon/up-arrow.png");
-            } else {
+                img.attr("src","/img/icon/up-arrow.png");
+            }else{
                 let data = users.sort((x, y) => y.username.localeCompare(x.username));
                 printTableUsers(data, list);
                 column.attr("data-tag", "down");
-                img.attr("src", "/img/icon/down-arrow.png");
+                img.attr("src","/img/icon/down-arrow.png");
             }
             break;
         case "FullName":
             img = $('#full');
-            if (tag === "down") {
+            if(tag==="down") {
                 let data = users.sort((x, y) => x.fullName.localeCompare(y.fullName));
                 printTableUsers(data, list);
                 column.attr("data-tag", "up");
-                img.attr("src", "/img/icon/up-arrow.png");
-            } else {
+                img.attr("src","/img/icon/up-arrow.png");
+            }else{
                 let data = users.sort((x, y) => y.fullName.localeCompare(x.fullName));
                 printTableUsers(data, list);
                 column.attr("data-tag", "down");
-                img.attr("src", "/img/icon/down-arrow.png");
+                img.attr("src","/img/icon/down-arrow.png");
             }
             break;
         case "Age":
             img = $('#age');
-            if (tag === "down") {
+            if(tag==="down") {
                 let data = users.sort((x, y) => x.age - y.age);
                 printTableUsers(data, list);
                 column.attr("data-tag", "up");
-                img.attr("src", "/img/icon/up-arrow.png");
-            } else {
+                img.attr("src","/img/icon/up-arrow.png");
+            }else{
                 let data = users.sort((x, y) => y.age - x.age);
                 printTableUsers(data, list);
                 column.attr("data-tag", "down");
-                img.attr("src", "/img/icon/down-arrow.png");
+                img.attr("src","/img/icon/down-arrow.png");
             }
             break;
         case "Email":
             img = $('#eml');
-            if (tag === "down") {
+            if(tag==="down") {
                 let data = users.sort((x, y) => x.email.localeCompare(y.email));
                 printTableUsers(data, list);
                 column.attr("data-tag", "up");
-                img.attr("src", "/img/icon/up-arrow.png");
-            } else {
+                img.attr("src","/img/icon/up-arrow.png");
+            }else{
                 let data = users.sort((x, y) => y.email.localeCompare(x.email));
                 printTableUsers(data, list);
                 column.attr("data-tag", "down");
-                img.attr("src", "/img/icon/down-arrow.png");
+                img.attr("src","/img/icon/down-arrow.png");
             }
             break;
         case "Rating":
             img = $('#rat');
-            if (tag === "down") {
+            if(tag==="down") {
                 let data = users.sort((x, y) => x.rating - y.rating);
                 printTableUsers(data, list);
                 column.attr("data-tag", "up");
-                img.attr("src", "/img/icon/up-arrow.png");
-            } else {
+                img.attr("src","/img/icon/up-arrow.png");
+            }else{
                 let data = users.sort((x, y) => y.rating - x.rating);
                 printTableUsers(data, list);
                 column.attr("data-tag", "down");
-                img.attr("src", "/img/icon/down-arrow.png");
+                img.attr("src","/img/icon/down-arrow.png");
             }
             break;
         case "CreatedAt":
             img = $('#crt');
-            if (tag === "down") {
+            if(tag==="down") {
                 let data = users.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt));
                 printTableUsers(data, list);
                 column.attr("data-tag", "up");
-                img.attr("src", "/img/icon/up-arrow.png");
-            } else {
+                img.attr("src","/img/icon/up-arrow.png");
+            }else{
                 let data = users.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt));
                 printTableUsers(data, list);
                 column.attr("data-tag", "down");
-                img.attr("src", "/img/icon/down-arrow.png");
+                img.attr("src","/img/icon/down-arrow.png");
             }
             break;
         case "UpdatedAt":
             img = $('#urt');
-            if (tag === "down") {
+            if(tag==="down") {
                 let data = users.sort((x, y) => new Date(x.updatedAt) - new Date(y.updatedAt));
                 printTableUsers(data, list);
                 column.attr("data-tag", "up");
-                img.attr("src", "/img/icon/up-arrow.png");
-            } else {
+                img.attr("src","/img/icon/up-arrow.png");
+            }else{
                 let data = users.sort((x, y) => new Date(y.updatedAt) - new Date(x.updatedAt));
                 printTableUsers(data, list);
                 column.attr("data-tag", "down");
-                img.attr("src", "/img/icon/down-arrow.png");
+                img.attr("src","/img/icon/down-arrow.png");
             }
             break;
         default:
@@ -109,11 +109,11 @@ $('.sort-table-user').on('click', function (e) {
     }
 })
 
-function printTableUsers(data, list) {
+function printTableUsers(data, list){
     let container = document.getElementById('body-table');
     container.innerHTML = "";
-    if (data != null) {
-        for (let i = 0; i < data.length; i++) {
+    if(data!=null){
+        for(let i=0; i<data.length; i++){
             let tr = document.createElement('tr');
             let td1 = document.createElement('td');
             let img1 = document.createElement('img');
@@ -126,7 +126,7 @@ function printTableUsers(data, list) {
             let td2 = document.createElement('td');
             td2.innerText = data[i].username;
             let td3 = document.createElement('td');
-            td3.innerText = data[i].fullName == null ? "NULL" : data[i].fullName;
+            td3.innerText = data[i].fullName==null?"NULL":data[i].fullName;
             let td4 = document.createElement('td');
             td4.innerText = data[i].age;
             let td5 = document.createElement('td');
@@ -141,7 +141,7 @@ function printTableUsers(data, list) {
             td9.innerText = correctDate(data[i].updatedAt);
             let td10 = document.createElement('td');
             let a2 = document.createElement('a');
-            if (list === "users-list") {
+            if(list==="users-list") {
                 a2.href = "/admin/users/view/" + data[i].id;
                 a2.title = "View";
                 let img2 = document.createElement('img');
@@ -177,7 +177,7 @@ function printTableUsers(data, list) {
                 img5.width = 30;
                 a5.appendChild(img5);
                 td10.appendChild(a5);
-            } else {
+            }else{
                 a2.href = "/admin/users/recovery/" + data[i].id;
                 a2.title = "Recovery";
                 let img2 = document.createElement('img');
@@ -199,8 +199,8 @@ function correctDate(date) {
     }).replace(/ /g, ' ');
 }
 
-$("#input-search-admin").keydown(function (event) {
-    if (event.keyCode === 13) {
+$("#input-search-admin").keydown(function(event){
+    if(event.keyCode === 13){
         $("#button-search").click();
         $(this).val('');
     }
@@ -212,11 +212,11 @@ $('#button-search').on('click', function () {
     let list = $("#table-list").attr("data-table");
     if (text !== "") {
         input.val('');
-        searchPosts(text, list);
+        searchUser(text, list);
     }
 })
 
-function searchPosts(text, list) {
+function searchUser(text, list) {
     let users = data;
     let arrText = text.split(' ');
     let result = [];
@@ -233,7 +233,7 @@ function searchPosts(text, list) {
                         result.push(users[i]);
                 }
             } else {
-                if (users[i].age.toString() === txt || users[i].rating.toString() === txt) {
+                if (users[i].age.toString()===txt || users[i].rating.toString()===txt) {
                     if (result.length === 0)
                         result.push(users[i]);
                     else {
@@ -248,7 +248,7 @@ function searchPosts(text, list) {
         answer = "Search result - \"" + text.toUpperCase() + "\"";
         alertInfo(answer);
         printTableUsers(result, list);
-    } else {
+    }else {
         answer = "Search result - \"" + text.toUpperCase() + "\" returned nothing!";
         alertInfo(answer);
     }

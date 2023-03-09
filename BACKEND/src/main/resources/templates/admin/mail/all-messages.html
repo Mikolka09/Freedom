@@ -3,6 +3,16 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+    th img{
+        margin-left: 3px;
+    }
+</style>
+
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -60,6 +70,12 @@
 <th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
 
 <th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
+
+<script th:inline="javascript">
+    let data = [[${messageAllList}]];
+</script>
+
+<script src="/admin/js/sort-table-messages.js"></script>
 
 </body>
 
