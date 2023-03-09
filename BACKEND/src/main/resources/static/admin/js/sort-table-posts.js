@@ -134,6 +134,7 @@ function printTablePosts(data, list) {
                 td11.appendChild(a2);
                 let a3 = document.createElement('a');
                 a3.href = "/user/posts/preview/" + data[i].id;
+                a3.style.marginLeft = "3px";
                 a3.title = "Preview";
                 let img3 = document.createElement('img');
                 img3.src = "/img/icon/preview.png";
@@ -142,6 +143,7 @@ function printTablePosts(data, list) {
                 td11.appendChild(a3);
                 let a4 = document.createElement('a');
                 a4.href = "#";
+                a4.style.marginLeft = "4px";
                 a4.title = "Delete";
                 a4.dataset.id = data[i].id;
                 a4.dataset.name = data[i].title;
@@ -162,6 +164,7 @@ function printTablePosts(data, list) {
                 td11.appendChild(a2);
                 let a3 = document.createElement('a');
                 a3.href = "/user/posts/preview/" + data[i].id;
+                a3.style.marginLeft = "4px";
                 a3.title = "Preview";
                 let img3 = document.createElement('img');
                 img3.src = "/img/icon/preview.png";
@@ -178,7 +181,7 @@ function printTablePosts(data, list) {
 function correctDate(date) {
     let data = new Date(date.toString());
     return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric'
+        day: 'numeric', month: 'short', year: 'numeric'
     }).replace(/ /g, ' ');
 }
 

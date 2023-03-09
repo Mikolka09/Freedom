@@ -137,6 +137,7 @@ function printTableMessages(data) {
             a2.href = "#";
             a2.title = "Edit Message";
             a2.className = "editMessage";
+            a2.style.marginLeft = "4px";
             a2.dataset.id = data[i].id;
             a2.dataset.name = data[i].invite.userTo.fullName;
             a2.dataset.text = data[i].message;
@@ -148,6 +149,7 @@ function printTableMessages(data) {
             let a3 = document.createElement('a');
             a3.hidden = data[i].status !== "DELETED";
             a3.href = "#";
+            a3.style.marginLeft = "4px";
             a3.title = "Recovery Message";
             a3.className = "recoveryMessage";
             a3.dataset.id = data[i].id;
@@ -159,6 +161,7 @@ function printTableMessages(data) {
             let a4 = document.createElement('a');
             a4.hidden = data[i].status === "DELETED";
             a4.href = "#";
+            a4.style.marginLeft = "4px";
             a4.title = "Delete Message";
             a4.dataset.id = data[i].id;
             a4.dataset.title = "deleteMessage";
@@ -181,7 +184,7 @@ function printTableMessages(data) {
 function correctDate(date) {
     let data = new Date(date.toString());
     return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric'
+        day: 'numeric', month: 'short', year: 'numeric'
     }).replace(/ /g, ' ');
 }
 

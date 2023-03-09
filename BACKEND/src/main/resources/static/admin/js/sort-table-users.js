@@ -151,6 +151,7 @@ function printTableUsers(data, list){
                 td10.appendChild(a2);
                 let a3 = document.createElement('a');
                 a3.href = "/admin/users/edit/" + data[i].id;
+                a3.style.marginLeft = "4px";
                 a3.title = "Edit";
                 let img3 = document.createElement('img');
                 img3.src = "/img/icon/edit.png";
@@ -159,6 +160,7 @@ function printTableUsers(data, list){
                 td10.appendChild(a3);
                 let a4 = document.createElement('a');
                 a4.href = "/admin/users/newpass/" + data[i].id;
+                a4.style.marginLeft = "3px";
                 a4.title = "Edit Password";
                 let img4 = document.createElement('img');
                 img4.src = "/img/icon/password.png";
@@ -167,6 +169,7 @@ function printTableUsers(data, list){
                 td10.appendChild(a4);
                 let a5 = document.createElement('a');
                 a5.href = "#";
+                a5.style.marginLeft = "4px";
                 a5.title = "Delete";
                 a5.dataset.id = data[i].id;
                 a5.dataset.name = data[i].username;
@@ -195,7 +198,7 @@ function printTableUsers(data, list){
 function correctDate(date) {
     let data = new Date(date.toString());
     return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric'
+        day: 'numeric', month: 'short', year: 'numeric'
     }).replace(/ /g, ' ');
 }
 

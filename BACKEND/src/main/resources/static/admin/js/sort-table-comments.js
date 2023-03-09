@@ -33,6 +33,20 @@ $('.sort-table-comment').on('click', function (e) {
                 img.attr("src", "/img/icon/down-arrow.png");
             }
             break;
+        case "Status":
+            img = $('#stat');
+            if (tag === "down") {
+                let data = posts.sort((x, y) => x.status.localeCompare(y.status));
+                printTableComments(data);
+                column.attr("data-tag", "up");
+                img.attr("src", "/img/icon/up-arrow.png");
+            } else {
+                let data = posts.sort((x, y) => y.status.localeCompare(x.status));
+                printTableComments(data);
+                column.attr("data-tag", "down");
+                img.attr("src", "/img/icon/down-arrow.png");
+            }
+            break;
         case "CreatedAt":
             img = $('#crt');
             if (tag === "down") {
@@ -98,11 +112,12 @@ function printTableComments(data) {
             let a1 = document.createElement('a');
             a1.href = "#";
             a1.title = "Edit";
+            a1.style.marginRight = "4px";
             a1.dataset.id = data[i].id;
-            a1.dataset.username = data[i].post.username;
+            a1.dataset.username = data[i].post.user.username;
             a1.dataset.body = data[i].body;
             a1.dataset.titlePost = data[i].post.title;
-            a1.dataset.category = data[i].post.category;
+            a1.dataset.category = data[i].post.category.name;
             a1.dataset.toggle = "modal";
             a1.dataset.target = "#EditCommentModal";
             let img2 = document.createElement('img');
@@ -115,10 +130,10 @@ function printTableComments(data) {
             a2.href = "#";
             a2.title = "Recovery";
             a2.dataset.id = data[i].id;
-            a2.dataset.username = data[i].post.username;
+            a2.dataset.username = data[i].post.user.username;
             a2.dataset.body = data[i].body;
             a2.dataset.titlePost = data[i].post.title;
-            a2.dataset.category = data[i].post.category;
+            a2.dataset.category = data[i].post.category.name;
             a2.dataset.toggle = "modal";
             a2.dataset.target = "#RecoveryCommentModal";
             let img3 = document.createElement('img');
@@ -127,6 +142,7 @@ function printTableComments(data) {
             a2.appendChild(img3);
             td9.appendChild(a2);
             let a3 = document.createElement('a');
+            a3.hidden = data[i].status === "DELETED";
             a3.href = "#";
             a3.title = "Delete";
             a3.dataset.id = data[i].id;
@@ -148,7 +164,7 @@ function printTableComments(data) {
 function correctDate(date) {
     let data = new Date(date.toString());
     return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric'
+        day: 'numeric', month: 'short', year: 'numeric'
     }).replace(/ /g, ' ');
 }
 
@@ -176,7 +192,8 @@ function searchComment(text) {
     for (let txt of arrText) {
         for (let i = 0; i < comments.length; i++) {
             if (comments[i].post.user.username.toLowerCase().includes(txt.toLowerCase()) ||
-                comments[i].post.title.toLowerCase().includes(txt.toLowerCase())) {
+                comments[i].post.title.toLowerCase().includes(txt.toLowerCase()) ||
+                comments[i].status.toLowerCase().includes(txt.toLowerCase())) {
                 if (result.length === 0)
                     result.push(comments[i]);
                 else {

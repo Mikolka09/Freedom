@@ -8,7 +8,8 @@
         text-decoration: none;
         color: #d62516;
     }
-    th img{
+
+    th img {
         margin-left: 3px;
     }
 </style>
@@ -44,9 +45,10 @@
                             <th scope="col">Comment</th>
                             <th scope="col"><a href="#" class="sort-table-comment" data-tag="up" data-name="Category">Category<img
                                     id="cat" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
-                            <th scope="col">Status</th>
+                            <th scope="col"><a href="#" class="sort-table-comment" data-tag="up" data-name="Status">Status<img
+                                    id="stat" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col"><a href="#" class="sort-table-comment" data-tag="up" data-name="CreatedAt">CreatedAt<img
-                                    id="crt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>CreatedAt</th>
+                                    id="crt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col"><a href="#" class="sort-table-comment" data-tag="up" data-name="UpdatedAt">UpdatedAt<img
                                     id="urt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Buttons</th>
@@ -86,7 +88,8 @@
                                        th:data-category="${comment.getPost().getCategory().getName()}"
                                        data-toggle="modal" data-target="#RecoveryCommentModal">
                                         <img src="/img/icon/restore.png" width="30px"/></a>
-                                    <a th:data-id="${comment.getId()}" href="#" title="Delete"
+                                    <a th:if="${comment.getStatus()!=status[2]}"
+                                       th:data-id="${comment.getId()}" href="#" title="Delete"
                                        th:data-name="${comment.getBody()}"
                                        data-toggle="modal" data-target="#DeleteModal">
                                         <img src="/img/icon/delete.png" width="30px"/></a>
