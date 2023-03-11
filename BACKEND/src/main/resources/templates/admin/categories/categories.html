@@ -3,6 +3,17 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+
+    th img {
+        margin-left: 3px;
+    }
+</style>
+
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -32,18 +43,23 @@
                         <thead>
                         <tr>
                             <th scope="col">Image</th>
-                            <th scope="col">Name</th>
+                            <th scope="col"><a href="#" class="sort-table-category" data-tag="up"
+                                               data-name="Name">Name<img
+                                    id="name" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Short Description</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">CreateAt</th>
-                            <th scope="col">UpdateAt</th>
+                            <th scope="col"><a href="#" class="sort-table-category" data-tag="up" data-name="Status">Status<img
+                                    id="stat" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                            <th scope="col"><a href="#" class="sort-table-category" data-tag="up" data-name="CreatedAt">CreatedAt<img
+                                    id="crt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                            <th scope="col"><a href="#" class="sort-table-category" data-tag="up" data-name="UpdatedAt">UpdatedAt<img
+                                    id="urt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Buttons</th>
                         </tr>
                         </thead>
                     </table>
                     <div class="scroll-table-body">
                         <table>
-                            <tbody>
+                            <tbody id="body-table">
                             <tr th:each="category:${categories}">
                                 <td><img width="100px"
                                          th:src="@{|/${category.getImgUrl()}|}"></td>
@@ -70,7 +86,8 @@
                                        th:data-img="${category.getImgUrl()}"
                                        data-toggle="modal" data-target="#RecoveryModal">
                                         <img src="/img/icon/restore.png" width="30px"/></a>
-                                    <a th:data-id="${category.getId()}" href="#" title="Delete"
+                                    <a th:if="${category.getStatus()!=status[2]}"
+                                       th:data-id="${category.getId()}" href="#" title="Delete"
                                        th:data-name="${category.getName()}"
                                        data-toggle="modal" data-target="#DeleteModal">
                                         <img src="/img/icon/delete.png" width="30px"/></a>
@@ -112,6 +129,12 @@
 <th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
 
 <th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
+
+<script th:inline="javascript">
+    let data = [[${categories}]];
+</script>
+
+<script src="/admin/js/sort-table-categories.js"></script>
 
 <script>
     $('#EditModal').on('show.bs.modal', function (event) {

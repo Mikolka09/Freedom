@@ -3,7 +3,17 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
-<body id="page-top">
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+    th img{
+        margin-left: 3px;
+    }
+</style>
+
+<body id="page-top" style="overflow: hidden;">
 
 <!-- Page Wrapper -->
 <div id="wrapper">
@@ -64,6 +74,15 @@
 <th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
 
 <th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
+
+<script th:inline="javascript">
+    let dataOut = [[${outMessages}]];
+    let dataDelete = [[${deleteMessages}]];
+    let user = [[${user}]];
+    let admin = [[${admin}]];
+</script>
+
+<script src="/admin/js/sort-table-mails.js"></script>
 
 </body>
 

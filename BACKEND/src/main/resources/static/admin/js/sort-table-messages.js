@@ -1,5 +1,5 @@
 $('.sort-table-message').on('click', function (e) {
-    let posts = data;
+    let messages = data;
     let column = $(this);
     let img;
     let name = column.attr("data-name");
@@ -8,12 +8,12 @@ $('.sort-table-message').on('click', function (e) {
         case "UsernameSender":
             img = $('#userSend');
             if (tag === "down") {
-                let data = posts.sort((x, y) => x.invite.userFrom.username.localeCompare(y.invite.userFrom.username));
+                let data = messages.sort((x, y) => x.invite.userFrom.username.localeCompare(y.invite.userFrom.username));
                 printTableMessages(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => y.invite.userFrom.username.localeCompare(x.invite.userFrom.username));
+                let data = messages.sort((x, y) => y.invite.userFrom.username.localeCompare(x.invite.userFrom.username));
                 printTableMessages(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -22,12 +22,12 @@ $('.sort-table-message').on('click', function (e) {
         case "FullNameSender":
             img = $('#fullSend');
             if (tag === "down") {
-                let data = posts.sort((x, y) => x.invite.userFrom.fullName.localeCompare(y.invite.userFrom.fullName));
+                let data = messages.sort((x, y) => x.invite.userFrom.fullName.localeCompare(y.invite.userFrom.fullName));
                 printTableMessages(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => y.invite.userFrom.fullName.localeCompare(x.invite.userFrom.fullName));
+                let data = messages.sort((x, y) => y.invite.userFrom.fullName.localeCompare(x.invite.userFrom.fullName));
                 printTableMessages(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -36,12 +36,12 @@ $('.sort-table-message').on('click', function (e) {
         case "UsernameRecipient":
             img = $('#userRec');
             if (tag === "down") {
-                let data = posts.sort((x, y) => x.invite.userTo.username.localeCompare(y.invite.userTo.username));
+                let data = messages.sort((x, y) => x.invite.userTo.username.localeCompare(y.invite.userTo.username));
                 printTableMessages(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => y.invite.userTo.username.localeCompare(x.invite.userTo.username));
+                let data = messages.sort((x, y) => y.invite.userTo.username.localeCompare(x.invite.userTo.username));
                 printTableMessages(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -50,12 +50,12 @@ $('.sort-table-message').on('click', function (e) {
         case "Status":
             img = $('#stat');
             if (tag === "down") {
-                let data = posts.sort((x, y) => x.status.localeCompare(y.status));
+                let data = messages.sort((x, y) => x.status.localeCompare(y.status));
                 printTableMessages(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => y.status.localeCompare(x.status));
+                let data = messages.sort((x, y) => y.status.localeCompare(x.status));
                 printTableMessages(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -64,12 +64,12 @@ $('.sort-table-message').on('click', function (e) {
         case "DateViewed":
             img = $('#dataV');
             if (tag === "down") {
-                let data = posts.sort((x, y) => new Date(x.invite.updatedAt) - new Date(y.invite.updatedAt));
+                let data = messages.sort((x, y) => new Date(x.invite.updatedAt) - new Date(y.invite.updatedAt));
                 printTableMessages(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => new Date(y.invite.updatedAt) - new Date(x.invite.updatedAt));
+                let data = messages.sort((x, y) => new Date(y.invite.updatedAt) - new Date(x.invite.updatedAt));
                 printTableMessages(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -78,12 +78,12 @@ $('.sort-table-message').on('click', function (e) {
         case "DateSent":
             img = $('#dataS');
             if (tag === "down") {
-                let data = posts.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt));
+                let data = messages.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt));
                 printTableMessages(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt));
+                let data = messages.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt));
                 printTableMessages(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -180,20 +180,6 @@ function printTableMessages(data) {
         }
     }
 }
-
-function correctDate(date) {
-    let data = new Date(date.toString());
-    return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'short', year: 'numeric'
-    }).replace(/ /g, ' ');
-}
-
-$("#input-search-admin").keydown(function (event) {
-    if (event.keyCode === 13) {
-        $("#button-search").click();
-        $(this).val('');
-    }
-});
 
 $('#button-search').on('click', function () {
     let input = $('#input-search-admin');

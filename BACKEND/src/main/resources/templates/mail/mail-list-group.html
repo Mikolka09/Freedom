@@ -76,7 +76,7 @@
             </div>
             <div class="col-8">
                 <ul id="container-messages" class="list-group list-group-light mb-3"
-                    style="max-height: 500px; overflow-y: auto;">
+                    style="max-height: 480px; overflow-y: auto;">
                     <th:block th:each="message:${messageList}">
                         <li class="list-group-item"
                             th:style="${message.getInvite().getStatus()==status[8]?'font-weight: normal':'font-weight: bold'}">

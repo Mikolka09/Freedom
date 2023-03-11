@@ -209,9 +209,3 @@ function printAllUserMessages(data) {
     }
 }
 
-function correctDate(date) {
-    let data = new Date(date.toString());
-    return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric'
-    }).replace(/ /g, ' ');
-}

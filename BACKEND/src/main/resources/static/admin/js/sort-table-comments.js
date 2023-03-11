@@ -1,5 +1,5 @@
 $('.sort-table-comment').on('click', function (e) {
-    let posts = data;
+    let comments = data;
     let column = $(this);
     let img;
     let name = column.attr("data-name");
@@ -8,12 +8,12 @@ $('.sort-table-comment').on('click', function (e) {
         case "Username":
             img = $('#user');
             if (tag === "down") {
-                let data = posts.sort((x, y) => x.post.user.username.localeCompare(y.post.user.username));
+                let data = comments.sort((x, y) => x.post.user.username.localeCompare(y.post.user.username));
                 printTableComments(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => y.post.user.username.localeCompare(x.post.user.username));
+                let data = comments.sort((x, y) => y.post.user.username.localeCompare(x.post.user.username));
                 printTableComments(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -22,12 +22,12 @@ $('.sort-table-comment').on('click', function (e) {
         case "Category":
             img = $('#cat');
             if (tag === "down") {
-                let data = posts.sort((x, y) => x.post.category.name.localeCompare(y.post.category.name));
+                let data = comments.sort((x, y) => x.post.category.name.localeCompare(y.post.category.name));
                 printTableComments(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => y.post.category.name.localeCompare(x.post.category.name));
+                let data = comments.sort((x, y) => y.post.category.name.localeCompare(x.post.category.name));
                 printTableComments(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -36,12 +36,12 @@ $('.sort-table-comment').on('click', function (e) {
         case "Status":
             img = $('#stat');
             if (tag === "down") {
-                let data = posts.sort((x, y) => x.status.localeCompare(y.status));
+                let data = comments.sort((x, y) => x.status.localeCompare(y.status));
                 printTableComments(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => y.status.localeCompare(x.status));
+                let data = comments.sort((x, y) => y.status.localeCompare(x.status));
                 printTableComments(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -50,12 +50,12 @@ $('.sort-table-comment').on('click', function (e) {
         case "CreatedAt":
             img = $('#crt');
             if (tag === "down") {
-                let data = posts.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt));
+                let data = comments.sort((x, y) => new Date(x.createdAt) - new Date(y.createdAt));
                 printTableComments(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt));
+                let data = comments.sort((x, y) => new Date(y.createdAt) - new Date(x.createdAt));
                 printTableComments(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -64,12 +64,12 @@ $('.sort-table-comment').on('click', function (e) {
         case "UpdatedAt":
             img = $('#urt');
             if (tag === "down") {
-                let data = posts.sort((x, y) => new Date(x.updatedAt) - new Date(y.updatedAt));
+                let data = comments.sort((x, y) => new Date(x.updatedAt) - new Date(y.updatedAt));
                 printTableComments(data);
                 column.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
-                let data = posts.sort((x, y) => new Date(y.updatedAt) - new Date(x.updatedAt));
+                let data = comments.sort((x, y) => new Date(y.updatedAt) - new Date(x.updatedAt));
                 printTableComments(data);
                 column.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
@@ -160,20 +160,6 @@ function printTableComments(data) {
         }
     }
 }
-
-function correctDate(date) {
-    let data = new Date(date.toString());
-    return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'short', year: 'numeric'
-    }).replace(/ /g, ' ');
-}
-
-$("#input-search-admin").keydown(function (event) {
-    if (event.keyCode === 13) {
-        $("#button-search").click();
-        $(this).val('');
-    }
-});
 
 $('#button-search').on('click', function () {
     let input = $('#input-search-admin');

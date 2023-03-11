@@ -235,9 +235,16 @@ function printAlerts(data) {
 function correctDate(date) {
     let data = new Date(date.toString());
     return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric'
+        day: 'numeric', month: 'short', year: 'numeric'
     }).replace(/ /g, ' ');
 }
+
+$("#input-search-admin").keydown(function(event){
+    if(event.keyCode === 13){
+        $("#button-search").click();
+        $(this).val('');
+    }
+});
 
 $('button').on('click', function () {
     let id = $(this).attr("id");

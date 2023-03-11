@@ -195,20 +195,6 @@ function printTableUsers(data, list){
     }
 }
 
-function correctDate(date) {
-    let data = new Date(date.toString());
-    return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'short', year: 'numeric'
-    }).replace(/ /g, ' ');
-}
-
-$("#input-search-admin").keydown(function(event){
-    if(event.keyCode === 13){
-        $("#button-search").click();
-        $(this).val('');
-    }
-});
-
 $('#button-search').on('click', function () {
     let input = $('#input-search-admin');
     let text = input.val();

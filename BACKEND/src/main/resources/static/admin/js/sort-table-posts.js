@@ -48,6 +48,20 @@ $('.sort-table-post').on('click', function (e) {
                 img.attr("src", "/img/icon/down-arrow.png");
             }
             break;
+        case "Comments":
+            img = $('#com');
+            if (tag === "down") {
+                let data = posts.sort((x, y) => x.comments.length - y.comments.length);
+                printTablePosts(data, list);
+                column.attr("data-tag", "up");
+                img.attr("src", "/img/icon/up-arrow.png");
+            } else {
+                let data = posts.sort((x, y) => y.comments.length - x.comments.length);
+                printTablePosts(data, list);
+                column.attr("data-tag", "down");
+                img.attr("src", "/img/icon/down-arrow.png");
+            }
+            break;
         case "CreatedAt":
             img = $('#crt');
             if (tag === "down") {
@@ -117,7 +131,11 @@ function printTablePosts(data, list) {
             let td7 = document.createElement('td');
             td7.innerText = data[i].likes === null ? 0 : data[i].likes;
             let td8 = document.createElement('td');
-            td8.innerText = data[i].status;
+            if (list === "posts-friend") {
+                td8.innerText = data[i].comments.length;
+            } else {
+                td8.innerText = data[i].status;
+            }
             let td9 = document.createElement('td');
             td9.innerText = correctDate(data[i].createdAt);
             let td10 = document.createElement('td');
@@ -154,6 +172,14 @@ function printTablePosts(data, list) {
                 img4.width = 30;
                 a4.appendChild(img4);
                 td11.appendChild(a4);
+            } else if (list === "posts-friend") {
+                a2.href = "/view-post/" + data[i].id;
+                a2.title = "Go to Post";
+                let img2 = document.createElement('img');
+                img2.src = "/img/icon/hyperlink.png";
+                img2.width = 30;
+                a2.appendChild(img2);
+                td11.appendChild(a2);
             } else {
                 a2.href = "/admin/post/verify/" + data[i].id;
                 a2.title = "Verify";
@@ -178,20 +204,6 @@ function printTablePosts(data, list) {
     }
 }
 
-function correctDate(date) {
-    let data = new Date(date.toString());
-    return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'short', year: 'numeric'
-    }).replace(/ /g, ' ');
-}
-
-$("#input-search-admin").keydown(function(event){
-    if(event.keyCode === 13){
-        $("#button-search").click();
-        $(this).val('');
-    }
-});
-
 $('#button-search').on('click', function () {
     let input = $('#input-search-admin');
     let text = input.val();
@@ -211,6 +223,7 @@ function searchPosts(text, list) {
         for (let i = 0; i < posts.length; i++) {
             if (posts[i].user.username.toLowerCase().includes(txt.toLowerCase()) ||
                 posts[i].user.fullName.toLowerCase().includes(txt.toLowerCase()) ||
+                posts[i].likes.toString().toLowerCase() === txt.toLowerCase() ||
                 searchPostForTags(posts[i], txt)) {
                 if (result.length === 0)
                     result.push(posts[i]);
@@ -220,13 +233,24 @@ function searchPosts(text, list) {
                 }
             } else {
                 if (posts[i].title.toLowerCase().includes(txt.toLowerCase()) ||
-                    posts[i].shortDescription.toLowerCase().includes(txt.toLowerCase()) ||
-                    posts[i].category.name.toLowerCase() === txt.toLowerCase()) {
+                posts[i].shortDescription.toLowerCase().includes(txt.toLowerCase()) ||
+                posts[i].category.name.toLowerCase() === txt.toLowerCase()) {
                     if (result.length === 0)
                         result.push(posts[i]);
                     else {
                         if (result.filter(x => x.id === posts[i].id).length === 0)
                             result.push(posts[i]);
+                    }
+                }else{
+                    if(list === "posts-friend"){
+                        if(posts[i].comments.length.toString() === txt.toLowerCase()){
+                            if (result.length === 0)
+                                result.push(posts[i]);
+                            else {
+                                if (result.filter(x => x.id === posts[i].id).length === 0)
+                                    result.push(posts[i]);
+                            }
+                        }
                     }
                 }
             }
@@ -236,14 +260,14 @@ function searchPosts(text, list) {
         answer = "Search result - \"" + text.toUpperCase() + "\"";
         alertInfo(answer);
         printTablePosts(result, list);
-    }else {
+    } else {
         answer = "Search result - \"" + text.toUpperCase() + "\" returned nothing!";
         alertInfo(answer);
     }
 }
 
 function searchPostForTags(posts, txt) {
-    for (let i=0; i< posts.length; i++) {
+    for (let i = 0; i < posts.length; i++) {
         let tags = posts[i].tags;
         for (let tag of tags) {
             if (tag.name.toLowerCase() === txt.toLowerCase()) {

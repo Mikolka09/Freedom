@@ -5,23 +5,27 @@
     <h1 class="text-center">List Outbox Messages</h1>
     <div>
         <div class="scroll-table">
-            <table>
+            <table id="table-list" data-table="out-list">
                 <thead>
                 <tr>
                     <th scope="col">Avatar</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">FullName</th>
+                    <th scope="col"><a href="#" class="sort-table-mail" data-tag="up" data-name="Username">Username<img
+                            id="user" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                    <th scope="col"><a href="#" class="sort-table-mail" data-tag="up" data-name="FullName">FullName<img
+                            id="full" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                     <th scope="col">Message</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Date viewed</th>
-                    <th scope="col">Date sent</th>
+                    <th scope="col"><a href="#" class="sort-table-mail" data-tag="up" data-name="Date Viewed">Date Viewed<img
+                            id="view" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                    <th scope="col"><a href="#" class="sort-table-mail" data-tag="up" data-name="Date Sent">Date Sent<img
+                            id="sent" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                     <th scope="col">Buttons</th>
                 </tr>
                 </thead>
             </table>
             <div class="scroll-table-body">
                 <table>
-                    <tbody>
+                    <tbody id="body-table">
                     <tr th:each="message:${outMessages}">
                         <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
                                  th:src="@{|/${message.getInvite().getUserTo().getAvatarUrl()}|}"></td>

@@ -7,21 +7,28 @@
             <thead>
             <tr>
                 <th scope="col">Avatar</th>
-                <th scope="col">Username</th>
-                <th scope="col">FullName</th>
-                <th scope="col">Age</th>
-                <th scope="col">Email</th>
+                <th scope="col"><a href="#" class="sort-table-friend" data-tag="up" data-name="Username">Username
+                    <img id="user" src="/img/icon/up-arrow.png" width="15px"></a></th>
+                <th scope="col"><a href="#" class="sort-table-friend" data-tag="up" data-name="FullName">FullName
+                    <img id="full" src="/img/icon/up-arrow.png" width="15px"></a></th>
+                <th scope="col"><a href="#" class="sort-table-friend" data-tag="up" data-name="Age">Age
+                    <img id="age" src="/img/icon/up-arrow.png" width="15px"></a></th>
+                <th scope="col"><a href="#" class="sort-table-friend" data-tag="up" data-name="Email">Email
+                    <img id="eml" src="/img/icon/up-arrow.png" width="15px"></a></th>
                 <th scope="col">Status</th>
-                <th scope="col">Rating</th>
-                <th scope="col">Friendship Days</th>
-                <th scope="col">Friendship Start Date</th>
+                <th scope="col"><a href="#" class="sort-table-friend" data-tag="up" data-name="Rating">Rating
+                    <img id="rat" src="/img/icon/up-arrow.png" width="15px"></a></th>
+                <th scope="col"><a href="#" class="sort-table-friend" data-tag="up" data-name="Friendship Days">Friendship Days
+                    <img id="days" src="/img/icon/up-arrow.png" width="15px"></a></th>
+                <th scope="col"><a href="#" class="sort-table-friend" data-tag="up" data-name="Friendship Start Date">Friendship Start Date
+                    <img id="date" src="/img/icon/up-arrow.png" width="15px"></a></th>
                 <th scope="col">Buttons</th>
             </tr>
             </thead>
         </table>
         <div class="scroll-table-body">
             <table>
-                <tbody>
+                <tbody id="body-table">
                 <tr th:each="friend:${friends}">
                     <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
                              th:src="@{|/${friend.getFriendReceiver().getAvatarUrl()}|}"></td>

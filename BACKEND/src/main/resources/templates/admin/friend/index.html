@@ -5,6 +5,13 @@
 
 <body id="page-top">
 
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+</style>
+
 <!-- Page Wrapper -->
 <div id="wrapper">
 
@@ -61,6 +68,13 @@
 <th:block th:insert="/admin/fragments/logout-modal.html::logout-modal"></th:block>
 
 <th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
+
+<script th:inline="javascript">
+    let data = [[${friends}]];
+    let admin = [[${admin}]];
+</script>
+
+<script src="/admin/js/sort-table-friends.js"></script>
 
 <script>
 
