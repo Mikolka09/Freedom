@@ -134,7 +134,9 @@ function printTableMails(data, list) {
                 a3.href = "#";
                 a3.style.marginLeft = "4px";
                 a3.title = "Send Message";
-                a3.className="newMessage";
+                a3.addEventListener('click', (event) => {
+                    getAttributesButton(event.currentTarget);
+                })
                 a3.dataset.id = "0";
                 a3.dataset.out = "true";
                 a3.dataset.idTo = (user === null) ? admin.id : user.id;
@@ -144,11 +146,12 @@ function printTableMails(data, list) {
                 a3.dataset.date = correctDate(data[i].createdAt)
                 img3.src = "/img/icon/send.png";
                 img3.width = 30;
-
             } else {
                 a3.style.marginLeft = "4px";
                 a3.href = "#";
-                a3.className = "recoveryMessage";
+                a3.addEventListener('click', (event) => {
+                    recoveryOneMessage(event.currentTarget.getAttribute('data-id'));
+                })
                 a3.title = "Recovery Message";
                 a3.dataset.id = data[i].id;
                 img3.src = "/img/icon/restore.png";
@@ -171,10 +174,6 @@ $('#button-search').on('click', function () {
         input.val('');
         searchMails(text, list);
     }
-})
-
-$('.newMessageMail').on('click', function (){
-    $('.newMessage').click();
 })
 
 function searchMails(text, list) {

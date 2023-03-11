@@ -420,8 +420,7 @@ $('.newMessage').on('click', function () {
     answerData($(this));
 });
 
-$('.recoveryMessage').on('click', function () {
-    let id = $(this).attr('data-id');
+function recoveryOneMessage(id){
     $.get({
         url: "/user/messages/recovery/" + id,
         success: (data) => {
@@ -436,6 +435,11 @@ $('.recoveryMessage').on('click', function () {
             console.log(err);
         }
     });
+}
+
+$('.recoveryMessage').on('click', function () {
+    let id = $(this).attr('data-id');
+    recoveryOneMessage(id);
 });
 
 $('#mark-all').on('click', function () {
@@ -477,14 +481,7 @@ $('#action').on('click', function () {
     }
 });
 
-function answerData(data) {
-    let id = data.attr('data-id');
-    let idFrom = data.attr('data-id-from');
-    let idTo = data.attr('data-id-to');
-    let out = data.attr("data-out");
-    let name = data.attr('data-name');
-    let text = data.attr('data-text');
-    let date = data.attr('data-date');
+function openToModalSend(id, idFrom, idTo, out, name, text, date){
     let answer = "";
     if (text === "false") {
         answer = text;
@@ -504,6 +501,30 @@ function answerData(data) {
         $('#sendUserMessageLabel').text('Answer to ' + name);
     }
     new bootstrap.Modal(document.getElementById("sendUserMessageModal")).show();
+
+}
+
+function getAttributesButton(data) {
+    let id = data.getAttribute('data-id');
+    let idFrom = data.getAttribute('data-id-from');
+    let idTo = data.getAttribute('data-id-to');
+    let out = data.getAttribute("data-out");
+    let name = data.getAttribute('data-name');
+    let text = data.getAttribute('data-text');
+    let date = data.getAttribute('data-date');
+    openToModalSend(id, idFrom, idTo, out, name, text, date);
+}
+
+
+function answerData(data) {
+    let id = data.attr('data-id');
+    let idFrom = data.attr('data-id-from');
+    let idTo = data.attr('data-id-to');
+    let out = data.attr("data-out");
+    let name = data.attr('data-name');
+    let text = data.attr('data-text');
+    let date = data.attr('data-date');
+    openToModalSend(id, idFrom, idTo, out, name, text, date);
 }
 
 $('#send-user-message').on('click', function () {
@@ -567,18 +588,22 @@ $('#send-user-message').on('click', function () {
     }
 });
 
-$('.editMessage').on('click', function (){
-    let data = $(this);
+function openToModalEditMessage(id, name, text){
     let button = $('#send-user-message');
-    let id = data.attr('data-id');
-    let name = data.attr('data-name');
-    let text = data.attr('data-text');
     button.attr('data-id', id);
     button.text('Save');
     $('#recipient-user-name').val(name);
     $('#sendUserMessageLabel').text('Edit message to ' + name);
     $('#message-user-text').val(text);
     new bootstrap.Modal(document.getElementById("sendUserMessageModal")).show();
+}
+
+$('.editMessage').on('click', function (){
+    let data = $(this);
+    let id = data.attr('data-id');
+    let name = data.attr('data-name');
+    let text = data.attr('data-text');
+    openToModalEditMessage(id, name, text);
 })
 
 

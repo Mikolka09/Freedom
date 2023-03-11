@@ -107,11 +107,11 @@ function printTableMessages(data) {
             let td3 = document.createElement('td');
             td3.innerText = data[i].invite.userTo.username;
             let td4 = document.createElement('td');
-            td4.innerText = data[i].message.length>70?(data[i].message.substring(0, 70)+' ...'):(data[i].message);
+            td4.innerText = data[i].message.length > 70 ? (data[i].message.substring(0, 70) + ' ...') : (data[i].message);
             let td5 = document.createElement('td');
             td5.innerText = data[i].status;
             let td6 = document.createElement('td');
-            td6.innerText = data[i].invite.status!=="VIEWED"?"NOT_VIEWED": correctDate(data[i].invite.updatedAt);
+            td6.innerText = data[i].invite.status !== "VIEWED" ? "NOT_VIEWED" : correctDate(data[i].invite.updatedAt);
             let td7 = document.createElement('td');
             td7.innerText = correctDate(data[i].createdAt);
             let td8 = document.createElement('td');
@@ -136,7 +136,12 @@ function printTableMessages(data) {
             let a2 = document.createElement('a');
             a2.href = "#";
             a2.title = "Edit Message";
-            a2.className = "editMessage";
+            a2.addEventListener('click', () => {
+                let id = data[i].id;
+                let name = data[i].invite.userTo.fullName;
+                let text = data[i].message;
+                openToModalEditMessage(id, name, text);
+            })
             a2.style.marginLeft = "4px";
             a2.dataset.id = data[i].id;
             a2.dataset.name = data[i].invite.userTo.fullName;
@@ -151,7 +156,9 @@ function printTableMessages(data) {
             a3.href = "#";
             a3.style.marginLeft = "4px";
             a3.title = "Recovery Message";
-            a3.className = "recoveryMessage";
+            a3.addEventListener('click', (event) => {
+                recoveryOneMessage(event.currentTarget.getAttribute('data-id'));
+            })
             a3.dataset.id = data[i].id;
             let img3 = document.createElement('img');
             img3.src = "/img/icon/restore.png";

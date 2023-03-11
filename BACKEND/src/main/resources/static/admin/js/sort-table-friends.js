@@ -151,7 +151,9 @@ function printTableFriends(data) {
             a3.href = "#";
             a3.style.marginLeft = "4px";
             a3.title = "Send Message";
-            a3.className = "newMessage";
+            a3.addEventListener('click', (event) => {
+                getAttributesButton(event.currentTarget);
+            })
             a3.dataset.id = "0";
             a3.dataset.idTo = admin.id;
             a3.dataset.name = data[i].friendReceiver.fullName;
