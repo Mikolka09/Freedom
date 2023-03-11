@@ -3,6 +3,17 @@
 
 <th:block th:insert="/user/fragments/head.html::head"></th:block>
 
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+
+    th img {
+        margin-left: 5px;
+    }
+</style>
+
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -60,6 +71,12 @@
 <th:block th:insert="/user/fragments/send-user-massege.html::send-user-message"></th:block>
 
 <th:block th:insert="/user/fragments/user-other-foot.html::user-other-foot"></th:block>
+
+<script th:inline="javascript">
+    let data = [[${list}]];
+</script>
+
+<script src="/admin/js/sort-table-inbox.js"></script>
 
 </body>
 
