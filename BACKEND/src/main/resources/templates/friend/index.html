@@ -3,6 +3,13 @@
 
 <th:block th:insert="/user/fragments/head.html::head"></th:block>
 
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+</style>
+
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -57,6 +64,13 @@
 <th:block th:insert="/user/fragments/send-user-massege.html::send-user-message"></th:block>
 
 <th:block th:insert="/user/fragments/user-other-foot.html::user-other-foot"></th:block>
+
+<script th:inline="javascript">
+    let data = [[${friends}]];
+    let user = [[${user}]];
+</script>
+
+<script src="/js/sort/sort-table-friends.js"></script>
 
 <script>
 

@@ -1,4 +1,4 @@
-$('.sort-table-friend').on('click', function (e) {
+$('.sort-table-friend-user').on('click', function (e) {
     let friends = data;
     let column = $(this);
     let img;
@@ -140,7 +140,7 @@ function printTableFriends(data) {
             td9.innerText = correctDate(data[i].createdAt);
             let td10 = document.createElement('td');
             let a2 = document.createElement('a');
-            a2.href = "/admin/friend/view/" + data[i].friendReceiver.id;
+            a2.href = "/user/friend/view/" + data[i].friendReceiver.id;
             a2.title = "View";
             let img2 = document.createElement('img');
             img2.src = "/img/icon/view.png";
@@ -155,7 +155,7 @@ function printTableFriends(data) {
                 getAttributesButton(event.currentTarget);
             })
             a3.dataset.id = "0";
-            a3.dataset.idTo = admin.id;
+            a3.dataset.idTo = user.id;
             a3.dataset.name = data[i].friendReceiver.fullName;
             a3.dataset.idFrom = data[i].friendReceiver.id;
             a3.dataset.text = "false";
@@ -170,7 +170,7 @@ function printTableFriends(data) {
             a4.style.marginLeft = "3px";
             a4.title = "Break Friendship";
             a4.dataset.idFriend = data[i].friendReceiver.id;
-            a4.dataset.id = admin.id;
+            a4.dataset.id = user.id;
             a4.dataset.name = data[i].friendReceiver.username;
             a4.dataset.toggle = "modal";
             a4.dataset.target = "#DeleteModal";
