@@ -156,7 +156,7 @@ function searchCategory(text) {
     for (let txt of arrText) {
         for (let i = 0; i < categories.length; i++) {
             if (categories[i].name.toLowerCase().includes(txt.toLowerCase()) ||
-                categories[i].shortDescription.toLowerCase().includes(txt.toLowerCase()) ||
+               searchWorldToString(categories[i].shortDescription.toLowerCase(), txt.toLowerCase()) ||
                 categories[i].status.toLowerCase().includes(txt.toLowerCase())) {
                 if (result.length === 0)
                     result.push(categories[i]);

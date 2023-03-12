@@ -1,7 +1,18 @@
 $('ul').on('click', '.open-all-messages', function () {
     let idFrom = $(this).data('id-from');
     let idTo = $(this).data('id-to');
-    if (typeof idFrom != "undefined" && typeof idTo != "undefined") {
+    if (typeof searchSend !== "undefined" && searchMess !== "undefined") {
+        if (typeof idFrom != "undefined" && typeof idTo != "undefined") {
+            let test = [];
+            for(let st of searchMess){
+                if(st[0].invite.userFrom.id===idFrom)
+                    test.push(st);
+            }
+            console.log(test[0]);
+            printAllSenders(searchSend, test[0][0].invite.userFrom.fullName);
+            printAllUserMessages(test[0]);
+        }
+    } else {
         $.get({
             url: "/user/messages/all-messages/" + idFrom,
             data: {
@@ -99,7 +110,7 @@ function printAllSenders(map, user) {
                 let span1 = document.createElement('span');
                 span1.className = "badge rounded-pill badge-primary";
                 span1.innerText = elem[0].length > 1 ? ((elem[0].filter(x => x.invite.status !== "VIEWED")
-                    .length)===0?"":(elem[0].filter(x => x.invite.status !== "VIEWED")
+                    .length) === 0 ? "" : (elem[0].filter(x => x.invite.status !== "VIEWED")
                     .length)) : (data[0].invite.status !== "VIEWED" ? "1" : "");
                 li.appendChild(span1);
                 container.appendChild(li);

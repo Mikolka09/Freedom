@@ -232,8 +232,8 @@ function searchPosts(text, list) {
                         result.push(posts[i]);
                 }
             } else {
-                if (posts[i].title.toLowerCase().includes(txt.toLowerCase()) ||
-                posts[i].shortDescription.toLowerCase().includes(txt.toLowerCase()) ||
+                if (searchWorldToString(posts[i].title.toLowerCase(), txt.toLowerCase()) ||
+              searchWorldToString(posts[i].shortDescription.toLowerCase(), txt.toLowerCase()) ||
                 posts[i].category.name.toLowerCase() === txt.toLowerCase()) {
                     if (result.length === 0)
                         result.push(posts[i]);

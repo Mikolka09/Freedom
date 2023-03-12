@@ -235,7 +235,7 @@ function printAlerts(data) {
 function correctDate(date) {
     let data = new Date(date.toString());
     return data.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'short', year: 'numeric'
+        day: '2-digit', month: 'short', year: 'numeric'
     }).replace(/ /g, ' ');
 }
 
@@ -606,6 +606,9 @@ $('.editMessage').on('click', function (){
     openToModalEditMessage(id, name, text);
 })
 
-
+function searchWorldToString(text, txt){
+    let arrText = text.split(" ");
+    return arrText.includes(txt);
+}
 
 

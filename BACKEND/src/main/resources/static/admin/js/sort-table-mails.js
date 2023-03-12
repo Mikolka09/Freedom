@@ -205,7 +205,7 @@ function searchMails(text, list) {
                             result.push(mails[i]);
                     }
                 } else {
-                    if (mails[i].message.toLowerCase().includes(txt.toLowerCase())) {
+                    if (searchWorldToString(mails[i].message.toLowerCase(), txt.toLowerCase())) {
                         if (result.length === 0)
                             result.push(mails[i]);
                         else {

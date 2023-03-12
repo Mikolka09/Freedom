@@ -178,7 +178,7 @@ function searchComment(text) {
     for (let txt of arrText) {
         for (let i = 0; i < comments.length; i++) {
             if (comments[i].post.user.username.toLowerCase().includes(txt.toLowerCase()) ||
-                comments[i].post.title.toLowerCase().includes(txt.toLowerCase()) ||
+               searchWorldToString(comments[i].post.title.toLowerCase(), txt.toLowerCase()) ||
                 comments[i].status.toLowerCase().includes(txt.toLowerCase())) {
                 if (result.length === 0)
                     result.push(comments[i]);
@@ -187,7 +187,7 @@ function searchComment(text) {
                         result.push(comments[i]);
                 }
             } else {
-                if (comments[i].body.toLowerCase().includes(txt.toLowerCase()) ||
+                if (searchWorldToString(comments[i].body.toLowerCase(), txt.toLowerCase()) ||
                     comments[i].post.category.name.toLowerCase().includes(txt.toLowerCase())) {
                     if (result.length === 0)
                         result.push(comments[i]);

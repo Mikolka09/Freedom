@@ -214,7 +214,7 @@ function searchMessage(text) {
                         result.push(messages[i]);
                 }
             } else {
-                if (messages[i].message.toLowerCase().includes(txt.toLowerCase()) ||
+                if (searchWorldToString( messages[i].message.toLowerCase(), txt.toLowerCase()) ||
                     messages[i].status.toLowerCase().includes(txt.toLowerCase())) {
                     if (result.length === 0)
                         result.push(messages[i]);
