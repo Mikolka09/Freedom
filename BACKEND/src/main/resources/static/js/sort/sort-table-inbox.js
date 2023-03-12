@@ -43,12 +43,14 @@ function editArrToTree(data) {
 
 $('#button-search').on('click', function () {
     let input = $('#input-search-admin');
-    let header = document.location.href.includes("messages");
+    let mess = document.location.href.includes("messages");
+    let del = document.location.href.includes("deleted");
+    let out = document.location.href.includes("out");
     let text = input.val();
     let list = $("#table-list").attr("data-table");
     if (text !== "") {
         input.val('');
-        if (header) {
+        if (mess && !del && !out) {
             searchMails(text);
         } else
             searchEmails(text, list);

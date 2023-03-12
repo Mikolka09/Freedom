@@ -8,4 +8,5 @@ public class SocialFreedomApplication {
     public static void main(String[] args) {
         SpringApplication.run(SocialFreedomApplication.class, args);
     }
+
 }

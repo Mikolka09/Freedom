@@ -1,5 +1,6 @@
 package itstep.social_freedom.controller;
 
+import itstep.social_freedom.SocialFreedomApplication;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,9 +81,23 @@ public class AdminController {
         model.addAttribute("admin", user);
     }
 
+    private static List<String> baseWords(){
+        List<String> base = new ArrayList<>();
+        String fileName = "/BACKEND/src/main/resources/static/admin/files/british-swear-words.txt";
+        String path = new File("").getAbsolutePath()+fileName;
+        try {
+            base = Files.readAllLines(Paths.get(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return base;
+    }
+
     //Main page AdminDashboard
     @GetMapping("/admin")
     public String index(Model model) {
+        String text = "There are many variations of passages of dick Ipsum available, bent the majority have suffered beef curtains in dick form, by injected humour, or randomised words knob don't look even knob believable.";
+        String st = textCheckWords(text);
         CreateModelUser(model, userService, alertService, messageService);
         return "admin/index";
     }
@@ -632,5 +652,30 @@ public class AdminController {
         return false;
     }
 
+    public static boolean checkStringCensorship(String text){
+        List<String> base = baseWords();
+        String[] arrText = text.split(" ");
+        for(String st:base){
+            for (String s : arrText) {
+                if (st.equalsIgnoreCase(s))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static String textCheckWords(String text){
+        List<String> base = baseWords();
+        String change = "[censorship!]";
+        String[] arrText = text.split(" ");
+        for(String st:base){
+            for(int i=0; i< arrText.length; i++){
+                if(st.equalsIgnoreCase(arrText[i]))
+                    arrText[i]=change;
+            }
+        }
+        return Arrays.toString(arrText);
+    }
 
 }
