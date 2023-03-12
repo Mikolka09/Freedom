@@ -166,17 +166,7 @@ function printTableMails(data, list) {
     }
 }
 
-$('#button-search').on('click', function () {
-    let input = $('#input-search-admin');
-    let text = input.val();
-    let list = $("#table-list").attr("data-table");
-    if (text !== "") {
-        input.val('');
-        searchMails(text, list);
-    }
-})
-
-function searchMails(text, list) {
+function searchEmails(text, list) {
     let mails;
     if (list === "out-list")
         mails = dataOut;

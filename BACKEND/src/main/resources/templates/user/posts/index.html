@@ -3,6 +3,16 @@
 
 <th:block th:insert="/user/fragments/head.html::head"></th:block>
 
+<style>
+    a:hover {
+        text-decoration: none;
+        color: #d62516;
+    }
+    th img{
+        margin-left: 3px;
+    }
+</style>
+
 <body id="page-top">
 
 <!-- Page Wrapper -->
@@ -31,25 +41,30 @@
                     <table>
                         <thead>
                         <tr>
-                            <th scope="col">Username</th>
                             <th scope="col">Image</th>
                             <th scope="col">Title</th>
                             <th scope="col">Short Description</th>
-                            <th scope="col">Category</th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up" data-name="Category">Category<img
+                                    id="cat" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Tags</th>
-                            <th scope="col">Likes</th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up"
+                                               data-name="Likes">Likes<img id="like" src="/img/icon/up-arrow.png"
+                                                                           width="15px" alt="image"></a></th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up" data-name="Comments">Comments<img
+                                    id="com" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Status</th>
-                            <th scope="col">CreateAt</th>
-                            <th scope="col">UpdateAt</th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up" data-name="CreatedAt">CreatedAt<img
+                                    id="crt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
+                            <th scope="col"><a href="#" class="sort-table-post" data-tag="up" data-name="UpdatedAt">UpdatedAt<img
+                                    id="urt" src="/img/icon/up-arrow.png" width="15px" alt="image"></a></th>
                             <th scope="col">Buttons</th>
                         </tr>
                         </thead>
                     </table>
                     <div class="scroll-table-body">
                         <table>
-                            <tbody>
+                            <tbody id="body-table">
                             <tr th:each="post:${posts}">
-                                <td th:text="${post.getUser().getUsername()}"></td>
                                 <td><img width="100px"
                                          th:src="@{|/${post.getImgUrl()}|}"></td>
                                 <td th:text="${post.getTitle()}"></td>
@@ -63,6 +78,7 @@
                                     </select>
                                 </td>
                                 <td th:text="${post.getLikes()==null?0:post.getLikes()}"></td>
+                                <td th:text="${post.getComments().size()}"></td>
                                 <td th:text="${post.getStatus()}"></td>
                                 <td th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(post.getCreatedAt()),
                                 #dates.month(post.getCreatedAt()), #dates.day(post.getCreatedAt())), 'dd MMM yyyy',
@@ -115,6 +131,12 @@
 
 
 <th:block th:insert="/user/fragments/user-other-foot.html::user-other-foot"></th:block>
+
+<script th:inline="javascript">
+    let data = [[${posts}]];
+</script>
+
+<script src="/js/sort/sort-table-posts.js"></script>
 
 <script>
 

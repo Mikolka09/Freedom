@@ -43,10 +43,15 @@ function editArrToTree(data) {
 
 $('#button-search').on('click', function () {
     let input = $('#input-search-admin');
+    let header = document.location.href.includes("messages");
     let text = input.val();
+    let list = $("#table-list").attr("data-table");
     if (text !== "") {
         input.val('');
-        searchMails(text);
+        if (header) {
+            searchMails(text);
+        } else
+            searchEmails(text, list);
     }
 })
 
@@ -67,7 +72,7 @@ function searchMails(text) {
                         if (test.filter(x => x.id === arr.id).length === 0)
                             test.push(arr);
                     }
-                }else if(searchWorldToString(arr.message.toLowerCase(), txt.toLowerCase())){
+                } else if (searchWorldToString(arr.message.toLowerCase(), txt.toLowerCase())) {
                     if (test.length === 0)
                         test.push(arr);
                     else {
