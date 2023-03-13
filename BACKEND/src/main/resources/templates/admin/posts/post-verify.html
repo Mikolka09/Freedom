@@ -3,7 +3,7 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
-<body id="page-top">
+<body id="page-top" style="overflow: hidden;">
 
 <!-- Page Wrapper -->
 <div id="wrapper">
@@ -25,10 +25,9 @@
             <!-- Sign up form -->
             <div class="col-md-12 col-md-offset-2">
                 <h1 class="text-center">Verify Post</h1>
-                <br>
                 <span class="text-center" style="color: red;" th:if="${error}!=null" th:text="${error}"></span>
                 <br>
-                <div class="row">
+                <div class="row" style="overflow: auto; height: 540px;">
                     <div class="col">
                         <form th:action="@{|/admin/post/verify-store/${post.getId()}|}" enctype="multipart/form-data"
                               method="POST">
@@ -68,7 +67,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="file">Image</label>
-                                            <img width="100px" th:src="@{|/${post.getImgUrl()}|}"
+                                            <img width="100px" style="padding-bottom: 5px;" th:src="@{|/${post.getImgUrl()}|}"
                                                  alt="Url">
                                             <input class="form-control" type="file" name="file" id="file"/>
                                         </div>
@@ -93,6 +92,14 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="offenses" name="offenses"/>
+                                                <label class="form-check-label" for="offenses">
+                                                    Offenses
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="status">Status</label>
                                             <select class="form-control" name="status" id="status" title="Select status!">
                                                 <option th:each="st : ${status}"
@@ -104,7 +111,7 @@
                                         <div class="form-group">
                                             <label for="description">Description</label>
                                             <textarea class="form-control" name="description" id="description"
-                                                      rows="22" placeholder="Description"
+                                                      rows="24" placeholder="Description"
                                                       th:text="${post.getBody()}"></textarea>
                                         </div>
                                     </div>

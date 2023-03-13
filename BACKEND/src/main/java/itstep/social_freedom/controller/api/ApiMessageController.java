@@ -1,5 +1,6 @@
 package itstep.social_freedom.controller.api;
 
+import itstep.social_freedom.controller.AdminController;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.entity.dto.MessageDto;
 import itstep.social_freedom.service.AlertService;
@@ -39,6 +40,13 @@ public class ApiMessageController {
         User userTo = userService.findUserById(id);
         Message message = new Message();
         Invite invite = new Invite();
+        if (!Objects.equals(text, "")) {
+            if (AdminController.checkStringCensorship(text)) {
+                userFrom.setOffenses(userFrom.getOffenses() + 100);
+                userService.saveEdit(userFrom);
+                text = AdminController.textCheckWords(text);
+            }
+        }
         if (Objects.equals(answer, "false")) {
             message.setMessage(text);
         } else {
@@ -204,6 +212,14 @@ public class ApiMessageController {
                                @RequestParam(name = "text") String text) {
         Message message = messageService.findMessageById(id);
         if(message!=null){
+            if (!Objects.equals(text, "")) {
+                if (AdminController.checkStringCensorship(text)) {
+                    User userFrom = message.getInvite().getUserFrom();
+                    userFrom.setOffenses(userFrom.getOffenses() + 100);
+                    userService.saveEdit(userFrom);
+                    text = AdminController.textCheckWords(text);
+                }
+            }
             message.setMessage(text);
             messageService.saveMessage(message);
             return "OK";

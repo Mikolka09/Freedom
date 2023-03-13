@@ -1,5 +1,6 @@
 package itstep.social_freedom.controller.api;
 
+import itstep.social_freedom.controller.AdminController;
 import itstep.social_freedom.controller.PageController;
 import itstep.social_freedom.entity.Comment;
 import itstep.social_freedom.entity.Post;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.*;
@@ -49,7 +51,15 @@ public class ApiPostController {
         if (post != null) {
             comment.setPost(post);
             comment.setUser(user);
-            comment.setBody(text);
+            if(!Objects.equals(text, "")){
+                if (AdminController.checkStringCensorship(text)) {
+                    user.setOffenses(user.getOffenses() + 100);
+                    userService.saveEdit(user);
+                    String tmp =AdminController.textCheckWords(text);
+                    comment.setBody(tmp);
+                } else
+                    comment.setBody(text);
+            }
             comment.setStatus(Status.ACTIVE);
         }
         if (commentService.save(comment)) {

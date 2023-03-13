@@ -47,6 +47,7 @@ public class Post extends BaseEntity{
     private Set<Comment> comments = new HashSet<>();
 
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String shortDescription;
 
     @Enumerated(EnumType.STRING)

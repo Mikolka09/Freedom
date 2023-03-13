@@ -53,7 +53,16 @@ public class CommentController {
     public String editStore(@RequestParam(value = "id") Long id,
                             @RequestParam(value = "body") String body) {
         Comment comment = commentService.findCommentById(id);
-        if (!Objects.equals(body, "")) comment.setBody(body);
+        if (!Objects.equals(body, "")){
+            if (AdminController.checkStringCensorship(body)) {
+                User user = userService.getCurrentUsername();
+                user.setOffenses(user.getOffenses() + 100);
+                userService.saveEdit(user);
+                String tmp =AdminController.textCheckWords(body);
+                comment.setBody(tmp);
+            } else
+                comment.setBody(body);
+        }
         commentService.save(comment);
         return "redirect:" + createPath();
     }

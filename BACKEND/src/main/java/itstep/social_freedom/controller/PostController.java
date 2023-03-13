@@ -128,7 +128,7 @@ public class PostController {
     public String setPost(Long user_id, MultipartFile file, String title, String shortDesc, Long category_id,
                           String description, Long[] tag_id, Post post) {
         addPost(user_id, file, title, shortDesc, category_id,
-                description, tag_id, post, userService, categoryService, tagService, fileService);
+                description, tag_id, post, userService, categoryService, tagService, fileService, null);
         if (!postService.savePost(post))
             return "redirect:/user/posts/store";
         return "redirect:/user/posts/" + user_id;
@@ -137,16 +137,42 @@ public class PostController {
     static void addPost(Long user_id, MultipartFile file, String title, String shortDesc,
                         Long category_id, String description, Long[] tag_id, Post post,
                         UserService userService, CategoryService categoryService, TagService tagService,
-                        FileService fileService) {
-        post.setUser(userService.findUserById(user_id));
-        if (!Objects.equals(title, ""))
-            post.setTitle(title);
-        if (!Objects.equals(shortDesc, ""))
-            post.setShortDescription(shortDesc);
+                        FileService fileService, String offenses) {
+        User user = userService.findUserById(user_id);
+        post.setUser(user);
+        if (offenses != null) {
+            user.setOffenses(user.getOffenses() + 100);
+            userService.saveEdit(user);
+        }
+        if (!Objects.equals(title, "")) {
+            if (AdminController.checkStringCensorship(title)) {
+                user.setOffenses(user.getOffenses() + 100);
+                userService.saveEdit(user);
+                String temp = AdminController.textCheckWords(title);
+                post.setTitle(temp);
+            } else
+                post.setTitle(title);
+        }
+        if (!Objects.equals(shortDesc, "")) {
+            if (AdminController.checkStringCensorship(shortDesc)) {
+                user.setOffenses(user.getOffenses() + 100);
+                userService.saveEdit(user);
+                String temp = AdminController.textCheckWords(shortDesc);
+                post.setShortDescription(temp);
+            } else
+                post.setShortDescription(shortDesc);
+        }
         if (!category_id.toString().equals("0"))
             post.setCategory(categoryService.findCategoryById(category_id));
-        if (!Objects.equals(description, ""))
-            post.setBody(description);
+        if (!Objects.equals(description, "")) {
+            if (AdminController.checkStringCensorship(description)) {
+                user.setOffenses(user.getOffenses() + 100);
+                userService.saveEdit(user);
+                String temp = AdminController.textCheckWords(description);
+                post.setBody(temp);
+            } else
+                post.setBody(description);
+        }
         if (tag_id != null) {
             if (tag_id.length != 0) {
                 Set<Tag> tagSet = new HashSet<>();

@@ -1,6 +1,6 @@
 package itstep.social_freedom.controller;
 
-import itstep.social_freedom.SocialFreedomApplication;
+import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Controller
@@ -81,10 +82,10 @@ public class AdminController {
         model.addAttribute("admin", user);
     }
 
-    private static List<String> baseWords(){
+    private static List<String> baseWords() {
         List<String> base = new ArrayList<>();
         String fileName = "/BACKEND/src/main/resources/static/admin/files/british-swear-words.txt";
-        String path = new File("").getAbsolutePath()+fileName;
+        String path = new File("").getAbsolutePath() + fileName;
         try {
             base = Files.readAllLines(Paths.get(path));
         } catch (IOException e) {
@@ -96,13 +97,12 @@ public class AdminController {
     //Main page AdminDashboard
     @GetMapping("/admin")
     public String index(Model model) {
-        String text = "There are many variations of passages of dick Ipsum available, bent the majority have suffered beef curtains in dick form, by injected humour, or randomised words knob don't look even knob believable.";
-        String st = textCheckWords(text);
         CreateModelUser(model, userService, alertService, messageService);
         return "admin/index";
     }
+
     @GetMapping("/admin/friends")
-    public String friends(Model model){
+    public String friends(Model model) {
         CreateModelUser(model, userService, alertService, messageService);
         User user = userService.getCurrentUsername();
         List<Friend> friends = FriendController.giveListFriends(user);
@@ -130,7 +130,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/friends/all-posts")
-    private String giveAllFriendsPosts(Model model){
+    private String giveAllFriendsPosts(Model model) {
         CreateModelUser(model, userService, alertService, messageService);
         User user = userService.getCurrentUsername();
         List<Friend> friends = FriendController.giveListFriends(user);
@@ -141,9 +141,9 @@ public class AdminController {
     static void getAllFriendsPosts(Model model, List<Friend> friends, PostService postService) {
         List<Post> friendPosts = new ArrayList<>();
         List<Post> posts = postService.posts();
-        for(Friend friend:friends) {
+        for (Friend friend : friends) {
             for (Post post : posts) {
-                if(Objects.equals(post.getUser().getId(), friend.getFriendReceiver().getId()))
+                if (Objects.equals(post.getUser().getId(), friend.getFriendReceiver().getId()))
                     friendPosts.add(post);
             }
         }
@@ -176,7 +176,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/out-messages")
-    public String outMessages(Model model){
+    public String outMessages(Model model) {
         List<Message> outMessages = messageService.findAllMessagesOutUserById(userService.getCurrentUsername().getId());
         model.addAttribute("outMessages", outMessages);
         CreateModelUser(model, userService, alertService, messageService);
@@ -184,7 +184,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/deleted-messages")
-    public String deletedMessages(Model model){
+    public String deletedMessages(Model model) {
         List<Message> deleteMessages = messageService.findAllDeletedMessagesUserById(userService.getCurrentUsername().getId());
         model.addAttribute("deleteMessages", deleteMessages);
         CreateModelUser(model, userService, alertService, messageService);
@@ -248,7 +248,7 @@ public class AdminController {
         post.setStatus(Status.NOT_VERIFIED);
         post.setLikes(0);
         CreateModelUser(model, userService, alertService, messageService);
-        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post))
+        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, null))
             return "redirect:/admin/posts";
         return "redirect:/admin/create-post/" + user_id;
     }
@@ -320,7 +320,7 @@ public class AdminController {
     @GetMapping("/admin/posts-verified")
     public String postsVerified(Model model) {
         List<Post> posts = postService.posts().stream().filter(x ->
-                (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED))
+                        (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED))
                 .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
                 .collect(Collectors.toList());
         model.addAttribute("posts", posts);
@@ -355,7 +355,16 @@ public class AdminController {
     public String editStore(@RequestParam(value = "id") Long id,
                             @RequestParam(value = "body") String body) {
         Comment comment = commentService.findCommentById(id);
-        if (!Objects.equals(body, "")) comment.setBody(body);
+        if (!Objects.equals(body, "")) {
+            if (checkStringCensorship(body)) {
+                User user = userService.getCurrentUsername();
+                user.setOffenses(user.getOffenses() + 100);
+                userService.saveEdit(user);
+                String tmp = textCheckWords(body);
+                comment.setBody(tmp);
+            } else
+                comment.setBody(body);
+        }
         commentService.save(comment);
         return "redirect:/admin/comments";
     }
@@ -438,7 +447,7 @@ public class AdminController {
                             @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
         Post post = postService.findPostById(post_id);
         CreateModelUser(model, userService, alertService, messageService);
-        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post))
+        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, null))
             return "redirect:/admin/posts";
         return "redirect:/admin/post/edit/" + user_id;
     }
@@ -453,6 +462,7 @@ public class AdminController {
                               @RequestParam(value = "shortDesc") String shortDesc,
                               @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
                               @RequestParam(value = "description") String description,
+                              @RequestParam(value = "offenses", required = false) String offenses,
                               @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id,
                               @RequestParam(value = "status") String status) {
         CreateModelUser(model, userService, alertService, messageService);
@@ -467,7 +477,7 @@ public class AdminController {
                 return "redirect:" + path;
             }
         }
-        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post)) {
+        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, offenses)) {
             if (postService.posts().stream().noneMatch(x -> x.getStatus() == Status.NOT_VERIFIED))
                 return "redirect:/admin/posts";
             return "redirect:/admin/posts-verified";
@@ -547,7 +557,7 @@ public class AdminController {
                 user.setStatus(Status.valueOf(status));
         }
         if (addRoles(redirectAttributes, file, role_id, user, edit)) return "redirect:" + path;
-        if(userService.allUsers().stream().noneMatch(x -> x.getStatus() == Status.DELETED))
+        if (userService.allUsers().stream().noneMatch(x -> x.getStatus() == Status.DELETED))
             return "redirect:/admin/users";
         return "redirect:/admin/users/deleted";
     }
@@ -598,8 +608,9 @@ public class AdminController {
 
     //Saving a new post
     public boolean setPost(Long user_id, MultipartFile file, String title, String shortDesc, Long category_id,
-                           String description, Long[] tag_id, Post post) {
-        PostController.addPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, userService, categoryService, tagService, fileService);
+                           String description, Long[] tag_id, Post post, String offenses) {
+        PostController.addPost(user_id, file, title, shortDesc, category_id, description, tag_id, post,
+                userService, categoryService, tagService, fileService, offenses);
         return postService.savePost(post);
     }
 
@@ -652,30 +663,31 @@ public class AdminController {
         return false;
     }
 
-    public static boolean checkStringCensorship(String text){
+    public static boolean checkStringCensorship(String text) {
         List<String> base = baseWords();
-        String[] arrText = text.split(" ");
-        for(String st:base){
-            for (String s : arrText) {
-                if (st.equalsIgnoreCase(s))
-                    return true;
-            }
+        for (String st : base) {
+            String reg = String.format("\\b%s\\b", st);
+            Pattern pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(text);
+            if (matcher.find())
+                return true;
         }
         return false;
     }
 
 
-    public static String textCheckWords(String text){
+    public static String textCheckWords(String text) {
         List<String> base = baseWords();
-        String change = "[censorship!]";
-        String[] arrText = text.split(" ");
-        for(String st:base){
-            for(int i=0; i< arrText.length; i++){
-                if(st.equalsIgnoreCase(arrText[i]))
-                    arrText[i]=change;
+        String change = "{censorship!}";
+        for (String st : base) {
+            String reg = String.format("\\b%s\\b", st);
+            Pattern pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(text);
+            if (matcher.find()) {
+                text = matcher.replaceAll(change);
             }
         }
-        return Arrays.toString(arrText);
+        return text;
     }
 
 }

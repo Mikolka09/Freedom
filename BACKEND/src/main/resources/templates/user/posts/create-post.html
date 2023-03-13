@@ -3,7 +3,7 @@
 
 <th:block th:insert="/user/fragments/head.html::head"></th:block>
 
-<body id="page-top">
+<body id="page-top" style="overflow: hidden;">
 
 <!-- Page Wrapper -->
 <div id="wrapper">
@@ -23,7 +23,7 @@
             <!-- Begin Page Content -->
             <div class="col-md-12 col-md-offset-2" th:fragment="create-post">
                 <h1 class="text-center">Create Post</h1>
-                <div class="row">
+                <div class="row" style="overflow: auto; height: 570px;">
                     <div class="col">
                         <form action="/user/posts/store" enctype="multipart/form-data" method="POST">
                             <input type="hidden" name="id" th:value="${userId}">
@@ -64,7 +64,7 @@
                                     <div class="form-group">
                                         <label for="description">Description</label>
                                         <textarea class="form-control" name="description" id="description"
-                                                  rows="19" placeholder="Description"></textarea>
+                                                  rows="20" placeholder="Description"></textarea>
                                     </div>
                                 </div>
                             </div>

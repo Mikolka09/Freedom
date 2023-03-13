@@ -3,7 +3,7 @@
 
 <th:block th:insert="/admin/fragments/head.html::head"></th:block>
 
-<body id="page-top">
+<body id="page-top" style="overflow: hidden;">
 
 <!-- Page Wrapper -->
 <div id="wrapper">
@@ -25,7 +25,7 @@
             <!-- Sign up form -->
             <div class="col-md-12 col-md-offset-2">
                 <h1 class="text-center">Edit Post</h1>
-                <div class="row">
+                <div class="row" style="overflow: auto; height: 570px;">
                     <div class="col">
                         <form th:action="@{|/admin/post/edit-store/${post.getId()}|}" enctype="multipart/form-data"
                               method="POST">
