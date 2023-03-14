@@ -215,7 +215,8 @@ public class PageController {
             if (arrText.length > 0) {
                 for (String s : arrText) {
                     for (Post post : posts) {
-                        if (post.getTitle().contains(s) || post.getShortDescription().contains(s) ||
+                        if ( post.getTitle().toLowerCase().contains(s.toLowerCase()) ||
+                                post.getShortDescription().toLowerCase().contains(s.toLowerCase()) ||
                                 searchPostsTags(post, s)) {
                             if (result.size() == 0) {
                                 result.add(post);

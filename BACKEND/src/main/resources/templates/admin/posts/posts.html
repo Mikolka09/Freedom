@@ -33,7 +33,7 @@
             <!-- Begin Page Content -->
             <div class="col-md-12 col-md-offset-1">
                 <h1 class="text-center">List Posts</h1>
-                <p>
+                <p th:if="${role!='ROLE_EDITOR'}">
                     <a class="btn btn-success btn-sm" th:href="@{|/admin/create-post/${admin.getId()}|}"
                        style="border-radius:6px;">Create new post</a>
                 </p>

@@ -79,12 +79,21 @@ public class UserController {
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
             return "redirect:" + (path);
         }
+        if (AdminController.checkStringCensorship(username) ||
+                AdminController.checkStringCensorship(fullName) ||
+                AdminController.checkStringCensorship(country) ||
+                AdminController.checkStringCensorship(city)) {
+            redirectAttributes.getFlashAttributes().clear();
+            redirectAttributes.addFlashAttribute("error", "Using foul language!!");
+            return "redirect:" + (path);
+        }
         if (!userService.checkPassword(id, oldPass)) {
             redirectAttributes.getFlashAttributes().clear();
             redirectAttributes.addFlashAttribute("error", "The old password was entered incorrectly!");
             return "redirect:" + (path);
         }
-        if (setDataUser(redirectAttributes, username, fullName, country, city, age, email, user)) return "redirect:" + path;
+        if (setDataUser(redirectAttributes, username, fullName, country, city, age, email, user))
+            return "redirect:" + path;
         user.setPassword(oldPass);
         if (AdminController.addFile(redirectAttributes, file, user, fileService, userService, edit))
             return "redirect:" + (path);
@@ -172,19 +181,19 @@ public class UserController {
             redirectAttributes.addFlashAttribute("error", "FullName not entered!");
             return true;
         }
-        if(country ==null || country.equals("")){
+        if (country == null || country.equals("")) {
             user.setCountry(null);
-        }else{
+        } else {
             user.setCountry(country);
         }
-        if(city ==null || city.equals("")){
+        if (city == null || city.equals("")) {
             user.setCity(null);
-        }else{
+        } else {
             user.setCity(city);
         }
-        if(age ==null || age.equals("")){
+        if (age == null || age.equals("")) {
             user.setAge(0);
-        }else{
+        } else {
             user.setAge(Integer.parseInt(age));
         }
         return false;

@@ -220,35 +220,35 @@ function searchPosts(text, list) {
     let result = [];
     let answer = "";
     for (let txt of arrText) {
-        for (let i = 0; i < posts.length; i++) {
-            if (posts[i].user.username.toLowerCase().includes(txt.toLowerCase()) ||
-                posts[i].user.fullName.toLowerCase().includes(txt.toLowerCase()) ||
-                posts[i].likes.toString().toLowerCase() === txt.toLowerCase() ||
-                searchPostForTags(posts[i], txt)) {
+        for (let st of posts) {
+            if (st.user.username.toLowerCase().includes(txt.toLowerCase()) ||
+                st.user.fullName.toLowerCase().includes(txt.toLowerCase()) ||
+                st.likes.toString().toLowerCase() === txt.toLowerCase() ||
+                searchPostForTags(st, txt)) {
                 if (result.length === 0)
-                    result.push(posts[i]);
+                    result.push(st);
                 else {
-                    if (result.filter(x => x.id === posts[i].id).length === 0)
-                        result.push(posts[i]);
+                    if (result.filter(x => x.id === st.id).length === 0)
+                        result.push(st);
                 }
             } else {
-                if (searchWorldToString(posts[i].title.toLowerCase(), txt.toLowerCase()) ||
-              searchWorldToString(posts[i].shortDescription.toLowerCase(), txt.toLowerCase()) ||
-                posts[i].category.name.toLowerCase() === txt.toLowerCase()) {
+                if (searchWorldToString(st.title.toLowerCase(), txt.toLowerCase()) ||
+                    searchWorldToString(st.shortDescription.toLowerCase(), txt.toLowerCase()) ||
+                    st.category.name.toLowerCase() === txt.toLowerCase()) {
                     if (result.length === 0)
-                        result.push(posts[i]);
+                        result.push(st);
                     else {
-                        if (result.filter(x => x.id === posts[i].id).length === 0)
-                            result.push(posts[i]);
+                        if (result.filter(x => x.id === st.id).length === 0)
+                            result.push(st);
                     }
-                }else{
-                    if(list === "posts-friend"){
-                        if(posts[i].comments.length.toString() === txt.toLowerCase()){
+                } else {
+                    if (list === "posts-friend") {
+                        if (st.comments.length.toString() === txt.toLowerCase()) {
                             if (result.length === 0)
-                                result.push(posts[i]);
+                                result.push(st);
                             else {
-                                if (result.filter(x => x.id === posts[i].id).length === 0)
-                                    result.push(posts[i]);
+                                if (result.filter(x => x.id === st.id).length === 0)
+                                    result.push(st);
                             }
                         }
                     }
@@ -266,13 +266,11 @@ function searchPosts(text, list) {
     }
 }
 
-function searchPostForTags(posts, txt) {
-    for (let i = 0; i < posts.length; i++) {
-        let tags = posts[i].tags;
-        for (let tag of tags) {
-            if (tag.name.toLowerCase() === txt.toLowerCase()) {
-                return true;
-            }
+function searchPostForTags(post, txt) {
+    let tags = post.tags;
+    for (let tag of tags) {
+        if (tag.name.toLowerCase() === txt.toLowerCase()) {
+            return true;
         }
     }
     return false

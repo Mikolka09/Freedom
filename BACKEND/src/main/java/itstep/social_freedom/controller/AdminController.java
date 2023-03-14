@@ -1,6 +1,5 @@
 package itstep.social_freedom.controller;
 
-import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -355,6 +354,20 @@ public class AdminController {
     public String editStore(@RequestParam(value = "id") Long id,
                             @RequestParam(value = "body") String body) {
         Comment comment = commentService.findCommentById(id);
+        return checkBodyComment(body, comment);
+    }
+
+    @PostMapping("/admin/comments/comment-recovery")
+    public String recoveryCategory(@RequestParam(value = "id") Long id,
+                                   @RequestParam(value = "body") String body,
+                                   @RequestParam(value = "status") String status) {
+        Comment comment = commentService.findCommentById(id);
+        if (Objects.equals(status, "DELETED") || Objects.equals(status, "ACTIVE"))
+            comment.setStatus(Status.valueOf(status));
+        return checkBodyComment(body, comment);
+    }
+
+    private String checkBodyComment(@RequestParam("body") String body, Comment comment) {
         if (!Objects.equals(body, "")) {
             if (checkStringCensorship(body)) {
                 User user = userService.getCurrentUsername();
@@ -365,18 +378,6 @@ public class AdminController {
             } else
                 comment.setBody(body);
         }
-        commentService.save(comment);
-        return "redirect:/admin/comments";
-    }
-
-    @PostMapping("/admin/comments/comment-recovery")
-    public String recoveryCategory(@RequestParam(value = "id") Long id,
-                                   @RequestParam(value = "body") String body,
-                                   @RequestParam(value = "status") String status) {
-        Comment comment = commentService.findCommentById(id);
-        if (Objects.equals(status, "DELETED") || Objects.equals(status, "ACTIVE"))
-            comment.setStatus(Status.valueOf(status));
-        if (!Objects.equals(body, "")) comment.setBody(body);
         commentService.save(comment);
         return "redirect:/admin/comments";
     }

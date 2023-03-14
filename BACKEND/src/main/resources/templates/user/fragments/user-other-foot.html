@@ -57,6 +57,7 @@
                 let act = modal.find('#action');
                 id = button.data('id');
                 idTo = button.data('id-to');
+                let show = button.data('show');
                 idFrom = button.data('id-from');
                 url = "/user/messages/deleted/" + id;
                 label = "Are you sure you want to delete this message?";
@@ -64,6 +65,7 @@
                 act.attr('data-id-to', idTo);
                 act.attr('data-id-from', idFrom);
                 act.attr('data-url', url);
+                act.attr('data-show', show);
                 act.attr('data-dismiss', 'modal');
             }
             modal.find('#deleteModalLabel').text(label);

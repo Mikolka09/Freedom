@@ -49,6 +49,7 @@
                                                        th:data-name="${message.getInvite().getUserFrom().getFullName()}"
                                                        th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                                        th:data-text="false"
+                                                       th:data-show="${admin==null?'user':'admin'}"
                                                        th:data-date="${#temporals.format(T(java.time.LocalDate).
                                                of(#dates.year(message.getCreatedAt()),#dates.month(message.getCreatedAt()),
                                                #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
@@ -104,6 +105,7 @@
                                            th:data-dies="${message.getInvite().getStatus()==status[8]?true:false}"
                                            th:data-id="${message.getId()}"
                                            th:data-button="mail"
+                                           th:data-show="${admin==null?'user':'admin'}"
                                            th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                            th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                            th:data-name="${message.getInvite().getUserFrom().getFullName()}"
@@ -120,6 +122,7 @@
                                            th:data-name="${message.getInvite().getUserFrom().getFullName()}"
                                            th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                            th:data-text="${message.getMessage()}"
+                                           th:data-show="${admin==null?'user':'admin'}"
                                            th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
                                 #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
@@ -129,6 +132,7 @@
                                         <a href="#" data-title="deleteMessage" data-toggle="modal"
                                            data-target="#DeleteModal"
                                            th:data-id="${message.getId()}"
+                                           th:data-show="${admin==null?'user':'admin'}"
                                            th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                            th:data-id-to="${message.getInvite().getUserTo().getId()}">
                                             <img src="/img/icon/delete-message.png" width="30px"/></a>
@@ -140,7 +144,8 @@
                 </ul>
                 <a class="btn btn-outline-primary btn-rounded w-100" id="mark-all"
                    th:data-id-from="${messageList.get(0).getInvite().getUserFrom().getId()}" href="#" role="button"
-                   th:data-id-to="${messageList.get(0).getInvite().getUserTo().getId()}">
+                   th:data-id-to="${messageList.get(0).getInvite().getUserTo().getId()}"
+                   th:data-show="${admin==null?'user':'admin'}">
                     Mark all messages as read</a>
             </div>
         </div>

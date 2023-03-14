@@ -212,9 +212,9 @@ function searchFriend(text) {
                         result.push(friends[i]);
                 }
             } else {
-                if (friends[i].friendReceiver.age.toString() === txt ||
-                    friends[i].friendReceiver.rating.toString() === txt ||
-                    termingDate(friends[i].friendReceiver.createdAt).toString() === txt) {
+                if (friends[i].friendReceiver.age.toString() === txt.toLowerCase() ||
+                    friends[i].friendReceiver.rating.toString() === txt.toLowerCase() ||
+                    termingDate(friends[i].createdAt).toString() === txt.toLowerCase()) {
                     if (result.length === 0)
                         result.push(friends[i]);
                     else {
