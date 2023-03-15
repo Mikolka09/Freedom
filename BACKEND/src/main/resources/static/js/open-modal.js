@@ -66,6 +66,7 @@ $('#MessageModal').on('show.bs.modal', function (event) {
         answer.attr('data-id', id);
         answer.attr('data-id-from', idFrom);
         answer.attr('data-id-to', idTo);
+        answer.attr('data-show', show);
         answer.attr('data-name', name);
         answer.attr('data-date', date);
         answer.attr('data-text', alert);
@@ -134,6 +135,7 @@ function printMessages(data, show) {
             a.dataset.text = data[i].message;
             a.dataset.target = "#MessageModal";
             a.dataset.toggle = "modal";
+            a.dataset.show = !!show;
             a.dataset.date = correctDate(data[i].createdAt);
             a.href = "#";
             let div1 = document.createElement('div');
@@ -164,7 +166,7 @@ function printMessages(data, show) {
         }
         let a2 = document.createElement('a');
         a2.className = "dropdown-item text-center small text-gray-500";
-        if (show === "user")
+        if (!show)
             a2.href = "/user/messages";
         else
             a2.href = "/admin/messages";
@@ -204,6 +206,7 @@ function printAlerts(data, show) {
             a.dataset.text = data[i].text;
             a.dataset.target = "#AlertModal";
             a.dataset.toggle = "modal";
+            a.dataset.show = !!show;
             a.dataset.date = correctDate(data[i].createdAt);
             a.href = "#";
             let div1 = document.createElement('div');
@@ -232,8 +235,8 @@ function printAlerts(data, show) {
         }
         let a2 = document.createElement('a');
         a2.className = "dropdown-item text-center small text-gray-500";
-        if(show==="user")
-        a2.href = "/user/alerts";
+        if (!show)
+            a2.href = "/user/alerts";
         else
             a2.href = "/admin/alerts";
         a2.innerText = "Show All Alerts";
@@ -320,8 +323,8 @@ function printEmails(idFrom, idTo, idMail, url, text, show) {
                                         url: '/user/messages/mails/' + idMail,
                                         success: (mails) => {
                                             printMessages(mails, show);
-                                            printAllSenders(senders, data[0].invite.userFrom.fullName);
-                                            printAllUserMessages(data);
+                                            printAllSenders(senders, data[0].invite.userFrom.fullName, show);
+                                            printAllUserMessages(data, show);
                                             alertInfo(text);
                                         },
                                         error: (err) => {
@@ -366,8 +369,8 @@ function printAllEmails(idFrom, idTo, url, text, show) {
                                     url: '/user/messages/all-mails/' + idTo,
                                     success: (mails) => {
                                         printMessages(mails, show);
-                                        printAllSenders(senders, data[0].invite.userFrom.fullName);
-                                        printAllUserMessages(data);
+                                        printAllSenders(senders, data[0].invite.userFrom.fullName, show);
+                                        printAllUserMessages(data, show);
                                         alertInfo(text);
                                     },
                                     error: (err) => {
@@ -422,6 +425,7 @@ $('#messageAnswerModal').on('click', function () {
     answerData($(this));
 });
 
+//вызов модального окна на отправку нового сообщения или ответа на сообщение в Inbox
 $('ul').on('click', '.answerMessage', function () {
     answerData($(this));
 });
@@ -521,8 +525,8 @@ function getAttributesButton(data) {
     let id = data.getAttribute('data-id');
     let idFrom = data.getAttribute('data-id-from');
     let idTo = data.getAttribute('data-id-to');
-    let out = data.getAttribute("data-out");
-    let show = data.getAttribute("data-show");
+    let out = data.getAttribute('data-out');
+    let show = data.getAttribute('data-show');
     let name = data.getAttribute('data-name');
     let text = data.getAttribute('data-text');
     let date = data.getAttribute('data-date');
@@ -535,7 +539,7 @@ function answerData(data) {
     let idFrom = data.attr('data-id-from');
     let idTo = data.attr('data-id-to');
     let out = data.attr("data-out");
-    let show = data.attr("data-show");
+    let show = data.attr('data-show');
     let name = data.attr('data-name');
     let text = data.attr('data-text');
     let date = data.attr('data-date');

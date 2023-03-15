@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<div th:fragment="mail-list-group">
+<div th:fragment="admin-mail-list-group">
     <h1 class="text-center" id="header-text">List Inbox Messages</h1>
     <div class="container-fluid">
         <div class="row">
             <div class="col-4 text-center text-dark">
                 <h3 style="font-weight: bold;"><a href="#" class="sort-table-inbox"
                                                   th:data-id-to="${messageList.get(0).getInvite().getUserTo().getId()}"
-                                                  th:data-show="${admin}" data-tag="up" data-name="Senders">Senders<img
+                                                  th:data-show="${true}" data-tag="up" data-name="Senders">Senders<img
                         id="send" src="/img/icon/down-arrow.png" width="20px" alt="image"></a></h3>
             </div>
             <div class="col-8 text-dark text-center">
@@ -51,7 +51,7 @@
                                                        th:data-name="${message.getInvite().getUserFrom().getFullName()}"
                                                        th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                                        th:data-text="false"
-                                                       th:data-show="${admin}"
+                                                       th:data-show="${true}"
                                                        th:data-date="${#temporals.format(T(java.time.LocalDate).
                                                of(#dates.year(message.getCreatedAt()),#dates.month(message.getCreatedAt()),
                                                #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
@@ -107,7 +107,7 @@
                                            th:data-dies="${message.getInvite().getStatus()==status[8]?true:false}"
                                            th:data-id="${message.getId()}"
                                            th:data-button="mail"
-                                           th:data-show="${admin}"
+                                           th:data-show="${true}"
                                            th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                            th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                            th:data-name="${message.getInvite().getUserFrom().getFullName()}"
@@ -124,7 +124,7 @@
                                            th:data-name="${message.getInvite().getUserFrom().getFullName()}"
                                            th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                            th:data-text="${message.getMessage()}"
-                                           th:data-show="${admin}"
+                                           th:data-show="${true}"
                                            th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(message.getCreatedAt()),
                                 #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
@@ -134,7 +134,7 @@
                                         <a href="#" data-title="deleteMessage" data-toggle="modal"
                                            data-target="#DeleteModal"
                                            th:data-id="${message.getId()}"
-                                           th:data-show="${admin}"
+                                           th:data-show="${true}"
                                            th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                            th:data-id-to="${message.getInvite().getUserTo().getId()}">
                                             <img src="/img/icon/delete-message.png" width="30px"/></a>
@@ -147,7 +147,7 @@
                 <a class="btn btn-outline-primary btn-rounded w-100" id="mark-all"
                    th:data-id-from="${messageList.get(0).getInvite().getUserFrom().getId()}" href="#" role="button"
                    th:data-id-to="${messageList.get(0).getInvite().getUserTo().getId()}"
-                   th:data-show="${admin}">
+                   th:data-show="${true}">
                     Mark all messages as read</a>
             </div>
         </div>

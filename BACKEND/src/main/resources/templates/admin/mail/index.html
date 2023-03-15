@@ -34,7 +34,7 @@
             <div class="col-md-12 col-md-offset-1">
 
                 <th:block th:if="${messageList.size()!=0 && outMessages==null && deleteMessages==null}"
-                          th:insert="/mail/mail-list-group.html::mail-list-group"></th:block>
+                          th:insert="/admin/mail/mail-list-group.html::admin-mail-list-group"></th:block>
                 <th:block th:if="${outMessages!=null}"
                           th:insert="/mail/list-out-emails.html::list-out-emails"></th:block>
                 <th:block th:if="${deleteMessages!=null}"

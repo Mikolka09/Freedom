@@ -1,37 +1,52 @@
+let senders;
+
 $('.sort-table-inbox').on('click', function () {
-    let senders = Object.values(list);
-    console.log(senders)
     let column = $(this);
+    let idTo = column.attr('data-id-to');
+    loadListMessages(idTo, column);
+})
+
+function sortInbox(base, data) {
     let img;
-    let name = column.attr("data-name");
-    let tag = column.attr("data-tag");
+    let show = base.attr('data-show');
+    let name = base.attr("data-name");
+    let tag = base.attr("data-tag");
+    senders = editArrToTree(data);
     switch (name) {
         case "Senders":
             img = $('#send');
             if (tag === "down") {
                 let data = senders.sort((x, y) => x[0].invite.userFrom.fullName.localeCompare(y[0].invite.userFrom.fullName));
-                printAllSenders(editArrToTree(data), data[0][0].invite.userFrom.fullName);
-                printAllUserMessages(senders[0]);
+                printAllSenders(editTreeToArr(data), data[0][0].invite.userFrom.fullName, show);
+                printAllUserMessages(senders[0], show);
                 searchMess = senders;
-                searchSend = editArrToTree(data);
-                column.attr("data-tag", "up");
+                searchSend = editTreeToArr(data);
+                base.attr("data-tag", "up");
                 img.attr("src", "/img/icon/up-arrow.png");
             } else {
                 let data = senders.sort((x, y) => y[0].invite.userFrom.fullName.localeCompare(x[0].invite.userFrom.fullName));
-                printAllSenders(editArrToTree(data), data[0][0].invite.userFrom.fullName);
-                printAllUserMessages(senders[0]);
+                printAllSenders(editTreeToArr(data), data[0][0].invite.userFrom.fullName, show);
+                printAllUserMessages(senders[0], show);
                 searchMess = senders;
-                searchSend = editArrToTree(data);
-                column.attr("data-tag", "down");
+                searchSend = editTreeToArr(data);
+                base.attr("data-tag", "down");
                 img.attr("src", "/img/icon/down-arrow.png");
             }
             break;
         default:
             break;
     }
-})
+}
 
 function editArrToTree(data) {
+    let arr = [];
+    for (let i = 0; i < data.length; i++) {
+        arr.push(data[i][0]);
+    }
+    return arr;
+}
+
+function editTreeToArr(data) {
     let arr = [];
     for (let st of data) {
         let t = [];
@@ -39,6 +54,20 @@ function editArrToTree(data) {
         arr.push(t);
     }
     return arr;
+}
+
+
+function loadListMessages(idTo, column) {
+    $.get({
+        url: "/user/messages/all-senders/" + idTo,
+        success: (data) => {
+            if (data != null)
+                sortInbox(column, data);
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
 }
 
 $('#button-search').on('click', function () {
@@ -58,7 +87,8 @@ $('#button-search').on('click', function () {
 })
 
 function searchMails(text) {
-    let senders = Object.values(list);
+    if (typeof senders === "undefined")
+        senders = Object.values(list);
     let arrText = text.split(' ');
     let result = [];
     let answer = "";
@@ -101,9 +131,9 @@ function searchMails(text) {
     if (result.length !== 0) {
         answer = "Search result - \"" + text.toUpperCase() + "\"";
         searchMess = result;
-        searchSend = editArrToTree(result);
+        searchSend = editTreeToArr(result);
         alertInfo(answer);
-        printAllSenders(editArrToTree(result), result[0][0].invite.userFrom.fullName);
+        printAllSenders(editTreeToArr(result), result[0][0].invite.userFrom.fullName);
         printAllUserMessages(result[0]);
     } else {
         answer = "Search result - \"" + text.toUpperCase() + "\" returned nothing!";

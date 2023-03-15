@@ -8,7 +8,6 @@ $('ul').on('click', '.open-all-messages', function () {
                 if(st[0].invite.userFrom.id===idFrom)
                     test.push(st);
             }
-            console.log(test[0]);
             printAllSenders(searchSend, test[0][0].invite.userFrom.fullName);
             printAllUserMessages(test[0]);
         }
@@ -37,7 +36,7 @@ $('ul').on('click', '.open-all-messages', function () {
     }
 });
 
-function printAllSenders(map, user) {
+function printAllSenders(map, user, show) {
     if (map != null) {
         let container = document.getElementById('container-senders');
         container.innerHTML = "";
@@ -84,10 +83,11 @@ function printAllSenders(map, user) {
                 a2.title = "Send Message";
                 a2.href = "#";
                 a2.className = "answerMessage";
-                a2.dataset.id = data[i].id;
+                a2.dataset.id = "0";
                 a2.dataset.idFrom = data[i].invite.userFrom.id;
                 a2.dataset.idTo = data[i].invite.userTo.id;
                 a2.dataset.name = data[i].invite.userFrom.fullName;
+                a2.dataset.show = !!show;
                 a2.dataset.text = "false";
                 a2.dataset.date = correctDate(data[i].createdAt);
                 let img2 = document.createElement('img');
@@ -120,7 +120,7 @@ function printAllSenders(map, user) {
     }
 }
 
-function printAllUserMessages(data) {
+function printAllUserMessages(data, show) {
     if (data != null) {
         document.getElementById('name-user-from').innerText = data[0].invite.userFrom.fullName;
         let container = document.getElementById('container-messages');
@@ -166,6 +166,7 @@ function printAllUserMessages(data) {
             a1.dataset.idFrom = data[i].invite.userFrom.id;
             a1.dataset.idTo = data[i].invite.userTo.id;
             a1.dataset.button = "mail";
+            a1.dataset.show = !!show;
             a1.dataset.name = data[i].invite.userFrom.fullName;
             a1.dataset.text = data[i].message;
             a1.dataset.date = correctDate(data[i].createdAt);
@@ -186,6 +187,7 @@ function printAllUserMessages(data) {
             a2.dataset.idTo = data[i].invite.userTo.id;
             a2.dataset.name = data[i].invite.userFrom.fullName;
             a2.dataset.text = data[i].message;
+            a2.dataset.show = !!show;
             a2.dataset.date = correctDate(data[i].createdAt);
             let img2 = document.createElement('img');
             img2.src = "/img/icon/answer.png";
@@ -203,6 +205,7 @@ function printAllUserMessages(data) {
             a3.dataset.idFrom = data[i].invite.userFrom.id;
             a3.dataset.idTo = data[i].invite.userTo.id;
             a3.dataset.toggle = "modal";
+            a3.dataset.show = !!show;
             a3.dataset.target = "#DeleteModal";
             let img3 = document.createElement('img');
             img3.src = "/img/icon/delete-message.png";
@@ -217,6 +220,7 @@ function printAllUserMessages(data) {
         let markAll = document.getElementById('mark-all');
         markAll.dataset.idFrom = data[0].invite.userFrom.id;
         markAll.dataset.idTo = data[0].invite.userTo.id;
+        markAll.dataset.show = !!show;
     }
 }
 

@@ -68,7 +68,8 @@
                 <th:block th:each="alert, state:${alerts}">
                     <a class="dropdown-item d-flex align-items-center" data-target="#AlertModal" data-toggle="modal"
                        th:data-id="${alert.getId()}" th:data-name="${alert.getInvite().getUserFrom().getFullName()}"
-                       th:data-text="${alert.getText()}" th:if="${state.index<3}" href="#" data-show="admin"
+                       th:data-text="${alert.getText()}" th:if="${state.index<3}" href="#"
+                       th:data-show="${true}"
                        th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
                                 #dates.month(alert.getCreatedAt()), #dates.day(alert.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
@@ -111,7 +112,7 @@
                        data-toggle="modal" href="#"
                        th:data-id="${message.getId()}"
                        th:data-button = "toolbar"
-                       data-show="admin"
+                       th:data-show="${true}"
                        th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                        th:data-id-to="${message.getInvite().getUserTo().getId()}"
                        th:data-name="${message.getInvite().getUserFrom().getFullName()}"
