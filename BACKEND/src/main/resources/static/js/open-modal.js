@@ -425,7 +425,7 @@ $('#messageAnswerModal').on('click', function () {
     answerData($(this));
 });
 
-//вызов модального окна на отправку нового сообщения или ответа на сообщение в Inbox
+//calling a modal window to send a new message or reply to a message in Inbox
 $('ul').on('click', '.answerMessage', function () {
     answerData($(this));
 });

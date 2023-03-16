@@ -16,6 +16,9 @@
     <!-- Font Icon -->
     <link rel="stylesheet" href="/register/fonts/material-icon/css/material-design-iconic-font.min.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.css"
+          integrity="sha256-sWZjHQiY9fvheUAOoxrszw9Wphl3zqfVaz1kZKEvot8=" crossorigin="anonymous">
+
     <!-- Main css -->
     <link rel="stylesheet" href="/register/css/style.css">
 </head>
@@ -60,7 +63,8 @@
                     <div class="social-login">
                         <span class="social-label">Or login with</span>
                         <ul class="socials">
-                            <li><a href="/login/facebook"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
+                            <li><a href="/login/facebook"><i class="display-flex-center zmdi zmdi-facebook"></i></a>
+                            </li>
                             <li><a href="/login/google"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
                         </ul>
                     </div>
@@ -86,9 +90,11 @@
                                     <div class="panel-body">
                                         <fieldset>
                                             <div class="form-group">
-                                                <input class="form-control input-lg" placeholder="E-mail Address" name="email" type="email">
+                                                <input class="form-control input-lg" id="email-input"
+                                                       placeholder="E-mail Address" name="email" type="email">
                                             </div>
-                                            <input class="btn btn-lg btn-primary btn-block" value="Send My Password" type="submit">
+                                            <input class="btn btn-lg btn-primary btn-block"
+                                                   value="Send My Password" id="send-email" type="submit">
                                         </fieldset>
                                     </div>
                                 </div>
@@ -109,9 +115,47 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="/register/vendor/jquery/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"
+        integrity="sha256-5WYg3s9NxGKR2MpEBTy0QMT3Gvgxl3yKjbW4l0CfUUY=" crossorigin="anonymous"></script>
 
 <!-- JS -->
 <script src="/register/js/main.js"></script>
+
+<script>
+    $('#send-email').on('click', function () {
+        let email = $('#email-input').val();
+        $('#exampleForgotModal').hide();
+        $.get({
+            url: "/email/simple-email/" + email,
+            success: (data) => {
+                if (data === "OK")
+                    alertInfo("A new password has been sent to your email!");
+                else
+                    alertInfo("There is no user with this email - " + email + "!");
+                setTimeout(function () {
+                    location.reload(true);
+                }, 1500);
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        })
+    })
+
+    function alertInfo(text) {
+        Swal.fire({
+            title: text,
+            icon: 'info',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            showConfirmButton: false,
+            showCancelButton: false,
+            timer: 2000
+        });
+    }
+</script>
 </body>
 </html>
