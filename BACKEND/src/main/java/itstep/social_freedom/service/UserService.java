@@ -1,6 +1,7 @@
 package itstep.social_freedom.service;
 
 import itstep.social_freedom.controller.FriendController;
+import itstep.social_freedom.entity.Post;
 import itstep.social_freedom.entity.Role;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -43,18 +45,22 @@ public class UserService implements UserDetailsService {
     }
 
     public int countRating(User user) {
-        int posts = (int) user.getPosts().stream().filter(x -> x.getStatus() == Status.VERIFIED).count();
+        List<Post> postsList = user.getPosts().stream().filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
+        int posts = postsList.size();
+        int likes = 0;
+        for (Post post : postsList) {
+            likes += post.getLikes();
+        }
         int comments = (int) user.getComments().stream().filter(x -> x.getStatus() == Status.ACTIVE).count();
         int friends = FriendController.giveListFriends(user).size();
         int offenses = user.getOffenses();
-        int summa = posts + comments + friends;
+        int summa = posts + comments + likes + friends;
         double users = allUsers().size();
         if (summa == 0 || (int) users == 0) {
             return 0;
         } else {
             return Math.max(((int) ((summa / users) * 100) - offenses), 0);
         }
-
     }
 
     public void saveRatingUser() {
@@ -79,7 +85,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User findUserByEmail(String email){
+    public User findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
 
@@ -103,6 +109,7 @@ public class UserService implements UserDetailsService {
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(Status.ACTIVE);
+        user.setEmailConfirmed(false);
         userRepository.save(user);
         return true;
     }

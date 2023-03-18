@@ -29,7 +29,7 @@ public class DefaultEmailService implements EmailService {
                 MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
         Context context = new Context();
-        context.setVariable("password", email.getContext());
+        context.setVariables(email.getContext());
         String emailContent = templateEngine.process(email.getTemplateLocation(), context);
         mimeMessageHelper.setFrom(email.getFrom());
         mimeMessageHelper.setTo(email.getTo());

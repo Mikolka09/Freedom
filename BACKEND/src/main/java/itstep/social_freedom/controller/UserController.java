@@ -1,9 +1,6 @@
 package itstep.social_freedom.controller;
 
-import itstep.social_freedom.entity.Alert;
-import itstep.social_freedom.entity.Role;
-import itstep.social_freedom.entity.Status;
-import itstep.social_freedom.entity.User;
+import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +28,9 @@ public class UserController {
     private AlertService alertService;
 
     @Autowired
+    private InviteService inviteService;
+
+    @Autowired
     private MessageService messageService;
 
     @Autowired
@@ -43,6 +43,13 @@ public class UserController {
     //Start index
     @GetMapping("/user")
     public String index(Model model) {
+        User userFrom = userService.findUserByEmail("admin@gmail.com");
+        User userTo = userService.getCurrentUsername();
+        String text = "Please confirm your email address in your profile in order to be able to recover your account " +
+                "or receive a changed password.\n" +
+                "\nGo to \"View Profile\" and click the activation button next to the email address";
+        if(!userTo.isEmailConfirmed())
+            createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
         CreateModelUser(model);
         return "user/index";
     }
@@ -199,4 +206,27 @@ public class UserController {
         return false;
     }
 
+    public static boolean createSendMessage(User userFrom, User userTo, String text, UserService userService,
+                                            InviteService inviteService, MessageService messageService) {
+        Message message = new Message();
+        Invite invite = new Invite();
+        if (!Objects.equals(text, "")) {
+            if (AdminController.checkStringCensorship(text)) {
+                userFrom.setOffenses(userFrom.getOffenses() + 100);
+                userService.saveEdit(userFrom);
+                text = AdminController.textCheckWords(text);
+            }
+            invite.setUserFrom(userFrom);
+            invite.setUserTo(userTo);
+            invite.setStatus(Status.REQUEST);
+            message.setMessage(text);
+            message.setInvite(invite);
+            if (inviteService.saveInvite(invite)) {
+                message.setStatus(Status.ACTIVE);
+                return messageService.saveMessage(message);
+            } else
+                return false;
+        } else
+            return false;
+    }
 }

@@ -31,8 +31,12 @@ public class RegistrationController {
             model.addAttribute("error", "Not all fields are filled!");
             return "register/register";
         }
-        if(AdminController.checkStringCensorship(userForm.getUsername())){
+        if (AdminController.checkStringCensorship(userForm.getUsername())) {
             model.addAttribute("error", "Using foul language!");
+            return "register/register";
+        }
+        if (userService.findUserByEmail(userForm.getEmail()) != null) {
+            model.addAttribute("error", "User with this email address already exists!");
             return "register/register";
         }
         if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
@@ -40,7 +44,7 @@ public class RegistrationController {
             return "register/register";
         }
         if (!userService.saveUser(userForm)) {
-            model.addAttribute("error", "A user with the same name already exists!");
+            model.addAttribute("error", "User with the same name already exists!");
             return "register/register";
         }
 

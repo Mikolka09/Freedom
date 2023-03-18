@@ -61,7 +61,8 @@
                                             <div class="view-user">Age:</div>
                                         </div>
                                         <div class="col-6 p-3">
-                                            <div style="color: tomato; font-weight: bold;" th:text="${user.getAge()}"></div>
+                                            <div style="color: tomato; font-weight: bold;"
+                                                 th:text="${user.getAge()}"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -143,8 +144,18 @@
                                                 <div class="view-user">Email:</div>
                                             </div>
                                             <div class="col-6 p-3">
-                                                <div style="font-weight: bold; color: #e9aa0b;"
-                                                     th:text="${user.getEmail()}"></div>
+                                                <div class="row">
+                                                    <div class="col-10">
+                                                        <div th:style="${user.isEmailConfirmed()?'font-weight: bold; color: #e9aa0b;':
+                                                        'font-weight: bold; color: red;'}"
+                                                             th:text="${user.getEmail()}"></div>
+                                                    </div>
+                                                    <div class="col-2" th:if="${!user.isEmailConfirmed()}">
+                                                        <a title="Activation Email" id="confirm-email" href="#"
+                                                           th:data-id="${user.getId()}">
+                                                            <img src="/img/icon/activate.png" width="30px"></a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -243,6 +254,26 @@
 <th:block th:insert="/user/fragments/message-modal.html::message-modal"></th:block>
 
 <th:block th:insert="/admin/fragments/other-foot.html::other-foot"></th:block>
+
+<script>
+    $('#confirm-email').on('click', function () {
+        let id = $(this).attr('data-id');
+        if (id !== "undefined") {
+            $.get({
+                url: "/email/confirm/" + id,
+                success: (data) => {
+                    if (data === "OK")
+                        alertInfo("The message has been sent to your email!");
+                    else
+                        alertInfo("Message not sent!!");
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+        }
+    });
+</script>
 
 </body>
 

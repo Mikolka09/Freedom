@@ -119,7 +119,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Access for non-registered users only
                 .antMatchers("/registration").not().fullyAuthenticated()
                 //Access only for users with the Editor role
-                .antMatchers("/admin/users/**", "/admin/categories/**", "/admin/tags/**").not().hasRole("EDITOR")
+                .antMatchers("/admin/users/**", "/admin/categories/**", "/admin/tags/**",
+                        "/admin/friends/**", "/admin/friends/all-posts/**", "/admin/messages/**",
+                        "/admin/out-messages/**", "/admin/deleted-messages/**").not().hasRole("EDITOR")
                 //Access only for users with the Administrator role
                 .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR")
                 //Access only for users with the role of Administrator and User

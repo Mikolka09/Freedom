@@ -1,5 +1,6 @@
 package itstep.social_freedom.controller;
 
+import itstep.social_freedom.controller.api.EmailController;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +36,9 @@ public class AdminController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private CommentService commentService;
@@ -548,6 +553,8 @@ public class AdminController {
         if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
             return "redirect:" + path;
 
+        sendNewPassword(password, user.getEmail(), "YOUR ACCOUNT HAS BEEN RESTORED");
+
         if (!status.isEmpty()) {
             if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED") || status.equals("REQUEST") ||
                     status.equals("ACCEPTED") || status.equals("DENIED")) {
@@ -596,7 +603,7 @@ public class AdminController {
 
         if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
             return "redirect:" + path;
-
+        sendNewPassword(password, user.getEmail(), "NEW PASSWORD");
         return "redirect:/admin/users";
     }
 
@@ -638,6 +645,17 @@ public class AdminController {
             }
         }
         return false;
+    }
+
+    public void sendNewPassword(String pass, String email,String subject){
+        String path = "/pages/fragments/email/new-password.html";
+        HashMap<String, Object> base = new HashMap<>();
+        base.put("password", pass);
+        try {
+            emailService.sendSimpleEmail(EmailController.createEmailSend(email,subject, base, path));
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //Saving a file

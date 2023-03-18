@@ -1,9 +1,11 @@
 package itstep.social_freedom.config;
 
+import itstep.social_freedom.controller.api.EmailController;
 import itstep.social_freedom.entity.Role;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.repository.UserRepository;
+import itstep.social_freedom.service.EmailService;
 import lombok.Data;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -26,7 +28,9 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.util.Assert;
 
+import javax.mail.MessagingException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +44,8 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices 
     private AuthoritiesExtractor authoritiesExtractor = new FixedAuthoritiesExtractor();
     private PrincipalExtractor principalExtractor = new FixedPrincipalExtractor();
 
+
+    private EmailService emailService;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
@@ -74,15 +80,28 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices 
                 user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
             }
 
+            user.setUsername(name.split(" ")[0]);
             user.setFullName(name);
             user.setGoogleName(googleName);
             user.setGoogleUsername(googleUsername);
             user.setEmail(googleUsername);
             user.setAvatarUrl("avatar/user.png");
+            user.setEmailConfirmed(true);
 
-            user.setPassword(passwordEncoder.encode("freedom"));
+            user.setPassword(passwordEncoder.encode("Freedom_new23"));
 
             userRepository.save(user);
+
+            String subject = "ADDITIONAL LOGIN INFORMATION";
+            String path = "/pages/fragments/email/new-account.html";
+            HashMap<String, Object> base = new HashMap<>();
+            base.put("login", name.split(" ")[0]);
+            base.put("password", "Freedom_new23");
+            try {
+                emailService.sendSimpleEmail(EmailController.createEmailSend(googleUsername,subject, base, path));
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         if (map.containsKey("error")) {

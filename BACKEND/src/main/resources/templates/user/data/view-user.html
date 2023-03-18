@@ -40,179 +40,189 @@
 
             <!-- Begin Page Content -->
             <div class="main">
-                    <!-- Sign up form -->
-                    <div class="container">
-                        <h1 class="text-center">View Profile</h1>
-                        <div class="row">
-                            <div class="col">
-                                <div class="p-1">
+                <!-- Sign up form -->
+                <div class="container">
+                    <h1 class="text-center">View Profile</h1>
+                    <div class="row">
+                        <div class="col">
+                            <div class="p-1">
 
-                                    <div class="form-group row justify-content-center">
-                                        <div class="col-md-1">
-                                            <img style="border-radius: 50%; padding-bottom: 5px" width="80px"
-                                                 th:src="@{|/${user.getAvatarUrl()}|}" alt="Url">
+                                <div class="form-group row justify-content-center">
+                                    <div class="col-md-1">
+                                        <img style="border-radius: 50%; padding-bottom: 5px" width="80px"
+                                             th:src="@{|/${user.getAvatarUrl()}|}" alt="Url">
+                                    </div>
+                                </div>
+                                <div class="form-group row justify-content-center">
+                                    <div class="row g-2">
+                                        <div class="col-6 p-3">
+                                            <div class="view-user">Age:</div>
+                                        </div>
+                                        <div class="col-6 p-3">
+                                            <div style="color: tomato; font-weight: bold;"
+                                                 th:text="${user.getAge()}"></div>
                                         </div>
                                     </div>
-                                    <div class="form-group row justify-content-center">
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
                                         <div class="row g-2">
                                             <div class="col-6 p-3">
-                                                <div class="view-user">Age:</div>
+                                                <div class="view-user">Username:</div>
                                             </div>
                                             <div class="col-6 p-3">
-                                                <div style="color: tomato; font-weight: bold;"
-                                                     th:text="${user.getAge()}"></div>
+                                                <div class="view-user-data" th:text="${user.getUsername()}"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">Username:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-data" th:text="${user.getUsername()}"></div>
-                                                </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">FullName:</div>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">FullName:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-data"
-                                                         th:text="${user.getFullName()==null?'NOT NAME':user.getFullName()}"></div>
-                                                </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data"
+                                                     th:text="${user.getFullName()==null?'NOT NAME':user.getFullName()}"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">Country:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-data"
-                                                         th:text="${user.getCountry()==null?'NOT COUNTRY':user.getCountry()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">City:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-data"
-                                                         th:text="${user.getCity()==null?'NOT CITY':user.getCity()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">GoogleName:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-data"
-                                                         th:text="${user.getGoogleName()==null?'NOT NAME':user.getGoogleName()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">GoogleUsername:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-data"
-                                                         th:text="${user.getGoogleUsername()==null?'NOT NAME':user.getGoogleUsername()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">Email:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div style="font-weight: bold; color: #e9aa0b;"
-                                                         th:text="${user.getEmail()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">Number of posts:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-numbers"
-                                                         th:text="${user.getPosts().size()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">Number of friend:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-numbers"
-                                                         th:text="${friends}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">Number of comments:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-numbers"
-                                                         th:text="${user.getComments().size()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">Rating:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-rating"
-                                                         th:text="${user.getRating()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row g-2">
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user">Offenses:</div>
-                                                </div>
-                                                <div class="col-6 p-3">
-                                                    <div class="view-user-rating" th:text="${user.getOffenses()}"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a type="button" class="btn btn-primary btn-user btn-block"
-                                       href="/user">Back</a>
                                 </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Country:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data"
+                                                     th:text="${user.getCountry()==null?'NOT COUNTRY':user.getCountry()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">City:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data"
+                                                     th:text="${user.getCity()==null?'NOT CITY':user.getCity()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">GoogleName:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data"
+                                                     th:text="${user.getGoogleName()==null?'NOT NAME':user.getGoogleName()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">GoogleUsername:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-data"
+                                                     th:text="${user.getGoogleUsername()==null?'NOT NAME':user.getGoogleUsername()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Email:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="row">
+                                                    <div class="col-10">
+                                                        <div th:style="${user.isEmailConfirmed()?'font-weight: bold; color: #e9aa0b;':
+                                                        'font-weight: bold; color: red;'}"
+                                                             th:text="${user.getEmail()}"></div>
+                                                    </div>
+                                                    <div class="col-2" th:if="${!user.isEmailConfirmed()}">
+                                                        <a title="Activation Email" id="confirm-email" href="#"
+                                                           th:data-id="${user.getId()}">
+                                                            <img src="/img/icon/activate.png" width="30px"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Number of posts:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-numbers"
+                                                     th:text="${user.getPosts().size()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Number of friend:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-numbers"
+                                                     th:text="${friends}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Number of comments:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-numbers"
+                                                     th:text="${user.getComments().size()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Rating:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-rating"
+                                                     th:text="${user.getRating()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2">
+                                            <div class="col-6 p-3">
+                                                <div class="view-user">Offenses:</div>
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <div class="view-user-rating" th:text="${user.getOffenses()}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a type="button" class="btn btn-primary btn-user btn-block"
+                                   href="/user">Back</a>
                             </div>
-
                         </div>
+
                     </div>
+                </div>
             </div>
 
             <!-- /.container-fluid -->
@@ -241,8 +251,27 @@
 <th:block th:insert="/user/fragments/alert-modal.html::alert-modal"></th:block>
 <th:block th:insert="/user/fragments/message-modal.html::message-modal"></th:block>
 
-
 <th:block th:insert="/user/fragments/user-other-foot.html::user-other-foot"></th:block>
+
+<script>
+    $('#confirm-email').on('click', function () {
+        let id = $(this).attr('data-id');
+        if (id !== "undefined") {
+            $.get({
+                url: "/email/confirm/" + id,
+                success: (data) => {
+                    if (data === "OK")
+                        alertInfo("The message has been sent to your email!");
+                    else
+                        alertInfo("Message not sent!!");
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+        }
+    });
+</script>
 
 </body>
 

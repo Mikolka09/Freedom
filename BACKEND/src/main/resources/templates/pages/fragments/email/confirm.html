@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="confirm-enail">
+  <div class="container-fluid">
+    <h3>CONFIRM EMAIL ADDRESS</h3>
+    <div class="row" style="font-size: 16px;">
+      <div class="col" style="font-weight: bold">FullName: </div>
+      <div class="col" style="color: blue;" th:text="${fullName}"></div>
+    </div>
+    <div class="row" style="font-size: 16px;">
+      <div class="col" style="font-weight: bold">Email: </div>
+      <div class="col" style="color: blue;" th:text="${email}"></div>
+    </div>
+    <div>
+      <p style="font-size: 14px; text-decoration: underline; color: deeppink;">
+        Please follow the link to verify your email address - <a th:href="${url}" style="font-weight: bold;">Confirm Email</a>
+      </p>
+    </div>
+    <div>
+      <p style="font-weight: bold; font-size: 14px">
+        © Copyright Freedom. All Rights Reserved
+      </p>
+    </div>
+  </div>
+</div>

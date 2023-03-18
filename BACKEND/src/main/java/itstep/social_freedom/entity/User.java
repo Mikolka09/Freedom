@@ -86,6 +86,10 @@ public class User extends BaseEntity implements UserDetails {
     private String googleName;
     private String googleUsername;
 
+    private boolean emailConfirmed;
+
+    private String token;
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

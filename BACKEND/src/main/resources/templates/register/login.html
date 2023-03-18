@@ -128,7 +128,7 @@
         let email = $('#email-input').val();
         $('#exampleForgotModal').hide();
         $.get({
-            url: "/email/simple-email/" + email,
+            url: "/email/new-password/" + email,
             success: (data) => {
                 if (data === "OK")
                     alertInfo("A new password has been sent to your email!");
