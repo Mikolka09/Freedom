@@ -1,6 +1,7 @@
 package itstep.social_freedom.config;
 
 import itstep.social_freedom.controller.api.EmailController;
+import itstep.social_freedom.entity.EmailContext;
 import itstep.social_freedom.entity.Role;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
@@ -29,10 +30,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 import org.springframework.util.Assert;
 
 import javax.mail.MessagingException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 public class CustomUserInfoTokenServices implements ResourceServerTokenServices {
@@ -78,29 +76,19 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices 
                 user = new User();
                 user.setStatus(Status.ACTIVE);
                 user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-            }
 
-            user.setUsername(name.split(" ")[0]);
-            user.setFullName(name);
-            user.setGoogleName(googleName);
-            user.setGoogleUsername(googleUsername);
-            user.setEmail(googleUsername);
-            user.setAvatarUrl("avatar/user.png");
-            user.setEmailConfirmed(true);
+                String username = verificationUsername(name);
+                user.setUsername(username.toUpperCase());
+                user.setFullName(googleName);
+                user.setGoogleName(googleName);
+                user.setGoogleUsername(googleUsername);
+                user.setEmail(googleUsername);
+                user.setAvatarUrl("avatar/user.png");
+                user.setEmailConfirmed(true);
 
-            user.setPassword(passwordEncoder.encode("Freedom_new23"));
+                user.setPassword(passwordEncoder.encode("Freedom_new23"));
 
-            userRepository.save(user);
-
-            String subject = "ADDITIONAL LOGIN INFORMATION";
-            String path = "/pages/fragments/email/new-account.html";
-            HashMap<String, Object> base = new HashMap<>();
-            base.put("login", name.split(" ")[0]);
-            base.put("password", "Freedom_new23");
-            try {
-                emailService.sendSimpleEmail(EmailController.createEmailSend(googleUsername,subject, base, path));
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
+                userRepository.save(user);
             }
         }
 
@@ -164,5 +152,15 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices 
             return Collections.<String, Object>singletonMap("error",
                     "Could not fetch user details");
         }
+    }
+
+    private String verificationUsername(String username){
+        User userBD = userRepository.findByUsername(username);
+        if(userBD!=null){
+            Random rand = new Random();
+            String name = username+rand.nextInt(100);
+            verificationUsername(name);
+        }
+        return username;
     }
 }

@@ -63,18 +63,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @ConfigurationProperties("facebook.client")
-    public AuthorizationCodeResourceDetails facebook() {
-        return new AuthorizationCodeResourceDetails();
-    }
-
-    @Bean
-    @ConfigurationProperties("facebook.resource")
-    public ResourceServerProperties facebookResource() {
-        return new ResourceServerProperties();
-    }
-
-    @Bean
     public FilterRegistrationBean oAuth2ClientFilterRegistration(OAuth2ClientContextFilter oAuth2ClientContextFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(oAuth2ClientContextFilter);
@@ -95,16 +83,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         tokenServices.setUserRepository(userRepository);
         tokenServices.setPasswordEncoder(passwordEncoder);
         filters.add(googleFilter);
-
-        OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
-        OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), oAuth2ClientContext);
-        facebookFilter.setRestTemplate(facebookTemplate);
-        tokenServices = new CustomUserInfoTokenServices(facebookResource().getUserInfoUri(), facebook().getClientId());
-        tokenServices.setRestTemplate(facebookTemplate);
-        facebookFilter.setTokenServices(tokenServices);
-        tokenServices.setUserRepository(userRepository);
-        tokenServices.setPasswordEncoder(passwordEncoder);
-        filters.add(facebookFilter);
 
         filter.setFilters(filters);
         return filter;

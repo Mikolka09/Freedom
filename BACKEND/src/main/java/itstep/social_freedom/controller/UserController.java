@@ -1,5 +1,6 @@
 package itstep.social_freedom.controller;
 
+import itstep.social_freedom.controller.api.EmailController;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,6 +34,9 @@ public class UserController {
     private InviteService inviteService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private MessageService messageService;
 
     @Autowired
@@ -48,8 +54,15 @@ public class UserController {
         String text = "Please confirm your email address in your profile in order to be able to recover your account " +
                 "or receive a changed password.\n" +
                 "\nGo to \"View Profile\" and click the activation button next to the email address";
-        if(!userTo.isEmailConfirmed())
+        if (!userTo.isEmailConfirmed())
             createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
+        else if (userService.checkPassword(userTo.getId(), "Freedom_new23")) {
+            text =String.format("Now you can also enter the site through Login: \"%s\" and Password: \"Freedom_new23\". " +
+                    "We kindly request you to change your Login and Password during the day. " +
+                    "This reminder will come until you change your details. " +
+                    "Sincerely, site administration.", userTo.getUsername());
+            createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
+        }
         CreateModelUser(model);
         return "user/index";
     }
@@ -75,7 +88,7 @@ public class UserController {
                        @RequestParam(value = "country") String country,
                        @RequestParam(value = "city") String city,
                        @RequestParam(value = "age") String age,
-                       @RequestParam(value = "email") String email,
+                       @RequestParam(value = "email", required = false, defaultValue = " ") String email,
                        @RequestParam(value = "passOld") String oldPass) {
         CreateModelUser(model);
         String path = "/user/data/edit-data/" + id;
@@ -99,7 +112,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("error", "The old password was entered incorrectly!");
             return "redirect:" + (path);
         }
-        if (setDataUser(redirectAttributes, username, fullName, country, city, age, email, user))
+        if (setDataUser(redirectAttributes, username, fullName, country, city, age, email, user, userService))
             return "redirect:" + path;
         user.setPassword(oldPass);
         if (AdminController.addFile(redirectAttributes, file, user, fileService, userService, edit))
@@ -172,15 +185,29 @@ public class UserController {
                                @RequestParam(value = "country") String country,
                                @RequestParam(value = "city") String city,
                                @RequestParam(value = "age") String age,
-                               @RequestParam("email") String email, User user) {
-        if (!Objects.equals(email, "") && email.equals(user.getEmail()))
-            user.setEmail(email);
+                               @RequestParam(value = "email", required = false, defaultValue = " ") String email,
+                               User user, UserService userService) {
+        if (!Objects.equals(email, "") && email.equals(user.getEmail())) {
+            User userBD = userService.findUserByEmail(email);
+            if (userBD != null) {
+                if (Objects.equals(userBD.getId(), user.getId()))
+                    user.setEmail(email);
+                else {
+                    redirectAttributes.getFlashAttributes().clear();
+                    redirectAttributes.addFlashAttribute("error", "User with this email address already exists!");
+                    return true;
+                }
+            } else
+                user.setEmail(email);
+        }
+
+        if (userService.findUserByUsername(user, username))
+            user.setUsername(username);
         else {
             redirectAttributes.getFlashAttributes().clear();
-            redirectAttributes.addFlashAttribute("error", "Email cannot be changed!");
+            redirectAttributes.addFlashAttribute("error", "User with the same username already exists!");
             return true;
         }
-        user.setUsername(username);
         if (fullName != null && !fullName.equals("")) {
             user.setFullName(fullName);
         } else {

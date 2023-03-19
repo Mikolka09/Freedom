@@ -514,7 +514,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
             return "redirect:" + path;
         }
-        if (UserController.setDataUser(redirectAttributes, username, fullName, country, city, age, email, user))
+        if (UserController.setDataUser(redirectAttributes, username, fullName, country, city, age, email, user, userService))
             return "redirect:" + path;
         if (addRoles(redirectAttributes, file, role_id, user, edit)) return "redirect:" + path;
 
@@ -547,7 +547,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error", "Not all fields are filled!");
             return "redirect:" + path;
         }
-        if (UserController.setDataUser(redirectAttributes, username, fullName, country, city, age, email, user))
+        if (UserController.setDataUser(redirectAttributes, username, fullName, country, city, age, email, user, userService))
             return "redirect:" + path;
 
         if (addPassword(userForm, redirectAttributes, passwordConfirm, password, user, userService))
