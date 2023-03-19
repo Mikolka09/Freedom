@@ -48,6 +48,7 @@ public class AlertController {
         model.addAttribute("user", user);
     }
 
+    //Loading main alerts page users
     @GetMapping("/user/alerts")
     public String index(Model model) {
         CreateModelUser(model);

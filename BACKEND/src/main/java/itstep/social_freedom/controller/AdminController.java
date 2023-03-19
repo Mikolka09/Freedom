@@ -86,6 +86,7 @@ public class AdminController {
         model.addAttribute("admin", user);
     }
 
+    //Download database of obscene words
     private static List<String> baseWords() {
         List<String> base = new ArrayList<>();
         String fileName = "/BACKEND/src/main/resources/static/admin/files/british-swear-words.txt";
@@ -105,6 +106,9 @@ public class AdminController {
         return "admin/index";
     }
 
+//*********************************** FRIENDS *******************************************//
+
+    //Loading main friends page
     @GetMapping("/admin/friends")
     public String friends(Model model) {
         CreateModelUser(model, userService, alertService, messageService);
@@ -114,6 +118,7 @@ public class AdminController {
         return "admin/friend/index";
     }
 
+    //Break friendship
     @GetMapping("/admin/friend/break/{id}/{idFriend}")
     public String breakFriend(@PathVariable(name = "id") Long id,
                               @PathVariable(name = "idFriend") Long idFriend) {
@@ -133,6 +138,7 @@ public class AdminController {
         return "admin/friend/view-friend";
     }
 
+    //Loading all friends posts
     @GetMapping("/admin/friends/all-posts")
     private String giveAllFriendsPosts(Model model) {
         CreateModelUser(model, userService, alertService, messageService);
@@ -142,6 +148,7 @@ public class AdminController {
         return "admin/friend/friends-posts";
     }
 
+    //Get all friends posts
     static void getAllFriendsPosts(Model model, List<Friend> friends, PostService postService) {
         List<Post> friendPosts = new ArrayList<>();
         List<Post> posts = postService.posts();
@@ -152,6 +159,20 @@ public class AdminController {
             }
         }
         model.addAttribute("friendPosts", friendPosts);
+    }
+
+//*********************************** USERS *******************************************//
+
+    //Getting a list of users
+    @GetMapping("/admin/users")
+    public String usersList(Model model) {
+        List<User> users = userService.allUsers().stream()
+                .filter(x -> x.getStatus() == Status.ACTIVE)
+                .sorted(Comparator.comparing(User::getUsername))
+                .collect(Collectors.toList());
+        model.addAttribute("allUsers", users);
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/users/users";
     }
 
     //View Profile User
@@ -165,42 +186,6 @@ public class AdminController {
         return "admin/users/view-user";
     }
 
-    @GetMapping("/admin/messages-all-users")
-    public String indexAllMessages(Model model) {
-        List<Message> messageAllList = messageService.findAllUsersMessages();
-        model.addAttribute("messageAllList", messageAllList);
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/mail/all-messages";
-    }
-
-    @GetMapping("/admin/messages")
-    public String indexMail(Model model) {
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/mail/index";
-    }
-
-    @GetMapping("/admin/out-messages")
-    public String outMessages(Model model) {
-        List<Message> outMessages = messageService.findAllMessagesOutUserById(userService.getCurrentUsername().getId());
-        model.addAttribute("outMessages", outMessages);
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/mail/index";
-    }
-
-    @GetMapping("/admin/deleted-messages")
-    public String deletedMessages(Model model) {
-        List<Message> deleteMessages = messageService.findAllDeletedMessagesUserById(userService.getCurrentUsername().getId());
-        model.addAttribute("deleteMessages", deleteMessages);
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/mail/index";
-    }
-
-    @GetMapping("/admin/alerts")
-    public String indexAlert(Model model) {
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/alert/index";
-    }
-
     //Get a list of deleted users
     @GetMapping("/admin/users/deleted")
     public String deletedUsers(Model model) {
@@ -210,51 +195,6 @@ public class AdminController {
         model.addAttribute("users", users);
         CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/deleted-users";
-    }
-
-    //Get a list of posts
-    @GetMapping("/admin/posts")
-    public String posts(Model model) {
-        List<Post> posts = postService.posts().stream()
-                .filter(post -> post.getStatus() == Status.VERIFIED)
-                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
-                .collect(Collectors.toList());
-        model.addAttribute("posts", posts);
-        model.addAttribute("status", Status.values());
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/posts/posts";
-    }
-
-    //Create a new post
-    @GetMapping("/admin/create-post/{id}")
-    public String createPost(@PathVariable(name = "id") Long id, Model model) {
-        model.addAttribute("user_id", id);
-        List<Category> categories = categoryService.allCategory().stream()
-                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
-        List<Tag> tags = tagService.allTag().stream()
-                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
-        model.addAttribute("categories", categories);
-        model.addAttribute("tags", tags);
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/posts/create-admin-post";
-    }
-
-    //Saving a post
-    @PostMapping("/admin/store-post")
-    public String store(@RequestParam(value = "id") Long user_id, Model model,
-                        @RequestParam(value = "file") MultipartFile file,
-                        @RequestParam(value = "title") String title,
-                        @RequestParam(value = "shortDesc") String shortDesc,
-                        @RequestParam(value = "category_id") Long category_id,
-                        @RequestParam(value = "description") String description,
-                        @RequestParam(value = "tag_id") Long[] tag_id) {
-        Post post = new Post();
-        post.setStatus(Status.NOT_VERIFIED);
-        post.setLikes(0);
-        CreateModelUser(model, userService, alertService, messageService);
-        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, null))
-            return "redirect:/admin/posts";
-        return "redirect:/admin/create-post/" + user_id;
     }
 
     //Creating a new user
@@ -286,126 +226,11 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
-    //Post editing
-    @GetMapping("/admin/post/edit/{id}")
-    public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
-        gettingPost(post_id, model, postService, categoryService, tagService);
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/posts/posts-edit";
-    }
-
-    //Getting post data
-    static void gettingPost(@PathVariable(name = "id") Long post_id, Model model,
-                            PostService postService,
-                            CategoryService categoryService,
-                            TagService tagService) {
-        Post post = postService.findPostById(post_id);
-        List<Category> categories = categoryService.allCategory().stream()
-                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
-        List<Tag> tags = tagService.allTag().stream()
-                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
-        List<Status> enums = Arrays.asList(Status.values());
-        model.addAttribute("user_id", post.getUser().getId());
-        model.addAttribute("categories", categories);
-        model.addAttribute("tags", tags);
-        model.addAttribute("post", post);
-        model.addAttribute("status", enums);
-    }
-
-    //Post Verification
-    @GetMapping("/admin/post/verify/{id}")
-    public String verifyPost(@PathVariable(name = "id") Long post_id, Model model) {
-        CreateModelUser(model, userService, alertService, messageService);
-        gettingPost(post_id, model, postService, categoryService, tagService);
-        return "admin/posts/post-verify";
-    }
-
-    //Getting a list of unverified posts
-    @GetMapping("/admin/posts-verified")
-    public String postsVerified(Model model) {
-        List<Post> posts = postService.posts().stream().filter(x ->
-                        (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED))
-                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
-                .collect(Collectors.toList());
-        model.addAttribute("posts", posts);
-        model.addAttribute("status", Status.values());
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/posts/posts-verified";
-    }
-
-    //Getting a list of users
-    @GetMapping("/admin/users")
-    public String usersList(Model model) {
-        List<User> users = userService.allUsers().stream()
-                .filter(x -> x.getStatus() == Status.ACTIVE)
-                .sorted(Comparator.comparing(User::getUsername))
-                .collect(Collectors.toList());
-        model.addAttribute("allUsers", users);
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/users/users";
-    }
-
-    //Getting a list of comments
-    @GetMapping("/admin/comments")
-    public String commentsList(Model model) {
-        List<Comment> comments = commentService.allComments();
-        model.addAttribute("comments", comments);
-        model.addAttribute("status", Status.values());
-        CreateModelUser(model, userService, alertService, messageService);
-        return "admin/comments/comments";
-    }
-
-    @PostMapping("/admin/comments/comment-store")
-    public String editStore(@RequestParam(value = "id") Long id,
-                            @RequestParam(value = "body") String body) {
-        Comment comment = commentService.findCommentById(id);
-        return checkBodyComment(body, comment);
-    }
-
-    @PostMapping("/admin/comments/comment-recovery")
-    public String recoveryCategory(@RequestParam(value = "id") Long id,
-                                   @RequestParam(value = "body") String body,
-                                   @RequestParam(value = "status") String status) {
-        Comment comment = commentService.findCommentById(id);
-        if (Objects.equals(status, "DELETED") || Objects.equals(status, "ACTIVE"))
-            comment.setStatus(Status.valueOf(status));
-        return checkBodyComment(body, comment);
-    }
-
-    private String checkBodyComment(@RequestParam("body") String body, Comment comment) {
-        if (!Objects.equals(body, "")) {
-            if (checkStringCensorship(body)) {
-                User user = userService.getCurrentUsername();
-                user.setOffenses(user.getOffenses() + 100);
-                userService.saveEdit(user);
-                String tmp = textCheckWords(body);
-                comment.setBody(tmp);
-            } else
-                comment.setBody(body);
-        }
-        commentService.save(comment);
-        return "redirect:/admin/comments";
-    }
-
-    //Deleting a comment
-    @GetMapping("/admin/comments/delete/{id}")
-    public String deleteComment(@PathVariable(name = "id") Long id) {
-        commentService.delete(id);
-        return "redirect:/admin/comments";
-    }
-
     //Deleting a user
     @GetMapping("/admin/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin/users";
-    }
-
-
-    @GetMapping("/admin/gt/{userId}")
-    public String gtUser(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("allUsers", userService.usergtList(userId));
-        return "admin";
     }
 
     //Editing user data
@@ -439,56 +264,6 @@ public class AdminController {
         model.addAttribute("user", user);
         CreateModelUser(model, userService, alertService, messageService);
         return "admin/users/user-newpass";
-    }
-
-    //Post editing
-    @PostMapping("/admin/post/edit-store/{id}")
-    public String editStore(@RequestParam(value = "user_id") Long user_id, Model model,
-                            @PathVariable(name = "id") Long post_id,
-                            @RequestParam(value = "file") MultipartFile file,
-                            @RequestParam(value = "title") String title,
-                            @RequestParam(value = "shortDesc") String shortDesc,
-                            @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
-                            @RequestParam(value = "description") String description,
-                            @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
-        Post post = postService.findPostById(post_id);
-        CreateModelUser(model, userService, alertService, messageService);
-        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, null))
-            return "redirect:/admin/posts";
-        return "redirect:/admin/post/edit/" + user_id;
-    }
-
-    //Post Verification
-    @PostMapping("/admin/post/verify-store/{id}")
-    public String verifyStore(@RequestParam(value = "user_id") Long user_id,
-                              RedirectAttributes redirectAttributes, Model model,
-                              @PathVariable(name = "id") Long post_id,
-                              @RequestParam(value = "file") MultipartFile file,
-                              @RequestParam(value = "title") String title,
-                              @RequestParam(value = "shortDesc") String shortDesc,
-                              @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
-                              @RequestParam(value = "description") String description,
-                              @RequestParam(value = "offenses", required = false) String offenses,
-                              @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id,
-                              @RequestParam(value = "status") String status) {
-        CreateModelUser(model, userService, alertService, messageService);
-        Post post = postService.findPostById(post_id);
-        String path = "/admin/post/verify/" + post_id;
-        if (!status.isEmpty()) {
-            if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED") || status.equals("DELETED"))
-                post.setStatus(Status.valueOf(status));
-            else {
-                redirectAttributes.getFlashAttributes().clear();
-                redirectAttributes.addFlashAttribute("error", "Wrong status selected!");
-                return "redirect:" + path;
-            }
-        }
-        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, offenses)) {
-            if (postService.posts().stream().noneMatch(x -> x.getStatus() == Status.NOT_VERIFIED))
-                return "redirect:/admin/posts";
-            return "redirect:/admin/posts-verified";
-        }
-        return "redirect:/admin/post/verify/" + user_id;
     }
 
     //Editing user data
@@ -570,6 +345,7 @@ public class AdminController {
         return "redirect:/admin/users/deleted";
     }
 
+    //Add new Role
     private boolean addRoles(RedirectAttributes redirectAttributes, @RequestParam("avatar") MultipartFile file, @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id, User user, boolean edit) {
         if (role_id != null) {
             if (role_id.length != 0) {
@@ -607,12 +383,257 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+//*********************************** MESSAGES *******************************************//
+
+    //Loading main messages page
+    @GetMapping("/admin/messages")
+    public String indexMail(Model model) {
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/mail/index";
+    }
+
+    //Loading all messages users
+    @GetMapping("/admin/messages-all-users")
+    public String indexAllMessages(Model model) {
+        List<Message> messageAllList = messageService.findAllUsersMessages();
+        model.addAttribute("messageAllList", messageAllList);
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/mail/all-messages";
+    }
+
+    //Loading out messages
+    @GetMapping("/admin/out-messages")
+    public String outMessages(Model model) {
+        List<Message> outMessages = messageService.findAllMessagesOutUserById(userService.getCurrentUsername().getId());
+        model.addAttribute("outMessages", outMessages);
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/mail/index";
+    }
+
+    //Loading deleted messages
+    @GetMapping("/admin/deleted-messages")
+    public String deletedMessages(Model model) {
+        List<Message> deleteMessages = messageService.findAllDeletedMessagesUserById(userService.getCurrentUsername().getId());
+        model.addAttribute("deleteMessages", deleteMessages);
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/mail/index";
+    }
+
+//*********************************** ALERTS *******************************************//
+
+    //Loading the main alert page
+    @GetMapping("/admin/alerts")
+    public String indexAlert(Model model) {
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/alert/index";
+    }
+
+//*********************************** POSTS *******************************************//
+
+    //Get a list of posts
+    @GetMapping("/admin/posts")
+    public String posts(Model model) {
+        List<Post> posts = postService.posts().stream()
+                .filter(post -> post.getStatus() == Status.VERIFIED)
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                .collect(Collectors.toList());
+        model.addAttribute("posts", posts);
+        model.addAttribute("status", Status.values());
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/posts/posts";
+    }
+
+    //Create a new post
+    @GetMapping("/admin/create-post/{id}")
+    public String createPost(@PathVariable(name = "id") Long id, Model model) {
+        model.addAttribute("user_id", id);
+        List<Category> categories = categoryService.allCategory().stream()
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
+        List<Tag> tags = tagService.allTag().stream()
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
+        model.addAttribute("categories", categories);
+        model.addAttribute("tags", tags);
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/posts/create-admin-post";
+    }
+
+    //Saving a post
+    @PostMapping("/admin/store-post")
+    public String store(@RequestParam(value = "id") Long user_id, Model model,
+                        @RequestParam(value = "file") MultipartFile file,
+                        @RequestParam(value = "title") String title,
+                        @RequestParam(value = "shortDesc") String shortDesc,
+                        @RequestParam(value = "category_id") Long category_id,
+                        @RequestParam(value = "description") String description,
+                        @RequestParam(value = "tag_id") Long[] tag_id) {
+        Post post = new Post();
+        post.setStatus(Status.NOT_VERIFIED);
+        post.setLikes(0);
+        CreateModelUser(model, userService, alertService, messageService);
+        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, null))
+            return "redirect:/admin/posts";
+        return "redirect:/admin/create-post/" + user_id;
+    }
+
+    //Post editing
+    @GetMapping("/admin/post/edit/{id}")
+    public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
+        gettingPost(post_id, model, postService, categoryService, tagService);
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/posts/posts-edit";
+    }
+
+    //Getting post data
+    static void gettingPost(@PathVariable(name = "id") Long post_id, Model model,
+                            PostService postService,
+                            CategoryService categoryService,
+                            TagService tagService) {
+        Post post = postService.findPostById(post_id);
+        List<Category> categories = categoryService.allCategory().stream()
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
+        List<Tag> tags = tagService.allTag().stream()
+                .filter(x -> x.getStatus() == Status.ACTIVE).collect(Collectors.toList());
+        List<Status> enums = Arrays.asList(Status.values());
+        model.addAttribute("user_id", post.getUser().getId());
+        model.addAttribute("categories", categories);
+        model.addAttribute("tags", tags);
+        model.addAttribute("post", post);
+        model.addAttribute("status", enums);
+    }
+
+    //Post Verification
+    @GetMapping("/admin/post/verify/{id}")
+    public String verifyPost(@PathVariable(name = "id") Long post_id, Model model) {
+        CreateModelUser(model, userService, alertService, messageService);
+        gettingPost(post_id, model, postService, categoryService, tagService);
+        return "admin/posts/post-verify";
+    }
+
+    //Getting a list of unverified posts
+    @GetMapping("/admin/posts-verified")
+    public String postsVerified(Model model) {
+        List<Post> posts = postService.posts().stream().filter(x ->
+                        (x.getStatus() == Status.NOT_VERIFIED || x.getStatus() == Status.DELETED))
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                .collect(Collectors.toList());
+        model.addAttribute("posts", posts);
+        model.addAttribute("status", Status.values());
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/posts/posts-verified";
+    }
+
+    //Post editing
+    @PostMapping("/admin/post/edit-store/{id}")
+    public String editStore(@RequestParam(value = "user_id") Long user_id, Model model,
+                            @PathVariable(name = "id") Long post_id,
+                            @RequestParam(value = "file") MultipartFile file,
+                            @RequestParam(value = "title") String title,
+                            @RequestParam(value = "shortDesc") String shortDesc,
+                            @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
+                            @RequestParam(value = "description") String description,
+                            @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
+        Post post = postService.findPostById(post_id);
+        CreateModelUser(model, userService, alertService, messageService);
+        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, null))
+            return "redirect:/admin/posts";
+        return "redirect:/admin/post/edit/" + user_id;
+    }
+
+    //Post Verification
+    @PostMapping("/admin/post/verify-store/{id}")
+    public String verifyStore(@RequestParam(value = "user_id") Long user_id,
+                              RedirectAttributes redirectAttributes, Model model,
+                              @PathVariable(name = "id") Long post_id,
+                              @RequestParam(value = "file") MultipartFile file,
+                              @RequestParam(value = "title") String title,
+                              @RequestParam(value = "shortDesc") String shortDesc,
+                              @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
+                              @RequestParam(value = "description") String description,
+                              @RequestParam(value = "offenses", required = false) String offenses,
+                              @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id,
+                              @RequestParam(value = "status") String status) {
+        CreateModelUser(model, userService, alertService, messageService);
+        Post post = postService.findPostById(post_id);
+        String path = "/admin/post/verify/" + post_id;
+        if (!status.isEmpty()) {
+            if (status.equals("VERIFIED") || status.equals("NOT_VERIFIED") || status.equals("DELETED"))
+                post.setStatus(Status.valueOf(status));
+            else {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "Wrong status selected!");
+                return "redirect:" + path;
+            }
+        }
+        if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, offenses)) {
+            if (postService.posts().stream().noneMatch(x -> x.getStatus() == Status.NOT_VERIFIED))
+                return "redirect:/admin/posts";
+            return "redirect:/admin/posts-verified";
+        }
+        return "redirect:/admin/post/verify/" + user_id;
+    }
+
     //Deleting a post
     @GetMapping("/admin/post/delete/{id}")
     public String deletePost(@PathVariable(name = "id") Long post_id) {
         postService.deletePost(post_id);
         return "redirect:/admin/posts/";
     }
+
+//*********************************** COMMENTS *******************************************//
+
+    //Getting a list of comments
+    @GetMapping("/admin/comments")
+    public String commentsList(Model model) {
+        List<Comment> comments = commentService.allComments();
+        model.addAttribute("comments", comments);
+        model.addAttribute("status", Status.values());
+        CreateModelUser(model, userService, alertService, messageService);
+        return "admin/comments/comments";
+    }
+
+    //Comment edit
+    @PostMapping("/admin/comments/comment-store")
+    public String editStore(@RequestParam(value = "id") Long id,
+                            @RequestParam(value = "body") String body) {
+        Comment comment = commentService.findCommentById(id);
+        return checkBodyComment(body, comment);
+    }
+
+    //Comment recovery
+    @PostMapping("/admin/comments/comment-recovery")
+    public String recoveryComment(@RequestParam(value = "id") Long id,
+                                   @RequestParam(value = "body") String body,
+                                   @RequestParam(value = "status") String status) {
+        Comment comment = commentService.findCommentById(id);
+        if (Objects.equals(status, "DELETED") || Objects.equals(status, "ACTIVE"))
+            comment.setStatus(Status.valueOf(status));
+        return checkBodyComment(body, comment);
+    }
+
+    //Checking and editing comment text
+    private String checkBodyComment(@RequestParam("body") String body, Comment comment) {
+        if (!Objects.equals(body, "")) {
+            if (checkStringCensorship(body)) {
+                User user = userService.getCurrentUsername();
+                user.setOffenses(user.getOffenses() + 100);
+                userService.saveEdit(user);
+                String tmp = textCheckWords(body);
+                comment.setBody(tmp);
+            } else
+                comment.setBody(body);
+        }
+        commentService.save(comment);
+        return "redirect:/admin/comments";
+    }
+
+    //Deleting a comment
+    @GetMapping("/admin/comments/delete/{id}")
+    public String deleteComment(@PathVariable(name = "id") Long id) {
+        commentService.delete(id);
+        return "redirect:/admin/comments";
+    }
+
+//*********************************** OTHER METHODS *******************************************//
 
     //Saving a new post
     public boolean setPost(Long user_id, MultipartFile file, String title, String shortDesc, Long category_id,
@@ -647,6 +668,7 @@ public class AdminController {
         return false;
     }
 
+    //Send new password user
     public void sendNewPassword(String pass, String email,String subject){
         String path = "/pages/fragments/email/new-password.html";
         HashMap<String, Object> base = new HashMap<>();
@@ -682,6 +704,7 @@ public class AdminController {
         return false;
     }
 
+    //Checking the text for obscene words
     public static boolean checkStringCensorship(String text) {
         List<String> base = baseWords();
         for (String st : base) {
@@ -694,7 +717,7 @@ public class AdminController {
         return false;
     }
 
-
+    //Replacement, clipping, obscene words
     public static String textCheckWords(String text) {
         List<String> base = baseWords();
         String change = "{censorship!}";
@@ -708,5 +731,4 @@ public class AdminController {
         }
         return text;
     }
-
 }

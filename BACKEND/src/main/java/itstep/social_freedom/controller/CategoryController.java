@@ -36,6 +36,7 @@ public class CategoryController {
     @Autowired
     private FileService fileService;
 
+    //Loading main categories page
     @GetMapping("/admin/categories")
     public String categories(Model model) {
         AdminController.CreateModelUser(model, userService, alertService, messageService);
@@ -47,6 +48,7 @@ public class CategoryController {
         return "/admin/categories/categories";
     }
 
+    //Category edit
     @GetMapping("/admin/categories/edit/{id}")
     public String editCategory(Model model, @PathVariable(name = "id") Long id) {
         AdminController.CreateModelUser(model, userService, alertService, messageService);
@@ -55,6 +57,7 @@ public class CategoryController {
         return "/admin/categories/category-edit";
     }
 
+    //Category edit
     @PostMapping("/admin/categories/category-store")
     public String editStore(@RequestParam(value = "id") Long id,
                             @RequestParam(value = "file") MultipartFile file,
@@ -72,6 +75,7 @@ public class CategoryController {
         return "redirect:/admin/categories";
     }
 
+    //Category recovery
     @PostMapping("/admin/categories/category-recovery")
     public String recoveryCategory(@RequestParam(value = "id") Long id,
                                    @RequestParam(value = "status") String status) {
@@ -82,7 +86,7 @@ public class CategoryController {
         return "redirect:/admin/categories";
     }
 
-
+    //Create new category
     @PostMapping("/admin/categories/create")
     public String createStore(@RequestParam(value = "name") String name,
                               @RequestParam(value = "short") String shortDesc,
@@ -100,6 +104,7 @@ public class CategoryController {
         return "redirect:/admin/categories";
     }
 
+    //Delete category
     @GetMapping("/admin/category/delete/{id}")
     public String deleteCategory(@PathVariable(name = "id") Long id) {
         categoryService.delete(id);
