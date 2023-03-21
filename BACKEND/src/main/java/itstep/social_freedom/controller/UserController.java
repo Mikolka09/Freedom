@@ -163,6 +163,22 @@ public class UserController {
         return "redirect:/";
     }
 
+    //Confirm Email
+    @GetMapping(value = "/email/confirm-message/{id}/{token}")
+    public String confirmEmail(@PathVariable(value = "id") Long id, @PathVariable(value = "token") String token) {
+        User user = userService.findUserById(id);
+        if(user!=null){
+            String tokenUser = user.getToken();
+            if(Objects.equals(tokenUser, token)){
+                user.setEmailConfirmed(true);
+                User userFrom = userService.allUsers().stream()
+                        .filter(x-> Objects.equals(x.getUsername(), "ADMIN")).findFirst().orElse(new User());
+                String text = "Your email has been verified. Thank you very much!";
+                createSendMessage(userFrom, user, text, userService, inviteService, messageService);
+            }
+        }
+        return "pages/fragments/email/confirm-true";
+    }
 
     static boolean setDataUser(RedirectAttributes redirectAttributes,
                                @RequestParam("username") String username,

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<div th:fragment="confirm-email">
+<div th:fragment="contact-message">
   <div class="container-fluid">
-    <h3>CONFIRM EMAIL ADDRESS</h3>
+    <h3>NEW MESSAGE FROM CONTACT PAGE</h3>
     <div class="row" style="font-size: 16px;">
       <div class="col" style="font-weight: bold">FullName: </div>
       <div class="col" style="color: blue;" th:text="${fullName}"></div>
@@ -13,9 +13,8 @@
       <div class="col" style="color: blue;" th:text="${email}"></div>
     </div>
     <div>
-      <p style="font-size: 14px; text-decoration: underline; color: deeppink;">
-        Please follow the link to verify your email address - <a th:href="${url}" style="font-weight: bold;">Confirm Email</a>
-      </p>
+      <h4 style="font-weight: bold" th:text="${subject}"></h4>
+      <p style="font-size: 14px; text-decoration: underline; color: #0f3d81;" th:text="${message}"></p>
     </div>
     <div>
       <p style="font-weight: bold; font-size: 14px">

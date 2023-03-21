@@ -1,6 +1,6 @@
 package itstep.social_freedom.controller;
 
-import itstep.social_freedom.controller.api.EmailController;
+import itstep.social_freedom.controller.api.ApiEmailController;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -669,12 +669,12 @@ public class AdminController {
     }
 
     //Send new password user
-    public void sendNewPassword(String pass, String email,String subject){
+    public void sendNewPassword(String pass, String email, String subject){
         String path = "/pages/fragments/email/new-password.html";
         HashMap<String, Object> base = new HashMap<>();
         base.put("password", pass);
         try {
-            emailService.sendSimpleEmail(EmailController.createEmailSend(email,subject, base, path));
+            emailService.sendSimpleEmail(ApiEmailController.createEmailSend(email,subject, base, path));
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

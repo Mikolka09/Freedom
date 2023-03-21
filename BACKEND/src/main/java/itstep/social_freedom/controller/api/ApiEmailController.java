@@ -1,6 +1,5 @@
 package itstep.social_freedom.controller.api;
 
-import itstep.social_freedom.controller.UserController;
 import itstep.social_freedom.entity.EmailContext;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.EmailService;
@@ -20,18 +19,12 @@ import java.util.UUID;
 
 
 @RestController
-public class EmailController {
+public class ApiEmailController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EmailController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ApiEmailController.class);
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private InviteService inviteService;
-
-    @Autowired
-    private MessageService messageService;
 
     @Autowired
     private EmailService emailService;
@@ -67,7 +60,7 @@ public class EmailController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             userService.saveEdit(user);
-            String email = "mikolka09@gmail.com"; //user.getEmail();
+            String email = user.getEmail();
             String subject = "CONFIRM EMAIL ADDRESS";
             String url = "http://localhost:8080/email/confirm-message/" + id + "/" + token;
             String path = "/pages/fragments/email/confirm.html";
@@ -86,22 +79,29 @@ public class EmailController {
             return "NOT";
     }
 
-    @GetMapping(value = "/email/confirm-message/{id}/{token}")
-    public void confirmEmail(@PathVariable(value = "id") Long id, @PathVariable(value = "token") String token) {
-        User user = userService.findUserById(id);
-        if(user!=null){
-            String tokenUser = user.getToken();
-            if(Objects.equals(tokenUser, token)){
-                user.setEmailConfirmed(true);
-                User userFrom = userService.findUserByEmail("admin@gmail.com");
-                String text = "Your email has been verified. Thank you very much!";
-                UserController.createSendMessage(userFrom, user, text, userService, inviteService, messageService);
-            }
-        }
+    @GetMapping("/contact-us/message")
+    public String sendContactMessage(@RequestParam(value = "name") String name,
+                                     @RequestParam(value = "email") String email,
+                                     @RequestParam(value = "subject") String subject,
+                                     @RequestParam(value = "message") String message) throws MessagingException {
+        if (!Objects.equals(name, "") || !Objects.equals(email, "") ||
+                !Objects.equals(subject, "") || !Objects.equals(message, "")) {
+            String header = "NEW MESSAGE FROM CONTACT PAGE";
+            String emailTo = "mikolka09@gmail.com";//
+            HashMap<String, Object> base = new HashMap<>();
+            base.put("fullName", name);
+            base.put("email", email);
+            base.put("subject", subject);
+            base.put("message", message);
+            String path = "/pages/fragments/email/contact-message.html";
+            emailService.sendSimpleEmail(createEmailSend(emailTo, header, base, path));
+            return "OK";
+        } else
+            return "NOT";
     }
 
     public static EmailContext createEmailSend(String email, String subject, HashMap<String, Object> base, String path) {
-        String fromAddress = "admin@freedom.com";
+        String fromAddress = "admin_freedom@gmail.com";
         EmailContext context = new EmailContext();
         context.setTo(email);
         context.setFrom(fromAddress);

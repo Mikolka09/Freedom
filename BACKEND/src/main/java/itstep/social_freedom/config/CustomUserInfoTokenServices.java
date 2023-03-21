@@ -1,7 +1,5 @@
 package itstep.social_freedom.config;
 
-import itstep.social_freedom.controller.api.EmailController;
-import itstep.social_freedom.entity.EmailContext;
 import itstep.social_freedom.entity.Role;
 import itstep.social_freedom.entity.Status;
 import itstep.social_freedom.entity.User;
@@ -29,7 +27,6 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.util.Assert;
 
-import javax.mail.MessagingException;
 import java.util.*;
 
 @Data
