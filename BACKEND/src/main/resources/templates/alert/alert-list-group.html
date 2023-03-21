@@ -18,7 +18,8 @@
                                 #locale.forLanguageTag('en'))}"></h6>
                                     <h5 class="mb-1 text-center"
                                         style="color: #6f42c1; font-weight: bold; text-decoration-line: underline;"
-                                        th:text="${alert.getInvite().getUserFrom().getFullName()}"></h5>
+                                        th:text="${alert.getInvite().getUserFrom().getFullName()==null?('User '+alert.getInvite().getUserFrom().getUsername()):
+                                        alert.getInvite().getUserFrom().getFullName()}"></h5>
                                     <p class="mb-0 text-center" style="color: #0a53be;"
                                        th:text="${alert.getText()}">john.doe@gmail.com</p>
                                 </div>

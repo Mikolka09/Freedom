@@ -68,7 +68,9 @@
                     </h6>
                     <th:block th:each="alert, state:${alerts}">
                         <a class="dropdown-item d-flex align-items-center" data-target="#AlertModal" data-toggle="modal"
-                           th:data-id="${alert.getId()}" th:data-name="${alert.getInvite().getUserFrom().getFullName()}"
+                           th:data-id="${alert.getId()}"
+                           th:data-name="${alert.getInvite().getUserFrom().getFullName()==null?('User '+ alert.getInvite().getUserFrom().getUsername()):
+                                        alert.getInvite().getUserFrom().getFullName()}"
                            th:data-text="${alert.getText()}" th:if="${state.index<3}" href="#"
                            th:data-show="${admin}"
                            th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),

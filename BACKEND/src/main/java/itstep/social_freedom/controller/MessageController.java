@@ -67,8 +67,6 @@ public class MessageController {
         return counter;
     }
 
-
-
     @GetMapping("/user/messages")
     public String index(Model model) {
         CreateModelUser(model);

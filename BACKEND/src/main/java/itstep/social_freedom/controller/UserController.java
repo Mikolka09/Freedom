@@ -1,6 +1,5 @@
 package itstep.social_freedom.controller;
 
-import itstep.social_freedom.controller.api.EmailController;
 import itstep.social_freedom.entity.*;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Enumeration;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static itstep.social_freedom.controller.AdminController.addPassword;
 
@@ -34,9 +31,6 @@ public class UserController {
     private InviteService inviteService;
 
     @Autowired
-    private EmailService emailService;
-
-    @Autowired
     private MessageService messageService;
 
     @Autowired
@@ -48,21 +42,12 @@ public class UserController {
 
     //Start index
     @GetMapping("/user")
-    public String index(Model model) {
-        User userFrom = userService.findUserByEmail("admin@gmail.com");
+    public String index(Model model, HttpServletRequest request) {
+        User userFrom = userService.allUsers().stream()
+                .filter(x-> Objects.equals(x.getUsername(), "ADMIN")).findFirst().orElse(new User());
         User userTo = userService.getCurrentUsername();
-        String text = "Please confirm your email address in your profile in order to be able to recover your account " +
-                "or receive a changed password.\n" +
-                "\nGo to \"View Profile\" and click the activation button next to the email address";
-        if (!userTo.isEmailConfirmed())
-            createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
-        else if (userService.checkPassword(userTo.getId(), "Freedom_new23")) {
-            text =String.format("Now you can also enter the site through Login: \"%s\" and Password: \"Freedom_new23\". " +
-                    "We kindly request you to change your Login and Password during the day. " +
-                    "This reminder will come until you change your details. " +
-                    "Sincerely, site administration.", userTo.getUsername());
-            createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
-        }
+        HttpSession session = request.getSession();
+        reminderMessage(userFrom, userTo, session);
         CreateModelUser(model);
         return "user/index";
     }
@@ -233,8 +218,8 @@ public class UserController {
         return false;
     }
 
-    public static boolean createSendMessage(User userFrom, User userTo, String text, UserService userService,
-                                            InviteService inviteService, MessageService messageService) {
+    public static void createSendMessage(User userFrom, User userTo, String text, UserService userService,
+                                         InviteService inviteService, MessageService messageService) {
         Message message = new Message();
         Invite invite = new Invite();
         if (!Objects.equals(text, "")) {
@@ -250,10 +235,52 @@ public class UserController {
             message.setInvite(invite);
             if (inviteService.saveInvite(invite)) {
                 message.setStatus(Status.ACTIVE);
-                return messageService.saveMessage(message);
-            } else
-                return false;
-        } else
-            return false;
+                messageService.saveMessage(message);
+            }
+        }
+    }
+
+    //Reminder Message
+    public void reminderMessage(User userFrom, User userTo, HttpSession session){
+        String text = "Please confirm your email address in your profile in order to be able to recover your account " +
+                "or receive a changed password." +
+                "Go to \"View Profile\" and click the activation button next to the email address";
+        if (!userTo.isEmailConfirmed())
+            if(session.isNew()) {
+                session.setAttribute("reminderEmail", true);
+                session.setMaxInactiveInterval(-1);
+                createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
+            }else{
+                Enumeration<String> keys = session.getAttributeNames();
+                while(keys.hasMoreElements()){
+                    if(!Objects.equals(keys.nextElement(), "reminderEmail")){
+                        session.setAttribute("reminderEmail", true);
+                        session.setMaxInactiveInterval(-1);
+                        createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
+                    }else
+                        break;
+                }
+            }
+        else if (userService.checkPassword(userTo.getId(), "Freedom_new23")) {
+            text =String.format("Now you can also enter the site through Login: \"%s\" and Password: \"Freedom_new23\". " +
+                    "We kindly request you to change your Login and Password during the day. " +
+                    "This reminder will come until you change your details. " +
+                    "Sincerely, site administration.", userTo.getUsername());
+            if(session.isNew()){
+                session.setAttribute("reminderPass", true);
+                session.setMaxInactiveInterval(-1);
+                createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
+            }else{
+                Enumeration<String> keys = session.getAttributeNames();
+                while(keys.hasMoreElements()){
+                    if(!Objects.equals(keys.nextElement(), "reminderPass")){
+                        session.setAttribute("reminderPass", true);
+                        session.setMaxInactiveInterval(-1);
+                        createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
+                    }else
+                        break;
+                }
+            }
+        }
     }
 }

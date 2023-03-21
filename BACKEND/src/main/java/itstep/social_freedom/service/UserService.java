@@ -45,7 +45,8 @@ public class UserService implements UserDetailsService {
     }
 
     public int countRating(User user) {
-        List<Post> postsList = user.getPosts().stream().filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
+        List<Post> postsList = user.getPosts().stream()
+                .filter(x -> x.getStatus() == Status.VERIFIED).collect(Collectors.toList());
         int posts = postsList.size();
         int likes = 0;
         for (Post post : postsList) {

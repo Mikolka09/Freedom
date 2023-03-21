@@ -150,7 +150,7 @@ public class ApiMessageController {
     public void sendResponse(User userFrom, User userTo, String answer) {
         Alert alert = new Alert();
         Invite invite = new Invite();
-        String text = userTo.getFullName() + answer;
+        String text = (userTo.getFullName() == null ? ("User " + userTo.getUsername()) : userTo.getFullName()) + answer;
         createAlert(userFrom, userTo, alert, invite, text, inviteService, alertService);
     }
 
@@ -187,9 +187,9 @@ public class ApiMessageController {
     }
 
     @GetMapping("/user/messages/recovery/{id}")
-    private String recoveryMessage(@PathVariable(name="id") Long id) {
+    private String recoveryMessage(@PathVariable(name = "id") Long id) {
         Message message = messageService.findMessageById(id);
-        if(message!=null){
+        if (message != null) {
             message.setStatus(Status.ACTIVE);
             messageService.saveMessage(message);
             return "OK";
@@ -198,9 +198,9 @@ public class ApiMessageController {
     }
 
     @GetMapping("/user/messages/deleted/{id}")
-    private String deleteMessage(@PathVariable(name="id") Long id) {
+    private String deleteMessage(@PathVariable(name = "id") Long id) {
         Message message = messageService.findMessageById(id);
-        if(message!=null){
+        if (message != null) {
             messageService.deleteMessage(id);
             return "OK";
         }
@@ -208,10 +208,10 @@ public class ApiMessageController {
     }
 
     @GetMapping("/admin/messages/edit-message/{id}")
-    private String editMessage(@PathVariable(name="id") Long id,
+    private String editMessage(@PathVariable(name = "id") Long id,
                                @RequestParam(name = "text") String text) {
         Message message = messageService.findMessageById(id);
-        if(message!=null){
+        if (message != null) {
             if (!Objects.equals(text, "")) {
                 if (AdminController.checkStringCensorship(text)) {
                     User userFrom = message.getInvite().getUserFrom();

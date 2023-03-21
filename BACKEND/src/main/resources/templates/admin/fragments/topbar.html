@@ -56,7 +56,7 @@
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter" id = "alerts-size"
+                <span class="badge badge-danger badge-counter" id="alerts-size"
                       th:text="${alerts.size()==0?'':(alerts.size()>3?'3+':alerts.size())}">3+</span>
             </a>
             <!-- Dropdown - Alerts -->
@@ -67,7 +67,9 @@
                 </h6>
                 <th:block th:each="alert, state:${alerts}">
                     <a class="dropdown-item d-flex align-items-center" data-target="#AlertModal" data-toggle="modal"
-                       th:data-id="${alert.getId()}" th:data-name="${alert.getInvite().getUserFrom().getFullName()}"
+                       th:data-id="${alert.getId()}"
+                       th:data-name="${alert.getInvite().getUserFrom().getFullName()==null?('User '+ alert.getInvite().getUserFrom().getUsername()):
+                                        alert.getInvite().getUserFrom().getFullName()}"
                        th:data-text="${alert.getText()}" th:if="${state.index<3}" href="#"
                        th:data-show="${true}"
                        th:data-date="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
@@ -81,7 +83,8 @@
                         <div style="font-weight: normal">
                             <div class="small text-gray-500" th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(alert.getCreatedAt()),
                                 #dates.month(alert.getCreatedAt()), #dates.day(alert.getCreatedAt())), 'dd MMM yyyy',
-                                #locale.forLanguageTag('en'))}">December 12, 2019</div>
+                                #locale.forLanguageTag('en'))}">December 12, 2019
+                            </div>
                             <span th:style="${alert.getInvite().getStatus()==status[8]||alert.getInvite().getStatus()==status[7]}
                             ? 'font-weight: normal':'font-weight: bold'"
                                   id="text-alert" th:text="${alert.getText()}">A new monthly report is ready to download!</span>
@@ -111,7 +114,7 @@
                     <a class="dropdown-item d-flex align-items-center" data-target="#MessageModal"
                        data-toggle="modal" href="#"
                        th:data-id="${message.getId()}"
-                       th:data-button = "toolbar"
+                       th:data-button="toolbar"
                        th:data-show="${true}"
                        th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                        th:data-id-to="${message.getInvite().getUserTo().getId()}"
@@ -121,7 +124,8 @@
                                 #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
                         <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"
+                            <img class="rounded-circle"
+                                 th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"
                                  alt="Avatar">
                             <div class="status-indicator bg-success"></div>
                         </div>
@@ -151,11 +155,13 @@
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">
-                <a class="dropdown-item" th:href="@{|/admin/users/view/${admin.getId()}|}" th:if="${role!='ROLE_EDITOR'}">
+                <a class="dropdown-item" th:href="@{|/admin/users/view/${admin.getId()}|}"
+                   th:if="${role!='ROLE_EDITOR'}">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     View Profile
                 </a>
-                <a class="dropdown-item" th:href="@{|/admin/users/edit/${admin.getId()}|}" th:if="${role!='ROLE_EDITOR'}">
+                <a class="dropdown-item" th:href="@{|/admin/users/edit/${admin.getId()}|}"
+                   th:if="${role!='ROLE_EDITOR'}">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Edit Profile
                 </a>
