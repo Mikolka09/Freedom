@@ -11,7 +11,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Collection;
+import java.util.Date;
 
 @Component
 public class AuthProvider implements AuthenticationProvider {
@@ -32,7 +36,7 @@ public class AuthProvider implements AuthenticationProvider {
             if (!passwordEncoder.matches(password, user.getPassword())) {
                 throw new BadCredentialsException("Wrong password!");
             }
-
+            checkOnOffenses(user);
             Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
             return new UsernamePasswordAuthenticationToken(user, password, authorities);
         } else {
@@ -42,5 +46,23 @@ public class AuthProvider implements AuthenticationProvider {
 
     public boolean supports(Class<?> arg) {
         return true;
+    }
+
+    public void checkOnOffenses(User user) {
+        if (user.getOffenses() >= 1000) {
+            LocalDate dateNow = LocalDate.now();
+            if (user.getLockDate() == null) {
+                user.setLockDate(dateNow);
+                throw new BadCredentialsException("Your account is temporarily blocked!");
+            } else {
+                Period period = Period.between(dateNow, user.getLockDate());
+                if (period.getDays() < 2) {
+                    throw new BadCredentialsException("Your account is temporarily blocked!");
+                } else {
+                    user.setOffenses(0);
+                    user.setLockDate(null);
+                }
+            }
+        }
     }
 }

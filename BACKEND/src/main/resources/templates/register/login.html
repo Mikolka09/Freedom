@@ -121,6 +121,10 @@
 <!-- JS -->
 <script src="/register/js/main.js"></script>
 
+<script th:inline="javascript">
+    let data = [[${param.error}]];
+</script>
+
 <script>
     $('#send-email').on('click', function () {
         let email = $('#email-input').val();
@@ -141,6 +145,21 @@
             }
         })
     })
+
+    window.onerror = (message, url, lineNumber) => {
+        // определяем, знаем ли мы, как обрабатывать ошибку
+        if (errorCanBeHandled) {
+            // показываем сообщение об ошибке пользователю
+            displayErrorMessage(message);
+            // возвращаем true и запускаем дефолтную
+            // реакцию приложения на фатальные ошибки
+            return true;
+        } else {
+            // запускаем дефолтную обработку ошибок браузером
+            return false;
+        }
+    }
+
 
     function alertInfo(text) {
         Swal.fire({

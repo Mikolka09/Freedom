@@ -11,10 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 @Getter
 @Setter
@@ -76,6 +74,9 @@ public class User extends BaseEntity implements UserDetails {
     private Status status;
 
     private int offenses;
+    @Column(name = "lockDate")
+    private LocalDate lockDate;
+
     private int rating;
 
     private String fullName;
