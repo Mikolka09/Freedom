@@ -3,8 +3,6 @@ package itstep.social_freedom.controller.api;
 import itstep.social_freedom.entity.EmailContext;
 import itstep.social_freedom.entity.User;
 import itstep.social_freedom.service.EmailService;
-import itstep.social_freedom.service.InviteService;
-import itstep.social_freedom.service.MessageService;
 import itstep.social_freedom.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,17 +36,20 @@ public class ApiEmailController {
         HashMap<String, Object> base = new HashMap<>();
         base.put("password", newPassword);
         if (user != null) {
-            try {
-                user.setPassword(newPassword);
-                user.setPasswordConfirm(newPassword);
-                if (userService.saveNewPassword(user)) {
-                    emailService.sendSimpleEmail(createEmailSend(email, subject, base, path));
+            if (user.isEmailConfirmed()) {
+                try {
+                    user.setPassword(newPassword);
+                    user.setPasswordConfirm(newPassword);
+                    if (userService.saveNewPassword(user)) {
+                        emailService.sendSimpleEmail(createEmailSend(email, subject, base, path));
+                    }
+                } catch (MailException | MessagingException mailException) {
+                    LOG.error("Error while sending out email..{}", (Object) mailException.getStackTrace());
+                    return "NOT";
                 }
-            } catch (MailException | MessagingException mailException) {
-                LOG.error("Error while sending out email..{}", (Object) mailException.getStackTrace());
+                return "OK";
+            } else
                 return "NOT";
-            }
-            return "OK";
         } else
             return "NOT";
     }
@@ -87,7 +88,7 @@ public class ApiEmailController {
         if (!Objects.equals(name, "") || !Objects.equals(email, "") ||
                 !Objects.equals(subject, "") || !Objects.equals(message, "")) {
             String header = "NEW MESSAGE FROM CONTACT PAGE";
-            String emailTo = "mikolka09@gmail.com";//
+            String emailTo = "info.freedom2023@gmail.com";
             HashMap<String, Object> base = new HashMap<>();
             base.put("fullName", name);
             base.put("email", email);
@@ -101,7 +102,7 @@ public class ApiEmailController {
     }
 
     public static EmailContext createEmailSend(String email, String subject, HashMap<String, Object> base, String path) {
-        String fromAddress = "admin_freedom@gmail.com";
+        String fromAddress = "info.freedom2023@gmail.com";
         EmailContext context = new EmailContext();
         context.setTo(email);
         context.setFrom(fromAddress);

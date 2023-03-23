@@ -279,7 +279,7 @@ public class AdminController {
                        @RequestParam(value = "city") String city,
                        @RequestParam(value = "age") String age,
                        @RequestParam(value = "email") String email,
-                       @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id) {
+                       @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id) throws IOException {
         CreateModelUser(model, userService, alertService, messageService);
         String path = "/admin/users/edit/" + user_id;
         User user = userService.findUserById(user_id);
@@ -312,7 +312,7 @@ public class AdminController {
                            @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id,
                            @RequestParam(value = "passwordConfirm") String passwordConfirm,
                            @RequestParam(value = "password") String password,
-                           @RequestParam(value = "status") String status) {
+                           @RequestParam(value = "status") String status) throws IOException {
         CreateModelUser(model, userService, alertService, messageService);
         String path = "/admin/users/recovery/" + user_id;
         User user = userService.findUserById(user_id);
@@ -346,7 +346,10 @@ public class AdminController {
     }
 
     //Add new Role
-    private boolean addRoles(RedirectAttributes redirectAttributes, @RequestParam("avatar") MultipartFile file, @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id, User user, boolean edit) {
+    private boolean addRoles(RedirectAttributes redirectAttributes,
+                             @RequestParam("avatar") MultipartFile file,
+                             @RequestParam(value = "role_id", required = false, defaultValue = "") Long[] role_id,
+                             User user, boolean edit) throws IOException {
         if (role_id != null) {
             if (role_id.length != 0) {
                 Set<Role> rolesSet = new HashSet<>();
@@ -465,7 +468,7 @@ public class AdminController {
                         @RequestParam(value = "shortDesc") String shortDesc,
                         @RequestParam(value = "category_id") Long category_id,
                         @RequestParam(value = "description") String description,
-                        @RequestParam(value = "tag_id") Long[] tag_id) {
+                        @RequestParam(value = "tag_id") Long[] tag_id) throws IOException {
         Post post = new Post();
         post.setStatus(Status.NOT_VERIFIED);
         post.setLikes(0);
@@ -531,7 +534,7 @@ public class AdminController {
                             @RequestParam(value = "shortDesc") String shortDesc,
                             @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
                             @RequestParam(value = "description") String description,
-                            @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
+                            @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) throws IOException {
         Post post = postService.findPostById(post_id);
         CreateModelUser(model, userService, alertService, messageService);
         if (setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post, null))
@@ -551,7 +554,7 @@ public class AdminController {
                               @RequestParam(value = "description") String description,
                               @RequestParam(value = "offenses", required = false) String offenses,
                               @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id,
-                              @RequestParam(value = "status") String status) {
+                              @RequestParam(value = "status") String status) throws IOException {
         CreateModelUser(model, userService, alertService, messageService);
         Post post = postService.findPostById(post_id);
         String path = "/admin/post/verify/" + post_id;
@@ -637,7 +640,7 @@ public class AdminController {
 
     //Saving a new post
     public boolean setPost(Long user_id, MultipartFile file, String title, String shortDesc, Long category_id,
-                           String description, Long[] tag_id, Post post, String offenses) {
+                           String description, Long[] tag_id, Post post, String offenses) throws IOException {
         PostController.addPost(user_id, file, title, shortDesc, category_id, description, tag_id, post,
                 userService, categoryService, tagService, fileService, offenses);
         return postService.savePost(post);
@@ -682,7 +685,7 @@ public class AdminController {
 
     //Saving a file
     static boolean addFile(RedirectAttributes redirectAttributes, @RequestParam("avatar") MultipartFile file,
-                           User user, FileService fileService, UserService userService, boolean edit) {
+                           User user, FileService fileService, UserService userService, boolean edit) throws IOException {
         if (file != null) {
             if (!file.isEmpty())
                 user.setAvatarUrl(fileService.uploadFile(file, "avatar/"));

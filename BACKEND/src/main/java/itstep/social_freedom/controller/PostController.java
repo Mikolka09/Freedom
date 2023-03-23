@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,7 +96,7 @@ public class PostController {
                         @RequestParam(value = "shortDesc") String shortDesc,
                         @RequestParam(value = "category_id") Long category_id,
                         @RequestParam(value = "description") String description,
-                        @RequestParam(value = "tag_id") Long[] tag_id) {
+                        @RequestParam(value = "tag_id") Long[] tag_id) throws IOException {
         Post post = new Post();
         post.setStatus(Status.NOT_VERIFIED);
         post.setLikes(0);
@@ -118,7 +119,7 @@ public class PostController {
                             @RequestParam(value = "shortDesc") String shortDesc,
                             @RequestParam(value = "category_id", required = false, defaultValue = "0") Long category_id,
                             @RequestParam(value = "description") String description,
-                            @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) {
+                            @RequestParam(value = "tag_id", required = false, defaultValue = "") Long[] tag_id) throws IOException {
         Post post = postService.findPostById(post_id);
         post.setStatus(Status.NOT_VERIFIED);
         CreateModelUser(model);
@@ -126,7 +127,7 @@ public class PostController {
     }
 
     public String setPost(Long user_id, MultipartFile file, String title, String shortDesc, Long category_id,
-                          String description, Long[] tag_id, Post post) {
+                          String description, Long[] tag_id, Post post) throws IOException {
         addPost(user_id, file, title, shortDesc, category_id,
                 description, tag_id, post, userService, categoryService, tagService, fileService, null);
         if (!postService.savePost(post))
@@ -137,7 +138,7 @@ public class PostController {
     static void addPost(Long user_id, MultipartFile file, String title, String shortDesc,
                         Long category_id, String description, Long[] tag_id, Post post,
                         UserService userService, CategoryService categoryService, TagService tagService,
-                        FileService fileService, String offenses) {
+                        FileService fileService, String offenses) throws IOException {
         User user = userService.findUserById(user_id);
         post.setUser(user);
         if (offenses != null) {

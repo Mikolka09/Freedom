@@ -173,6 +173,8 @@ public class UserService implements UserDetailsService {
             return saveNewUser(user);
         } else if (Objects.equals(userFromDB.getId(), user.getId())) {
             userFromDB.setEmail(user.getEmail());
+            userFromDB.setLockDate(user.getLockDate());
+            userFromDB.setOffenses(user.getOffenses());
             if (user.getAvatarUrl() != null)
                 userFromDB.setAvatarUrl(user.getAvatarUrl());
             userRepository.save(userFromDB);

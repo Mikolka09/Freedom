@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,7 +63,7 @@ public class CategoryController {
     public String editStore(@RequestParam(value = "id") Long id,
                             @RequestParam(value = "file") MultipartFile file,
                             @RequestParam(value = "name") String name,
-                            @RequestParam(value = "short") String shortDesc) {
+                            @RequestParam(value = "short") String shortDesc) throws IOException {
         Category category = categoryService.findCategoryById(id);
         if (!Objects.equals(name, "")) category.setName(name);
         if (!Objects.equals(shortDesc, ""))
@@ -90,7 +91,7 @@ public class CategoryController {
     @PostMapping("/admin/categories/create")
     public String createStore(@RequestParam(value = "name") String name,
                               @RequestParam(value = "short") String shortDesc,
-                              @RequestParam(value = "file") MultipartFile file) {
+                              @RequestParam(value = "file") MultipartFile file) throws IOException {
         Category category = new Category();
         if (!Objects.equals(name, "")) category.setName(name);
         if (!Objects.equals(shortDesc, ""))

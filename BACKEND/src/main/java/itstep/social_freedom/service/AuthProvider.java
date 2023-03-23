@@ -1,5 +1,6 @@
 package itstep.social_freedom.service;
 
+import itstep.social_freedom.controller.UserController;
 import itstep.social_freedom.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,12 +17,20 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
 @Component
 public class AuthProvider implements AuthenticationProvider {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private InviteService inviteService;
+
+    @Autowired
+    private MessageService messageService;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -53,14 +62,21 @@ public class AuthProvider implements AuthenticationProvider {
             LocalDate dateNow = LocalDate.now();
             if (user.getLockDate() == null) {
                 user.setLockDate(dateNow);
+                userService.saveEdit(user);
                 throw new BadCredentialsException("Your account is temporarily blocked!");
             } else {
-                Period period = Period.between(dateNow, user.getLockDate());
+                Period period = Period.between(user.getLockDate(), dateNow);
                 if (period.getDays() < 2) {
                     throw new BadCredentialsException("Your account is temporarily blocked!");
                 } else {
                     user.setOffenses(0);
                     user.setLockDate(null);
+                    userService.saveEdit(user);
+                    String text = "Your account has been banned for a couple of days. Please be more careful in the " +
+                            "future and do not violate the rules of censorship! Sincerely, Administration.";
+                    User userFrom = userService.allUsers().stream()
+                            .filter(x-> Objects.equals(x.getUsername(), "ADMIN")).findFirst().orElse(new User());
+                    UserController.createSendMessage(userFrom, user, text, userService, inviteService, messageService);
                 }
             }
         }

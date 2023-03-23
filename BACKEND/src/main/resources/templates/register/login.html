@@ -36,14 +36,12 @@
                 </div>
 
                 <div class="signin-form">
-                    <h2>Sign up</h2>
-                    <a href="/" class="logo d-flex align-items-center">
+                    <h2>Sign Up <a href="/" class="logo d-flex align-items-center">
                         <img src="/img/logo_freedom.png" width="200px">
-                    </a>
-                    <br>
-                    <span style="color: red;" th:if="${param.error}">Data entered incorrectly!</span>
-                    <br>
-                    <form method="POST" class="register-form" id="login-form" action="/login">
+                    </a></h2>
+                    <div style="color: red; margin-bottom: 5px; margin-top: 5px;" th:if="${param.error}">
+                        The data is entered incorrectly or your account is temporarily blocked!</div>
+                    <form style="margin-top: 10px;" method="POST" class="register-form" id="login-form" action="/login">
                         <div class="form-group">
                             <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>
                             <input type="text" name="username" id="username" placeholder="Your Name"/>
@@ -121,10 +119,6 @@
 <!-- JS -->
 <script src="/register/js/main.js"></script>
 
-<script th:inline="javascript">
-    let data = [[${param.error}]];
-</script>
-
 <script>
     $('#send-email').on('click', function () {
         let email = $('#email-input').val();
@@ -135,7 +129,7 @@
                 if (data === "OK")
                     alertInfo("A new password has been sent to your email!");
                 else
-                    alertInfo("There is no user with this email - " + email + "!");
+                    alertInfo("There is no user with this email address or the email was not verified!");
                 setTimeout(function () {
                     location.reload(true);
                 }, 1500);
@@ -144,21 +138,7 @@
                 console.log(err);
             }
         })
-    })
-
-    window.onerror = (message, url, lineNumber) => {
-        // определяем, знаем ли мы, как обрабатывать ошибку
-        if (errorCanBeHandled) {
-            // показываем сообщение об ошибке пользователю
-            displayErrorMessage(message);
-            // возвращаем true и запускаем дефолтную
-            // реакцию приложения на фатальные ошибки
-            return true;
-        } else {
-            // запускаем дефолтную обработку ошибок браузером
-            return false;
-        }
-    }
+    });
 
 
     function alertInfo(text) {

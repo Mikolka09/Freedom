@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Objects;
 
@@ -74,7 +75,7 @@ public class UserController {
                        @RequestParam(value = "city") String city,
                        @RequestParam(value = "age") String age,
                        @RequestParam(value = "email", required = false, defaultValue = " ") String email,
-                       @RequestParam(value = "passOld") String oldPass) {
+                       @RequestParam(value = "passOld") String oldPass) throws IOException {
         CreateModelUser(model);
         String path = "/user/data/edit-data/" + id;
         User user = userService.findUserById(id);
@@ -198,8 +199,10 @@ public class UserController {
                     redirectAttributes.addFlashAttribute("error", "User with this email address already exists!");
                     return true;
                 }
-            } else
+            } else {
                 user.setEmail(email);
+                user.setEmailConfirmed(false);
+            }
         }
 
         if (userService.findUserByUsername(user, username))
