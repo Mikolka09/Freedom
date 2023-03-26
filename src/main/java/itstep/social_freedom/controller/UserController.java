@@ -238,6 +238,7 @@ public class UserController {
         return false;
     }
 
+    //Create Send Message
     public static void createSendMessage(User userFrom, User userTo, String text, UserService userService,
                                          InviteService inviteService, MessageService messageService) {
         Message message = new Message();
