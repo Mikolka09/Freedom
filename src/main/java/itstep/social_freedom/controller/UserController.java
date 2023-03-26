@@ -181,6 +181,7 @@ public class UserController {
         return "pages/fragments/email/confirm-true";
     }
 
+    //Set Data User
     static boolean setDataUser(RedirectAttributes redirectAttributes,
                                @RequestParam("username") String username,
                                @RequestParam("fullName") String fullName,
