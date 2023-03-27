@@ -13,37 +13,45 @@
 <main id="main">
 
     <!-- ======= Hero Slider Section ======= -->
-    <th:block th:insert="/pages/fragments/main/slider.html::slider"></th:block>
+    <th:block th:if="${likesPosts.size()!=0}" th:insert="/pages/fragments/main/slider.html::slider"></th:block>
 
     <!-- ======= Post Grid Section ======= -->
-    <th:block th:insert="/pages/fragments/main/post-grid.html::post-grid"></th:block>
+    <th:block th:if="${posts.size()>0}" th:insert="/pages/fragments/main/post-grid.html::post-grid"></th:block>
 
     <!-- ======= Business Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/business-category.html::business-category"></th:block>
+    <th:block th:if="${busPosts.size()>3}"
+              th:insert="/pages/fragments/main/business-category.html::business-category"></th:block>
 
     <!-- ======= Celebrity Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/celebrity-category.html::celebrity-category"></th:block>
+    <th:block th:if="${celPosts.size()>3}"
+              th:insert="/pages/fragments/main/celebrity-category.html::celebrity-category"></th:block>
 
     <!-- ======= Culture Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/culture-category.html::culture-category"></th:block>
+    <th:block th:if="${culPosts.size()>3}"
+              th:insert="/pages/fragments/main/culture-category.html::culture-category"></th:block>
 
     <!-- ======= Food Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/food-category.html::food-category"></th:block>
+    <th:block th:if="${foodPosts.size()>3}" th:insert="/pages/fragments/main/food-category.html::food-category"></th:block>
 
     <!-- ======= Lifestyle Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/lifestyle-category.html::lifestyle-category"></th:block>
+    <th:block th:if="${lifePosts.size()>3}"
+              th:insert="/pages/fragments/main/lifestyle-category.html::lifestyle-category"></th:block>
 
     <!-- ======= Politics Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/politics-category.html::politics-category"></th:block>
+    <th:block th:if="${polPosts.size()>3}"
+              th:insert="/pages/fragments/main/politics-category.html::politics-category"></th:block>
 
     <!-- ======= Sport Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/sport-category.html::sport-category"></th:block>
+    <th:block th:if="${sportPosts.size()>3}"
+              th:insert="/pages/fragments/main/sport-category.html::sport-category"></th:block>
 
     <!-- ======= Startups Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/startups-category.html::startups-category"></th:block>
+    <th:block th:if="${starPosts.size()>3}"
+              th:insert="/pages/fragments/main/startups-category.html::startups-category"></th:block>
 
     <!-- ======= Travel Category Section ======= -->
-    <th:block th:insert="/pages/fragments/main/travel-category.html::travel-category"></th:block>
+    <th:block th:if="${travelPosts.size()>3}"
+              th:insert="/pages/fragments/main/travel-category.html::travel-category"></th:block>
 
 
 </main><!-- End #main -->

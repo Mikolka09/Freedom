@@ -39,7 +39,7 @@ public class AuthProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
 
-        User user = (User) userService.loadUserByUsername(username);
+        User user = (User) userService.loadUserByUsername(username.toUpperCase());
 
         if (user != null && (user.getUsername().equalsIgnoreCase(username) || user.getFullName().equalsIgnoreCase(username))) {
             if (!passwordEncoder.matches(password, user.getPassword())) {
