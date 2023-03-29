@@ -67,9 +67,13 @@ public class AdminController {
         List<Message> messages = messageService.findAllMessagesUserById(userService.getCurrentUsername().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.NOT_VIEWED)
                 .collect(Collectors.toList());
-        List<Message> messageList = messageService.allUserMessages(userService.getCurrentUsername().getId())
-                .getInMessages().entrySet().iterator().next().getValue();
-        HashMap<Long, List<Message>> list = messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages();
+        if (messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages().size() != 0) {
+            List<Message> messageList = messageService.allUserMessages(userService.getCurrentUsername().getId())
+                    .getInMessages().entrySet().iterator().next().getValue();
+            HashMap<Long, List<Message>> list = messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages();
+            model.addAttribute("messageList", messageList);
+            model.addAttribute("list", list);
+        }
         String role = "";
         for (Role r : user.getRoles()) {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
@@ -77,8 +81,6 @@ public class AdminController {
         }
         userService.saveRatingUser();
         model.addAttribute("counter", MessageController.counterMessages(messages));
-        model.addAttribute("messageList", messageList);
-        model.addAttribute("list", list);
         model.addAttribute("messages", messages);
         model.addAttribute("alerts", alertList);
         model.addAttribute("status", Status.values());
@@ -605,8 +607,8 @@ public class AdminController {
     //Comment recovery
     @PostMapping("/admin/comments/comment-recovery")
     public String recoveryComment(@RequestParam(value = "id") Long id,
-                                   @RequestParam(value = "body") String body,
-                                   @RequestParam(value = "status") String status) {
+                                  @RequestParam(value = "body") String body,
+                                  @RequestParam(value = "status") String status) {
         Comment comment = commentService.findCommentById(id);
         if (Objects.equals(status, "DELETED") || Objects.equals(status, "ACTIVE"))
             comment.setStatus(Status.valueOf(status));
@@ -672,12 +674,12 @@ public class AdminController {
     }
 
     //Send new password user
-    public void sendNewPassword(String pass, String email, String subject){
+    public void sendNewPassword(String pass, String email, String subject) {
         String path = "/pages/fragments/email/new-password.html";
         HashMap<String, Object> base = new HashMap<>();
         base.put("password", pass);
         try {
-            emailService.sendSimpleEmail(ApiEmailController.createEmailSend(email,subject, base, path));
+            emailService.sendSimpleEmail(ApiEmailController.createEmailSend(email, subject, base, path));
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

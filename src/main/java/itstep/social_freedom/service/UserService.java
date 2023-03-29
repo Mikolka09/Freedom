@@ -28,6 +28,7 @@ public class UserService implements UserDetailsService {
     private EntityManager em;
     @Autowired
     UserRepository userRepository;
+
     @Autowired
     RoleRepository roleRepository;
     @Autowired
@@ -67,8 +68,11 @@ public class UserService implements UserDetailsService {
     public void saveRatingUser() {
         List<User> users = allUsers();
         for (User user : users) {
-            user.setRating(countRating(user));
-            userRepository.save(user);
+            int count = countRating(user);
+            if(count!=0) {
+                user.setRating(count);
+                saveEdit(user);
+            }
         }
     }
 
@@ -92,7 +96,7 @@ public class UserService implements UserDetailsService {
 
     public boolean findUserByUsername(User user, String username) {
         User userBD = userRepository.findByUsername(username);
-        if(userBD!=null){
+        if (userBD != null) {
             return Objects.equals(userBD.getId(), user.getId());
         }
         return false;
@@ -115,10 +119,14 @@ public class UserService implements UserDetailsService {
         }
         user.setUsername(user.getUsername().toUpperCase());
         user.setAvatarUrl("avatar/user.png");
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        if (user.getRoles()==null) {
+            Role role = roleRepository.findByName("ROLE_USER");
+            user.setRoles(Collections.singleton(role));
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(Status.ACTIVE);
-        user.setEmailConfirmed(false);
+        if (!user.isEmailConfirmed())
+            user.setEmailConfirmed(false);
         userRepository.save(user);
         return true;
     }

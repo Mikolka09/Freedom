@@ -20,4 +20,15 @@ public class RoleService {
     public Role findRoleById(Long id){
         return roleRepository.findById(id).orElse(new Role());
     }
+
+    public Role findRoleByName(String name){
+        return roleRepository.findByName(name);
+    }
+
+    public void save(Role role){
+        Role roleDB = roleRepository.findByName(role.getName());
+        if(roleDB==null){
+            roleRepository.save(role);
+        }
+    }
 }

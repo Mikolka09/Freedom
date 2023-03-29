@@ -1,10 +1,7 @@
 package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.*;
-import itstep.social_freedom.service.CategoryService;
-import itstep.social_freedom.service.PostService;
-import itstep.social_freedom.service.TagService;
-import itstep.social_freedom.service.UserService;
+import itstep.social_freedom.service.*;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +24,9 @@ public class PageController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private TagService tagService;
@@ -98,6 +98,10 @@ public class PageController {
         model.addAttribute("sportPosts", sportPosts);
         model.addAttribute("starPosts", starPosts);
         model.addAttribute("travelPosts", travelPosts);
+        if(roleService.allRoles().size()==0){
+            createRoles();
+            createAdmin();
+        }
         CreateModel(model);
         return "pages/index";
     }
@@ -240,6 +244,26 @@ public class PageController {
                     return true;
         }
         return false;
+    }
+
+    private void createRoles(){
+        String[]roles = {"ROLE_USER", "ROLE_ADMIN", "ROLE_EDITOR"};
+        for (String r:roles){
+            Role role = new Role();
+            role.setName(r);
+            roleService.save(role);
+        }
+    }
+
+    private void createAdmin(){
+        User user = new User();
+        user.setUsername("ADMIN");
+        Role role = roleService.findRoleByName("ROLE_ADMIN");
+        user.setRoles(Collections.singleton(role));
+        user.setPassword("Admin123");
+        user.setEmail("info.freedom2023@gmail.com");
+        user.setEmailConfirmed(true);
+        userService.saveUser(user);
     }
 
 }
