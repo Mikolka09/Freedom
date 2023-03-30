@@ -118,7 +118,7 @@ public class UserService implements UserDetailsService {
             return false;
         }
         user.setUsername(user.getUsername().toUpperCase());
-        user.setAvatarUrl("avatar/user.png");
+        user.setAvatarUrl("");
         if (user.getRoles()==null) {
             Role role = roleRepository.findByName("ROLE_USER");
             user.setRoles(Collections.singleton(role));
