@@ -205,13 +205,14 @@ public class UserController {
                 user.setEmailConfirmed(false);
             }
         }
-
-        if (userService.findUserByUsername(user, username))
-            user.setUsername(username);
-        else {
-            redirectAttributes.getFlashAttributes().clear();
-            redirectAttributes.addFlashAttribute("error", "User with the same username already exists!");
-            return true;
+        if(!Objects.equals(user.getUsername(), username)) {
+            if (!userService.findUserByUsername(user, username))
+                user.setUsername(username);
+            else {
+                redirectAttributes.getFlashAttributes().clear();
+                redirectAttributes.addFlashAttribute("error", "User with the same username already exists!");
+                return true;
+            }
         }
         if (fullName != null && !fullName.equals("")) {
             user.setFullName(fullName);
@@ -278,8 +279,8 @@ public class UserController {
                         session.setAttribute("reminderEmail", true);
                         session.setMaxInactiveInterval(-1);
                         createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
+                    }else
                         break;
-                    }
                 }
             }
         else if (userService.checkPassword(userTo.getId(), "Freedom_new23")) {
