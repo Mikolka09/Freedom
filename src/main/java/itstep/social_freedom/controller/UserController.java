@@ -45,7 +45,7 @@ public class UserController {
     @GetMapping("/user")
     public String index(Model model, HttpServletRequest request) {
         User userFrom = userService.allUsers().stream()
-                .filter(x-> Objects.equals(x.getUsername(), "ADMIN")).findFirst().orElse(new User());
+                .filter(x -> Objects.equals(x.getUsername(), "ADMIN")).findFirst().orElse(new User());
         User userTo = userService.getCurrentUsername();
         HttpSession session = request.getSession();
         reminderMessage(userFrom, userTo, session);
@@ -168,12 +168,12 @@ public class UserController {
     @GetMapping(value = "/email/confirm-message/{id}/{token}")
     public String confirmEmail(@PathVariable(value = "id") Long id, @PathVariable(value = "token") String token) {
         User user = userService.findUserById(id);
-        if(user!=null){
+        if (user != null) {
             String tokenUser = user.getToken();
-            if(Objects.equals(tokenUser, token)){
+            if (Objects.equals(tokenUser, token)) {
                 user.setEmailConfirmed(true);
                 User userFrom = userService.allUsers().stream()
-                        .filter(x-> Objects.equals(x.getUsername(), "ADMIN")).findFirst().orElse(new User());
+                        .filter(x -> Objects.equals(x.getUsername(), "ADMIN")).findFirst().orElse(new User());
                 String text = "Your email has been verified. Thank you very much!";
                 createSendMessage(userFrom, user, text, userService, inviteService, messageService);
             }
@@ -262,44 +262,45 @@ public class UserController {
     }
 
     //Reminder Message
-    public void reminderMessage(User userFrom, User userTo, HttpSession session){
+    public void reminderMessage(User userFrom, User userTo, HttpSession session) {
         String text = "Please confirm your email address in your profile in order to be able to recover your account " +
                 "or receive a changed password." +
                 "Go to \"View Profile\" and click the activation button next to the email address";
         if (!userTo.isEmailConfirmed())
-            if(session.isNew()) {
+            if (session.isNew()) {
                 session.setAttribute("reminderEmail", true);
                 session.setMaxInactiveInterval(-1);
                 createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
-            }else{
+            } else {
                 Enumeration<String> keys = session.getAttributeNames();
-                while(keys.hasMoreElements()){
-                    if(!Objects.equals(keys.nextElement(), "reminderEmail")){
+                while (keys.hasMoreElements()) {
+                    if (!Objects.equals(keys.nextElement(), "reminderEmail")) {
                         session.setAttribute("reminderEmail", true);
                         session.setMaxInactiveInterval(-1);
                         createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
-                    }else
                         break;
+                    }
                 }
             }
         else if (userService.checkPassword(userTo.getId(), "Freedom_new23")) {
-            text =String.format("Now you can also enter the site through Login: \"%s\" and Password: \"Freedom_new23\". " +
+            text = String.format("Now you can also enter the site through Login: \"%s\" and Password: \"Freedom_new23\". " +
                     "We kindly request you to change your Login and Password during the day. " +
                     "This reminder will come until you change your details. " +
                     "Sincerely, site administration.", userTo.getUsername());
-            if(session.isNew()){
+            if (session.isNew()) {
                 session.setAttribute("reminderPass", true);
                 session.setMaxInactiveInterval(-1);
                 createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
-            }else{
+            } else {
                 Enumeration<String> keys = session.getAttributeNames();
-                while(keys.hasMoreElements()){
-                    if(!Objects.equals(keys.nextElement(), "reminderPass")){
+
+                while (keys.hasMoreElements()) {
+                    if (!Objects.equals(keys.nextElement(), "reminderPass")) {
                         session.setAttribute("reminderPass", true);
                         session.setMaxInactiveInterval(-1);
                         createSendMessage(userFrom, userTo, text, userService, inviteService, messageService);
-                    }else
                         break;
+                    }
                 }
             }
         }

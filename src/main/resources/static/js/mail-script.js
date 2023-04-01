@@ -57,7 +57,7 @@ function printAllSenders(map, user, show) {
                 a1.dataset.idTo = data[i].invite.userTo.id;
                 let img1 = document.createElement('img');
                 img1.className = "rounded-circle px-2";
-                img1.src = "/" + data[i].invite.userFrom.avatarUrl;
+                img1.src = data[i].invite.userFrom.avatarUrl;
                 img1.alt = "avatar";
                 img1.width = 80;
                 a1.appendChild(img1);

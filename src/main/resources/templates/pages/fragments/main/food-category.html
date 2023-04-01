@@ -16,7 +16,7 @@
                 <div class="d-lg-flex post-entry-2">
                     <a th:href="@{|/view-post/${foodPosts.get(0).getId()}|}"
                        class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
-                        <img th:src="@{|/${foodPosts.get(0).getImgUrl()}|}" alt="" class="img-fluid">
+                        <img th:src="@{|${foodPosts.get(0).getImgUrl()}|}" alt="" class="img-fluid">
                     </a>
                     <div>
                         <div class="post-meta"><span class="date" th:text="${foodPosts.get(0).getCategory().getName()}">Business</span> <span class="mx-1">&bullet;</span>
@@ -32,7 +32,7 @@
                             exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas, nobis error
                             deserunt aliquam temporibus sapiente, laudantium dolorum itaque libero eos deleniti?</p>
                         <div class="d-flex align-items-center author">
-                            <div class="photo"><img th:src="@{|/${foodPosts.get(0).getUser().getAvatarUrl()}|}" alt=""
+                            <div class="photo"><img th:src="@{|${foodPosts.get(0).getUser().getAvatarUrl()}|}" alt=""
                                                     class="img-fluid"></div>
                             <div class="name">
                                 <h3 class="m-0 p-0" th:text="${foodPosts.get(0).getUser().getFullName()}">Wade
@@ -46,7 +46,7 @@
                     <div class="col-lg-4">
                         <div class="post-entry-1 border-bottom">
                             <a th:href="@{|/view-post/${foodPosts.get(1).getId()}|}"><img
-                                    th:src="@{|/${foodPosts.get(1).getImgUrl()}|}" alt=""
+                                    th:src="@{|${foodPosts.get(1).getImgUrl()}|}" alt=""
                                     class="img-fluid"></a>
                             <div class="post-meta"><span class="date" th:text="${foodPosts.get(1).getCategory().getName()}">Business</span> <span
                                     class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
@@ -79,7 +79,7 @@
                     <div class="col-lg-8">
                         <div class="post-entry-1">
                             <a th:href="@{|/view-post/${foodPosts.get(3).getId()}|}"><img
-                                    th:src="@{|/${foodPosts.get(3).getImgUrl()}|}" alt=""
+                                    th:src="@{|${foodPosts.get(3).getImgUrl()}|}" alt=""
                                     class="img-fluid"></a>
                             <div class="post-meta"><span class="date" th:text="${foodPosts.get(3).getCategory().getName()}">Business</span> <span
                                     class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).

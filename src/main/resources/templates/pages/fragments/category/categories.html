@@ -16,7 +16,7 @@
             <th:block th:each="category:${categoriesAll}">
             <div class="col-lg-4 text-center mb-5">
                 <a th:href="@{|/category/${category.getId()}|}">
-                    <img th:src="@{|/${category.getImgUrl()}|}" alt="Business" class="img-fluid">
+                    <img th:src="@{|${category.getImgUrl()}|}" alt="Business" class="img-fluid">
                     <h4 th:text="${category.getName()}">Business</h4>
                     <p th:text="${category.getShortDescription()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, perspiciatis repellat maxime,
                         adipisci non ipsam at itaque rerum vitae</p>

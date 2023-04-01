@@ -28,7 +28,7 @@
                     <tbody id="body-table">
                     <tr th:each="message:${outMessages}">
                         <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
-                                 th:src="@{|/${message.getInvite().getUserTo().getAvatarUrl()}|}"></td>
+                                 th:src="@{|${message.getInvite().getUserTo().getAvatarUrl()}|}"></td>
                         <td th:text="${message.getInvite().getUserTo().getUsername()}"></td>
                         <td th:text="${message.getInvite().getUserTo().getFullName()==null? 'NULL':
                     message.getInvite().getUserTo().getFullName()}"></td>

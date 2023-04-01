@@ -36,9 +36,16 @@ public class MessageController {
         List<Alert> alerts = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
                 .stream().filter(x -> x.getInvite().getStatus() == Status.REQUEST || x.getInvite().getStatus() == Status.VIEWED)
                 .collect(Collectors.toList());
-        List<Message> messageList = messageService.allUserMessages(userService.getCurrentUsername().getId())
-                .getInMessages().entrySet().iterator().next().getValue();
-        HashMap<Long, List<Message>> list = messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages();
+        if (messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages().size() != 0) {
+            List<Message> messageList = messageService.allUserMessages(userService.getCurrentUsername().getId())
+                    .getInMessages().entrySet().iterator().next().getValue();
+            HashMap<Long, List<Message>> list = messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages();
+            model.addAttribute("messageList", messageList);
+            model.addAttribute("list", list);
+        }else{
+            model.addAttribute("messageList", new ArrayList<>());
+            model.addAttribute("list", new HashMap<>());
+        }
         String role = "";
         for (Role r : user.getRoles()) {
             if (Objects.equals(r.getName(), "ROLE_EDITOR"))
@@ -46,8 +53,6 @@ public class MessageController {
         }
         model.addAttribute("alerts", alerts);
         model.addAttribute("counter", counterMessages(messages));
-        model.addAttribute("messageList", messageList);
-        model.addAttribute("list", list);
         model.addAttribute("messages", messages);
         model.addAttribute("status", Status.values());
         model.addAttribute("role", role);

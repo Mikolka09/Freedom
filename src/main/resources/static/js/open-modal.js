@@ -143,7 +143,7 @@ function printMessages(data, show) {
             let img1 = document.createElement('img');
             img1.className = "rounded-circle";
             img1.alt = "Avatar";
-            img1.src = "/" + data[i].invite.userFrom.avatarUrl;
+            img1.src = data[i].invite.userFrom.avatarUrl;
             div1.appendChild(img1);
             a.appendChild(div1);
             let div2 = document.createElement('div');

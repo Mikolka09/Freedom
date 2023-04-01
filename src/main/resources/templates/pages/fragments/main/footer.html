@@ -44,7 +44,7 @@
                             <th:block th:each="post, state:${posts}">
                                 <li th:if="${state.index<4}">
                                     <a th:href="@{|/view-post/${post.getId()}|}" class="d-flex align-items-center">
-                                        <img th:src="@{|/${post.getImgUrl()}|}" alt="Img" class="img-fluid me-3">
+                                        <img th:src="@{|${post.getImgUrl()}|}" alt="Img" class="img-fluid me-3">
                                         <div>
                                             <div class="post-meta d-block"><span class="date"
                                                                                  th:text="${post.getCategory().getName()}">Culture</span>

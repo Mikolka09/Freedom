@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <div th:fragment="mail-list-group">
-    <h1 class="text-center" id="header-text">List Inbox Messages</h1>
     <div class="container-fluid">
         <div class="row">
             <div class="col-4 text-center text-dark">
@@ -30,7 +29,7 @@
                                        th:data-id-from="${message.getInvite().getUserFrom().getId()}"
                                        th:data-id-to="${message.getInvite().getUserTo().getId()}"
                                        class="open-all-messages">
-                                        <img th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"
+                                        <img th:src="@{|${message.getInvite().getUserFrom().getAvatarUrl()}|}"
                                              alt="avatar"
                                              width="80px"
                                              class="rounded-circle px-2"/>

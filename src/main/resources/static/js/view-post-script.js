@@ -26,7 +26,7 @@ $('#modalAbandonedCart').on('show.bs.modal', function (event) {
     let friend = button.data('friend');
     let idFrom = button.data('user');
     let rating = button.data('rating');
-    let avatar = "/" + button.data('avatar');
+    let avatar = button.data('avatar');
     let modal = $(this);
     modal.find('#userFrom').val(idFrom);
     modal.find('#userTo').val(idTo);
@@ -162,7 +162,7 @@ function printComments(data) {
             let img = document.createElement("img");
             img.className = "avatar-img img-fluid";
             img.alt = "avatar";
-            img.src = "/" + data[i].user.avatarUrl;
+            img.src = data[i].user.avatarUrl;
             div4.appendChild(img);
             div3.appendChild(div4);
             let div5 = document.createElement("div");

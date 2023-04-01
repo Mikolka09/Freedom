@@ -1,15 +1,16 @@
 package itstep.social_freedom.service;
 
-import com.amazonaws.HttpMethod;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.util.IOUtils;
+import com.amazonaws.services.s3.model.S3Object;
 import itstep.social_freedom.exceptions.storage.StorageException;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -34,10 +31,7 @@ import java.util.UUID;
 @Service
 public class FileService {
 
-    private AmazonS3 s3client;
-
-    @Value("${aws.s3.endpoint.url}")
-    private String endpointUrl;
+    private static AmazonS3 s3client;
 
     @Value("${aws.s3.region.name}")
     private String region;
@@ -58,7 +52,7 @@ public class FileService {
 
 
     public String uploadFile(MultipartFile file, String path) throws IOException {
-        InputStream stream;
+        BufferedImage image;
         String nameFile = "";
         String fileUrl = "";
         String pathNew = path.replace(String.valueOf('/'), "");
@@ -67,25 +61,23 @@ public class FileService {
             if (img.getWidth() > 400 && img.getHeight() > 400) {
                 int avatarWidth = 400;
                 int avatarHeight = 400;
-                BufferedImage image = resizeImage(img, avatarWidth, avatarHeight);
-                stream = asInputStream(image);
+                image = resizeImage(img, avatarWidth, avatarHeight);
             } else
-                stream = asInputStream(img);
+                image = img;
         } else {
             if (img.getWidth() > 800 && img.getHeight() > 600) {
                 int postWidth = 800;
                 int postHeight = 600;
-                BufferedImage image = resizeImage(img, postWidth, postHeight);
-                stream = asInputStream(image);
+                image = resizeImage(img, postWidth, postHeight);
             } else
-                stream = asInputStream(img);
+                image = img;
         }
 
         try {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.DATE, 1);
-            File fileOut = convertMultiPartToFile(stream, file);
+            File fileOut = convertMultiPartToFile(image, file);
             nameFile = nameUUID(StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename())));
             uploadFileTos3bucket(nameFile, fileOut);
         } catch (Exception e) {
@@ -98,12 +90,27 @@ public class FileService {
         return fileUrl;
     }
 
-    private File convertMultiPartToFile(InputStream stream, MultipartFile file) throws IOException {
+    private File convertMultiPartToFile(BufferedImage image, MultipartFile file) throws IOException {
+        String nameImage = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()))
+                .split("\\.")[1];
         File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(stream.available());
-        fos.close();
+        ImageIO.write(image, nameImage, convFile);
         return convFile;
+    }
+
+    public static InputStream downloadFile(String key){
+        String buck = "elasticbeanstalk-eu-west-3-668774714230";
+        try {
+            S3Object s3object = s3client.getObject(new GetObjectRequest(buck, key));
+
+            return s3object.getObjectContent();
+        } catch (AmazonServiceException serviceException) {
+            System.out.println("AmazonServiceException Message:    " + serviceException.getMessage());
+            throw serviceException;
+        } catch (AmazonClientException clientException) {
+            System.out.println("AmazonClientException Message: " + clientException.getMessage());
+            throw clientException;
+        }
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {
@@ -116,12 +123,6 @@ public class FileService {
         String newName = UUID.randomUUID().toString();
         name = newName + "." + arr[1];
         return name;
-    }
-
-    private InputStream asInputStream(BufferedImage buff) throws IOException {
-        ByteArrayOutputStream str = new ByteArrayOutputStream();
-        ImageIO.write(buff, "jpg", str);
-        return new ByteArrayInputStream(str.toByteArray());
     }
 
     private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {

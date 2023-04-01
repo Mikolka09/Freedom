@@ -10,8 +10,7 @@
                         <th:block th:each="post, state:${likesPosts}">
                             <div class="swiper-slide" th:if="${state.index<4}">
                                 <a th:href="@{|/view-post/${post.getId()}|}" class="img-bg d-flex align-items-end"
-                                   th:style="'background-image: url(' + '/'+${post.getImgUrl()} + ');'">
-                                    <!--style="background-image: url('/img/post-slide-1.jpg');"-->
+                                   th:style="'background-image: url(' +${post.getImgUrl()} + ');'">
                                     <div class="img-bg-inner">
                                         <h2 th:text="${post.getTitle()}">The Best Homemade Masks for Face (keep the
                                             Pimples Away)</h2>

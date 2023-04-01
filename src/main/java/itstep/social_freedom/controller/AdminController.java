@@ -13,8 +13,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -73,6 +75,9 @@ public class AdminController {
             HashMap<Long, List<Message>> list = messageService.allUserMessages(userService.getCurrentUsername().getId()).getInMessages();
             model.addAttribute("messageList", messageList);
             model.addAttribute("list", list);
+        } else {
+            model.addAttribute("messageList", new ArrayList<>());
+            model.addAttribute("list", new HashMap<>());
         }
         String role = "";
         for (Role r : user.getRoles()) {
@@ -91,10 +96,11 @@ public class AdminController {
     //Download database of obscene words
     private static List<String> baseWords() {
         List<String> base = new ArrayList<>();
-        String fileName = "/BACKEND/src/main/resources/static/admin/files/british-swear-words.txt";
-        String path = new File("").getAbsolutePath() + fileName;
-        try {
-            base = Files.readAllLines(Paths.get(path));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(FileService.downloadFile("british-swear-words.txt")))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                base.add(line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

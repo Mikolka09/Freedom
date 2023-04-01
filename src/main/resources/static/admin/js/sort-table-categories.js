@@ -74,7 +74,7 @@ function printTableCategory(data) {
             let tr = document.createElement('tr');
             let td1 = document.createElement('td');
             let img1 = document.createElement('img');
-            img1.src = "/" + data[i].imgUrl;
+            img1.src = data[i].imgUrl;
             img1.width = 100;
             img1.alt = "image";
             td1.appendChild(img1);

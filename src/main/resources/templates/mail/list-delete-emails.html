@@ -28,7 +28,7 @@
                     <tbody id="body-table">
                     <tr th:each="message:${deleteMessages}">
                         <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
-                                 th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"></td>
+                                 th:src="@{|${message.getInvite().getUserFrom().getAvatarUrl()}|}"></td>
                         <td th:text="${message.getInvite().getUserFrom().getUsername()}"></td>
                         <td th:text="${message.getInvite().getUserFrom().getFullName()==null? 'NULL':
                     message.getInvite().getUserFrom().getFullName()}"></td>

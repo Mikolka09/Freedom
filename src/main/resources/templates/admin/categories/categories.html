@@ -62,7 +62,7 @@
                             <tbody id="body-table">
                             <tr th:each="category:${categories}">
                                 <td><img width="100px"
-                                         th:src="@{|/${category.getImgUrl()}|}"></td>
+                                         th:src="@{|${category.getImgUrl()}|}"></td>
                                 <td th:text="${category.getName()}"></td>
                                 <td th:text="${category.getShortDescription()}"></td>
                                 <td th:text="${category.getStatus()}"></td>
@@ -142,7 +142,7 @@
         let id = button.data('id');
         let name = button.data('name');
         let short = button.data('short');
-        let img = "/" + button.data('img');
+        let img = button.data('img');
         let action = "/admin/categories/category-store";
         let title = "Edit Category";
         let modal = $(this);
@@ -158,7 +158,7 @@
         let id = button.data('id');
         let name = button.data('name');
         let short = button.data('short');
-        let img = "/" + button.data('img');
+        let img = button.data('img');
         let action = "/admin/categories/category-recovery";
         let title = "Recovery Category";
         let modal = $(this);

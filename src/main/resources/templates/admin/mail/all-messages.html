@@ -32,9 +32,8 @@
 
             <!-- Begin Page Content -->
             <div class="col-md-12 col-md-offset-1">
-
-                <th:block th:if="${messageAllList.size()!=0}"
-                          th:insert="/admin/mail/list-all-messages.html::list-all-messages"></th:block>
+                <h1 class="text-center">List All Messages</h1>
+                <th:block th:insert="/admin/mail/list-all-messages.html::list-all-messages"></th:block>
 
             </div>
             <!-- /.container-fluid -->

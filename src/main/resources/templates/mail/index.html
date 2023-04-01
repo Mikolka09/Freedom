@@ -33,7 +33,9 @@
 
             <!-- Begin Page Content -->
             <div class="col-md-12 col-md-offset-1">
-
+                <div th:if="${outMessages==null && deleteMessages==null}">
+                    <h1 class="text-center" id="header-text">List Inbox Messages</h1>
+                </div>
                 <th:block th:if="${messageList.size()!=0 && outMessages==null && deleteMessages==null}"
                           th:insert="/mail/mail-list-group.html::mail-list-group"></th:block>
                 <th:block th:if="${outMessages!=null}"

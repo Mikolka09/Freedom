@@ -80,7 +80,7 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices 
                 user.setGoogleName(googleName);
                 user.setGoogleUsername(googleUsername);
                 user.setEmail(googleUsername);
-                user.setAvatarUrl("avatar/user.png");
+                user.setAvatarUrl("/img/user.png");
                 user.setEmailConfirmed(true);
 
                 user.setPassword(passwordEncoder.encode("Freedom_new23"));

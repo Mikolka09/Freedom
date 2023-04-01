@@ -12,7 +12,7 @@
         <div class="row g-5">
             <div class="col-lg-4">
                 <div class="post-entry-1 lg">
-                    <a th:href="@{|/view-post/${lifePosts.get(0).getId()}|}"><img th:src="@{|/${lifePosts.get(0).getImgUrl()}|}" alt="" class="img-fluid"></a>
+                    <a th:href="@{|/view-post/${lifePosts.get(0).getId()}|}"><img th:src="@{|${lifePosts.get(0).getImgUrl()}|}" alt="" class="img-fluid"></a>
                     <div class="post-meta"><span class="date" th:text="${lifePosts.get(0).getCategory().getName()}">Lifestyle</span> <span class="mx-1">&bullet;</span>
                         <span th:text="${#temporals.format(T(java.time.LocalDate).of(#dates.year(lifePosts.get(0).getCreatedAt()),
                                 #dates.month(lifePosts.get(0).getCreatedAt()), #dates.day(lifePosts.get(0).getCreatedAt())), 'dd MMM yyyy',
@@ -26,7 +26,7 @@
                         eveniet, quo, praesentium dignissimos</p>
 
                     <div class="d-flex align-items-center author">
-                        <div class="photo"><img th:src="@{|/${lifePosts.get(0).getUser().getAvatarUrl()}|}" alt="" class="img-fluid"></div>
+                        <div class="photo"><img th:src="@{|${lifePosts.get(0).getUser().getAvatarUrl()}|}" alt="" class="img-fluid"></div>
                         <div class="name">
                             <h3 class="m-0 p-0" th:text="${lifePosts.get(0).getUser().getFullName()}">Esther Howard</h3>
                         </div>
@@ -64,7 +64,7 @@
                     <div class="col-lg-4 border-start custom-border">
                         <th:block th:each="post,state:${lifePosts}">
                         <div class="post-entry-1" th:if="${state.index>2 && state.index<6}">
-                            <a th:href="@{|/view-post/${post.getId()}|}" ><img th:src="@{|/${post.getImgUrl()}|}" alt=""
+                            <a th:href="@{|/view-post/${post.getId()}|}" ><img th:src="@{|${post.getImgUrl()}|}" alt=""
                                                             class="img-fluid"></a>
                             <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}">Lifestyle</span> <span
                                     class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
@@ -78,7 +78,7 @@
                     <div class="col-lg-4 border-start custom-border">
                         <th:block th:each="post,state:${lifePosts}">
                             <div class="post-entry-1" th:if="${state.index>5 && state.index<9}">
-                                <a th:href="@{|/view-post/${post.getId()}|}" ><img th:src="@{|/${post.getImgUrl()}|}" alt=""
+                                <a th:href="@{|/view-post/${post.getId()}|}" ><img th:src="@{|${post.getImgUrl()}|}" alt=""
                                                                                    class="img-fluid"></a>
                                 <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}">Lifestyle</span> <span
                                         class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).

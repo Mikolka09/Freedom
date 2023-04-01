@@ -117,7 +117,7 @@ function printTableUsers(data, list){
             let tr = document.createElement('tr');
             let td1 = document.createElement('td');
             let img1 = document.createElement('img');
-            img1.src = "/" + data[i].avatarUrl;
+            img1.src = data[i].avatarUrl;
             img1.style.borderRadius = "50%";
             img1.style.paddingBottom = "5px";
             img1.width = 50;

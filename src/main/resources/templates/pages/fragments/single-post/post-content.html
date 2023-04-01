@@ -10,7 +10,7 @@
     <h1 class="mb-5" th:text="${post.getTitle()}">13 Amazing Poems from Shel Silverstein with
         Valuable Life Lessons</h1>
     <figure class="my-2 offset-1">
-        <img th:src="@{|/${post.getImgUrl()}|}" alt="Image" width="800px" class="img-fluid">
+        <img th:src="@{|${post.getImgUrl()}|}" alt="Image" width="800px" class="img-fluid">
     </figure>
     <div class="row mb-2">
         <div class="col-sm-6 align-self-center" style="text-align: left;">
@@ -28,7 +28,7 @@
                th:data-user="${user==null?null:user.getId()}"
                th:data-rating="${post.getUser().getRating()}" th:data-avatar="${post.getUser().getAvatarUrl()}"
                th:data-friend="${myFriend}">
-                <img class="px-1 rounded-circle" th:src="@{|/${post.getUser().getAvatarUrl()}|}" width="50px">
+                <img class="px-1 rounded-circle" th:src="@{|${post.getUser().getAvatarUrl()}|}" width="50px">
                 <span style="font-weight: bold" th:text="${post.getUser().getFullName()}"></span>
             </a>
         </div>

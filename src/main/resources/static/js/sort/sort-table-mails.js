@@ -91,11 +91,11 @@ function printTableMails(data, list) {
             let td2 = document.createElement('td');
             let td3 = document.createElement('td');
             if (list === "out-list") {
-                img1.src = "/" + data[i].invite.userTo.avatarUrl;
+                img1.src = data[i].invite.userTo.avatarUrl;
                 td2.innerText = data[i].invite.userTo.username;
                 td3.innerText = data[i].invite.userTo.fullName === null ? 'NULL' : data[i].invite.userTo.fullName;
             } else {
-                img1.src = "/" + data[i].invite.userFrom.avatarUrl;
+                img1.src = data[i].invite.userFrom.avatarUrl;
                 td2.innerText = data[i].invite.userFrom.username;
                 td3.innerText = data[i].invite.userFrom.fullName === null ? 'NULL' : data[i].invite.userFrom.fullName;
             }

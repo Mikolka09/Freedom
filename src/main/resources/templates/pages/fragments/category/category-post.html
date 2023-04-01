@@ -4,7 +4,7 @@
 <th:block th:each="post, state:${categoryPosts}" th:fragment="category-post">
     <div th:if="${state.index<8}" class="d-md-flex post-entry-2 half">
         <a th:href="@{|/view-post/${post.getId()}|}" class="me-4 thumbnail">
-            <img th:src="@{|/${post.getImgUrl()}|}" alt="Img" class="img-fluid">
+            <img th:src="@{|${post.getImgUrl()}|}" alt="Img" class="img-fluid">
         </a>
         <div>
             <div class="post-meta">
@@ -22,7 +22,7 @@
                 deserunt aliquam temporibus sapiente, laudantium dolorum itaque libero eos
                 deleniti?</p>
             <div class="d-flex align-items-center author">
-                <div class="photo"><img th:src="@{|/${post.getUser().getAvatarUrl()}|}" alt="avatar"
+                <div class="photo"><img th:src="@{|${post.getUser().getAvatarUrl()}|}" alt="avatar"
                                         class="img-fluid"></div>
                 <div class="name">
                     <h3 class="m-0 p-0" th:text="${post.getUser().getFullName()}">Wade Warren</h3>

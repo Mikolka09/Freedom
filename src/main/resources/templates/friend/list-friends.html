@@ -31,7 +31,7 @@
                 <tbody id="body-table">
                 <tr th:each="friend:${friends}">
                     <td><img style="border-radius: 50%; padding-bottom: 5px" width="50px"
-                             th:src="@{|/${friend.getFriendReceiver().getAvatarUrl()}|}"></td>
+                             th:src="@{|${friend.getFriendReceiver().getAvatarUrl()}|}"></td>
                     <td th:text="${friend.getFriendReceiver().getUsername()}"></td>
                     <td th:text="${friend.getFriendReceiver().getFullName()==null? 'NULL':
                     friend.getFriendReceiver().getFullName()}"></td>

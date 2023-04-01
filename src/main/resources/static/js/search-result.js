@@ -62,7 +62,7 @@ function printPosts(data) {
         let img1 = document.createElement("img");
         img1.className = "img-fluid";
         img1.alt = "Img";
-        img1.src = "/" + data[i].imgUrl;
+        img1.src = data[i].imgUrl;
         a1.appendChild(img1);
         div1.appendChild(a1);
         let div2 = document.createElement("div");
@@ -96,7 +96,7 @@ function printPosts(data) {
         let img2 = document.createElement("img");
         img2.className = "img-fluid";
         img2.alt = "avatar";
-        img2.src = "/" + data[i].user.avatarUrl;
+        img2.src = data[i].user.avatarUrl;
         div5.appendChild(img2);
         div4.appendChild(div5);
         let div6 = document.createElement("div");

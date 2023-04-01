@@ -125,7 +125,7 @@
                                 #dates.month(message.getCreatedAt()), #dates.day(message.getCreatedAt())), 'dd MMM yyyy',
                                 #locale.forLanguageTag('en'))}">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" th:src="@{|/${message.getInvite().getUserFrom().getAvatarUrl()}|}"
+                                <img class="rounded-circle" th:src="@{|${message.getInvite().getUserFrom().getAvatarUrl()}|}"
                                      alt="Avatar">
                                 <div class="status-indicator bg-success"></div>
                             </div>
@@ -151,7 +151,7 @@
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small"
                           th:text="${user.getUsername()}">User</span>
                     <img class="img-profile rounded-circle"
-                         th:src="@{|/${user.getAvatarUrl()}|}" alt="Url">
+                         th:src="@{|${user.getAvatarUrl()}|}" alt="Url">
                 </a>
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
