@@ -80,6 +80,7 @@ public class FileService {
             File fileOut = convertMultiPartToFile(image, file);
             nameFile = nameUUID(StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename())));
             uploadFileTos3bucket(nameFile, fileOut);
+            fileOut.delete();
         } catch (Exception e) {
             e.printStackTrace();
             throw new StorageException("Could not store file " + file.getOriginalFilename()
