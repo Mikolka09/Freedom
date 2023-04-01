@@ -63,7 +63,7 @@ public class ApiEmailController {
             userService.saveEdit(user);
             String email = user.getEmail();
             String subject = "CONFIRM EMAIL ADDRESS";
-            String url = "https://elasticbeanstalk-eu-west-3-668774714230.s3.eu-west-3.amazonaws.com/email/confirm-message/" + id + "/" + token;
+            String url = "http://freedom.eu-central-1.elasticbeanstalk.com/email/confirm-message/" + id + "/" + token;
             String path = "/pages/fragments/email/confirm.html";
             HashMap<String, Object> base = new HashMap<>();
             base.put("url", url);
