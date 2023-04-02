@@ -64,7 +64,7 @@
                     <div class="col-lg-4 border-start custom-border">
                         <th:block th:each="post,state:${sportPosts}">
                             <div class="post-entry-1" th:if="${state.index>2 && state.index<6}">
-                                <a th:href="@{|/view-post/${post.getId()}|}" ><img th:src="@{/${post.getImgUrl()}|}" alt=""
+                                <a th:href="@{|/view-post/${post.getId()}|}" ><img th:src="@{|${post.getImgUrl()}|}" alt=""
                                                                                    class="img-fluid"></a>
                                 <div class="post-meta"><span class="date" th:text="${post.getCategory().getName()}">Lifestyle</span> <span
                                         class="mx-1">&bullet;</span> <span th:text="${#temporals.format(T(java.time.LocalDate).
