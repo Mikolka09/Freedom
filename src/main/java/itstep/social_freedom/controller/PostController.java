@@ -42,6 +42,7 @@ public class PostController {
         giveMainData(model, userService, alertService, messageService);
     }
 
+    //Give main data
     static void giveMainData(Model model, UserService userService, AlertService alertService, MessageService messageService) {
         User user = userService.getCurrentUsername();
         List<Alert> alertList = alertService.findAllAlertsUserById(userService.getCurrentUsername().getId())
