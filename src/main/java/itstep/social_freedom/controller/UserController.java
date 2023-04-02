@@ -1,6 +1,7 @@
 package itstep.social_freedom.controller;
 
 import itstep.social_freedom.entity.*;
+import itstep.social_freedom.repository.CommentRepository;
 import itstep.social_freedom.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,9 @@ public class UserController {
     private AlertService alertService;
 
     @Autowired
+    private PostService postService;
+
+    @Autowired
     private InviteService inviteService;
 
     @Autowired
@@ -36,6 +40,8 @@ public class UserController {
 
     @Autowired
     private FileService fileService;
+    @Autowired
+    private CommentRepository commentRepository;
 
     private void CreateModelUser(Model model) {
         PostController.giveMainData(model, userService, alertService, messageService);
@@ -49,6 +55,14 @@ public class UserController {
         User userTo = userService.getCurrentUsername();
         HttpSession session = request.getSession();
         reminderMessage(userFrom, userTo, session);
+        int postsSize = postService.allPosts(userTo.getId()).size();
+        int friendsSize = userTo.getReceivedFriends().size();
+        int ratingSize = userTo.getRating();
+        int commentsSize = userTo.getComments().size();
+        model.addAttribute("postsSize", postsSize);
+        model.addAttribute("friendsSize", friendsSize);
+        model.addAttribute("ratingSize", ratingSize);
+        model.addAttribute("commentsSize", commentsSize);
         CreateModelUser(model);
         return "user/index";
     }

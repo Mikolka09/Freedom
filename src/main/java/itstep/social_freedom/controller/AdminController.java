@@ -91,6 +91,7 @@ public class AdminController {
         model.addAttribute("status", Status.values());
         model.addAttribute("role", role);
         model.addAttribute("admin", user);
+
     }
 
     //Download database of obscene words
@@ -110,6 +111,14 @@ public class AdminController {
     //Main page AdminDashboard
     @GetMapping("/admin")
     public String index(Model model) {
+        int usersSize = userService.allUsers().size();
+        int messagesSize = messageService.findAllUsersMessages().size();
+        int postsSize = postService.posts().size();
+        int commentsSize = commentService.allComments().size();
+        model.addAttribute("usersSize", usersSize);
+        model.addAttribute("messagesSize", messagesSize);
+        model.addAttribute("postsSize", postsSize);
+        model.addAttribute("commentsSize", commentsSize);
         CreateModelUser(model, userService, alertService, messageService);
         return "admin/index";
     }
