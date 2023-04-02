@@ -95,7 +95,12 @@ public class ApiEmailController {
             base.put("subject", subject);
             base.put("message", message);
             String path = "/pages/fragments/email/contact-message.html";
-            emailService.sendSimpleEmail(createEmailSend(emailTo, header, base, path));
+            try {
+                emailService.sendSimpleEmail(createEmailSend(emailTo, header, base, path));
+            }catch (MailException | MessagingException mailException) {
+                LOG.error("Error while sending out email..{}", (Object) mailException.getStackTrace());
+                return "NOT";
+            }
             return "OK";
         } else
             return "NOT";
