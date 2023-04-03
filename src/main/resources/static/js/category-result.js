@@ -96,7 +96,7 @@ function printPosts(data) {
         let img2 = document.createElement("img");
         img2.className = "img-fluid";
         img2.alt = "avatar";
-        img2.src = "/" + data[i].user.avatarUrl;
+        img2.src = data[i].user.avatarUrl;
         div5.appendChild(img2);
         div4.appendChild(div5);
         let div6 = document.createElement("div");

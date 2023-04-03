@@ -1,5 +1,5 @@
 .scroll-table-body {
-    height: 450px;
+    max-height: calc(390px + (500 - 450) * ((100vw - 500px) / (1080 - 500)));
     overflow-x: auto;
     margin-top: 0px;
     margin-bottom: 10px;

@@ -37,7 +37,7 @@
                     <a class="btn btn-success btn-sm" th:href="@{|/admin/create-post/${admin.getId()}|}"
                        style="border-radius:6px;">Create new post</a>
                 </p>
-                <div class="scroll-table">
+                <div class="scroll-table" th:style="${role=='ROLE_EDITOR'?'margin-top: 55px;':''}">
                     <table id="table-list" data-table="posts-list">
                         <thead >
                         <tr>
