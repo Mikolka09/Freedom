@@ -63,7 +63,7 @@ public class ApiEmailController {
             userService.saveEdit(user);
             String email = user.getEmail();
             String subject = "CONFIRM EMAIL ADDRESS";
-            String url = "https://freedom-ua.herokuapp.com//email/confirm-message/" + id + "/" + token;
+            String url = "https://freedom-ua.herokuapp.com/email/confirm-message/" + id + "/" + token;
             String path = "/pages/fragments/email/confirm.html";
             HashMap<String, Object> base = new HashMap<>();
             base.put("url", url);
