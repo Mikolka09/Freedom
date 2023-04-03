@@ -64,6 +64,7 @@ public class PostController {
         model.addAttribute("user", user);
     }
 
+    //List posts user
     @GetMapping("/user/posts/{id}")
     public String index(@PathVariable(name = "id") Long id, Model model) {
         List<Post> posts = postService.allPosts(id).stream()
@@ -77,6 +78,7 @@ public class PostController {
         return "user/posts/index";
     }
 
+    //Create post
     @GetMapping("/user/posts/create/{id}")
     public String create(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("userId", id);
@@ -90,6 +92,7 @@ public class PostController {
         return "user/posts/create-post";
     }
 
+    //Save post
     @PostMapping("/user/posts/store")
     public String store(@RequestParam(value = "id") Long user_id, Model model,
                         @RequestParam(value = "file") MultipartFile file,
@@ -105,6 +108,7 @@ public class PostController {
         return setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post);
     }
 
+    //Edit post
     @GetMapping("/user/posts/edit/{id}")
     public String editPost(@PathVariable(name = "id") Long post_id, Model model) {
         AdminController.gettingPost(post_id, model, postService, categoryService, tagService);
@@ -112,6 +116,7 @@ public class PostController {
         return "/user/posts/edit-post";
     }
 
+    //Edit post
     @PostMapping("/user/posts/edit-store/{id}")
     public String editStore(@RequestParam(value = "user_id") Long user_id, Model model,
                             @PathVariable(name = "id") Long post_id,
