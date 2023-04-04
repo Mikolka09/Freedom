@@ -10,6 +10,7 @@ $('#DeleteUserModal').on('show.bs.modal', function (event) {
     modal.find('#action').prop("href", action);
 })
 
+//Alert Modal
 $('#AlertModal').on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget);
     let id = button.data('id');
