@@ -27,10 +27,14 @@ $('#AlertModal').on('show.bs.modal', function (event) {
     if (alert.split(' ').includes('accepted') ||
         alert.split(' ').includes('denied') ||
         alert.split(' ').includes('read') ||
-        alert.split(' ').includes('broke'))
+        alert.split(' ').includes('broke')) {
         modal.find('#footer-confirm').hide();
-    else
+        modal.find('#footer-accepted').show();
+    }
+    else {
         modal.find('#footer-accepted').hide();
+        modal.find('#footer-confirm').show();
+    }
     changeStatusAlert(id, show);
 })
 
