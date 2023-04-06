@@ -142,6 +142,7 @@ public class PostController {
         return "redirect:/user/posts/" + user_id;
     }
 
+    //Add post
     static void addPost(Long user_id, MultipartFile file, String title, String shortDesc,
                         Long category_id, String description, Long[] tag_id, Post post,
                         UserService userService, CategoryService categoryService, TagService tagService,
