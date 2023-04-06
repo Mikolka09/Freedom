@@ -34,6 +34,7 @@ public class ApiEmailController {
         String newPassword = "Freedom_new23";
         String path = "/pages/fragments/email/new-password.html";
         HashMap<String, Object> base = new HashMap<>();
+        base.put("userName", user.getUsername());
         base.put("password", newPassword);
         if (user != null) {
             if (user.isEmailConfirmed()) {
