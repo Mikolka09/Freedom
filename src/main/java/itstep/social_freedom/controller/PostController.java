@@ -132,6 +132,7 @@ public class PostController {
         return setPost(user_id, file, title, shortDesc, category_id, description, tag_id, post);
     }
 
+    //Set Post
     public String setPost(Long user_id, MultipartFile file, String title, String shortDesc, Long category_id,
                           String description, Long[] tag_id, Post post) throws IOException {
         addPost(user_id, file, title, shortDesc, category_id,
